@@ -14,7 +14,7 @@
 return [
     'default' => [
         /* DEFAULT: Resource Controller */
-        'controllerServiceName' => 'Reliv\RcmApiLib\Resource\Controller\DoctrineResourceController',
+        'controllerServiceName' => 'Reliv\PipeRat\ResourceController\DoctrineResourceController',
         'controllerOptions' => [
             'entity' => null,
             'responsePropertyBlackList' => [
@@ -158,7 +158,7 @@ return [
          * '{serviceAlias}' => '{serviceName}',
          */
         'preServiceNames' => [
-            'JsonRequestFormat' => 'Reliv\RcmApiLib\Resource\Middleware\RequestFormat\JsonRequestFormat',
+            'JsonRequestFormat' => 'Reliv\PipeRat\Middleware\RequestFormat\JsonRequestFormat',
         ],
         /*
          * '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ],
@@ -175,9 +175,9 @@ return [
          * '{serviceAlias}' => '{serviceName}',
          */
         'postServiceNames' => [
-            'JsonResponseFormat' => 'Reliv\RcmApiLib\Resource\Middleware\ResponseFormat\JsonResponseFormat',
-            'XmlResponseFormat' => 'Reliv\RcmApiLib\Resource\Middleware\ResponseFormat\XmlResponseFormat',
-            'DefaultResponseFormat' => 'Reliv\RcmApiLib\Resource\Middleware\ResponseFormat\JsonResponseFormat',
+            'JsonResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
+            'XmlResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat',
+            'DefaultResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
         ],
         /*
          * '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ],
@@ -209,59 +209,16 @@ return [
      *
      */
     'resources' => [
-        'example-path' => [
-            /* Methods White-list */
-            'methodsAllowed' => [
-                //Reads
-                'count',
-                'exists',
-                'findById',
-                'findOne',
-                'find',
-                //Writes
-//                'upsert',
-            ],
-            'methods' => [],
-            /* Resource Controller */
-            'controllerServiceName' => 'Reliv\RcmApiLib\Resource\Controller\DoctrineResourceController',
-            'controllerServiceOptions' => [
-                'entity' => 'Rcm\Entity\Country',
-            ],
-            /* Path */
-            'path' => 'example-path',
-            /* Pre Controller Middleware */
-            'preServiceNames' => [
-                //'RcmUserAcl' => 'Reliv\RcmApiLib\Resource\Middleware\Acl\RcmUserAcl',
-                //'ZfInputFilterClass' => 'Reliv\RcmApiLib\Resource\Middleware\InputFilter\ZfInputFilterClass',
-                //'ZfInputFilterConfig' => 'Reliv\RcmApiLib\Resource\Middleware\InputFilter\ZfInputFilterConfig',
-                //'ZfInputFilterService' => 'Reliv\RcmApiLib\Resource\Middleware\InputFilter\ZfInputFilterService',
-            ],
-            'preServiceOptions' => [
-                'RcmUserAcl' => [
-                    'resourceId' => '{resourceId}',
-                    'privilege' => null,
-                ],
-                'ZfInputFilterClass' => [
-                    'class' => '',
-                ],
-                'ZfInputFilterService' => [
-                    'serviceName' => '',
-                ],
-                'ZfInputFilterConfig' => [
-                    'config' => [],
-                ],
-            ],
-        ],
     ],
     /* DEFAULT: Route */
     'routeServiceNames' => [
-        'baseRoute' => 'Reliv\RcmApiLib\Resource\Middleware\Router',
+        'baseRoute' => 'Reliv\PipeRat\Middleware\Router',
     ],
     'routeServiceOptions' => [],
     'routeServicePriority' => [],
     /* DEFAULT: Error Handlers */
     'errorServiceNames' => [
-        'errorHandler' => 'Reliv\RcmApiLib\Resource\Middleware\Error\TriggerErrorHandler',
+        'errorHandler' => 'Reliv\PipeRat\Middleware\Error\TriggerErrorHandler',
     ],
     'errorServicePriority' => [],
 ];

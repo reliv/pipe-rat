@@ -2,20 +2,10 @@
 
 namespace Reliv\PipeRat\ResourceController;
 
-use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\RcmApiLib\Http\BasicApiResponse;
 use Reliv\PipeRat\Exception\InvalidWhereException;
-use Reliv\PipeRat\Exception\ResponseFormatException;
-use Reliv\PipeRat\Http\BasicDataResponse;
-use Reliv\PipeRat\Http\DataResponse;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
-use Reliv\PipeRat\Middleware\OptionsMiddleware;
-use Reliv\PipeRat\ServiceModel\ResponseFormatModel;
 use Reliv\PipeRat\ServiceModel\RouteModel;
-use Reliv\PipeRat\Options\GenericOptions;
-use Reliv\PipeRat\Options\Options;
-use Reliv\PipeRat\ResponseFormat\ResponseFormat;
 
 /**
  * Class AbstractResourceController
