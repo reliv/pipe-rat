@@ -1,6 +1,6 @@
 {
   "name": "reliv/pipe-rat",
-  "description": "Config driven REST Middleware Api Library",
+  "description": "Create REST APIs with just a few lines of config. This PSR7 compliant PHP library uses Zend\Stragility Middleware at its core.",
   "type": "library",
   "license": "BSD-3-Clause",
   "keywords": [
