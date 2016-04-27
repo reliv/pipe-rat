@@ -44,11 +44,13 @@ class MainMiddleware extends AbstractModelMiddleware implements Middleware
         $routePipe->pipe([$this, 'postRoute']);
         $routePipe->pipeServices($errorModel);
 
-        return $routePipe(
+        $result = $routePipe(
             $request,
             $response,
             $out
         );
+
+        return $result;
     }
 
     /**
