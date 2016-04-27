@@ -2,24 +2,22 @@
 
 namespace Reliv\PipeRat\Provider;
 
+use Reliv\PipeRat\Options\GenericOptions;
 use Reliv\PipeRat\ServiceModel\BaseControllerModel;
 use Reliv\PipeRat\ServiceModel\BaseMethodModel;
 use Reliv\PipeRat\ServiceModel\BaseResourceModel;
 use Reliv\PipeRat\ServiceModel\BaseServiceModelCollection;
 use Reliv\PipeRat\ServiceModel\ResourceModel;
-use Reliv\PipeRat\ServiceModel\ServiceModelCollection;
-use Reliv\PipeRat\Options\GenericOptions;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Class ZFConfigResourceModelProvider
+ * Class ConfigResourceModelProvider
  *
  * @author    James Jervis <jjervis@relivinc.com>
  * @copyright 2016 Reliv International
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class ZfConfigResourceModelProvider extends ZfConfigAbstractResourceModelProvider implements ResourceModelProvider
+class ConfigResourceModelProvider extends ConfigAbstractResourceModelProvider implements ResourceModelProvider
 {
     /**
      * @var array

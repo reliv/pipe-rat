@@ -2,40 +2,38 @@
 
 namespace Reliv\PipeRat\Provider;
 
-use Reliv\PipeRat\ServiceModel\BaseRouteModel;
-use Reliv\PipeRat\ServiceModel\RouteModel;
+use Interop\Container\ContainerInterface;
 use Reliv\PipeRat\Options\GenericOptions;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * class ZfConfigAbstractModelProvider
+ * class ConfigAbstractModelProvider
  *
  * @author    James Jervis <jjervis@relivinc.com>
  * @copyright 2016 Reliv International
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-abstract class ZfConfigAbstractModelProvider
+abstract class ConfigAbstractModelProvider
 {
     /**
      * @var array
      */
     protected $config;
-    
+
     /**
-     * @var ServiceLocatorInterface
+     * @var ContainerInterface
      */
     protected $serviceManager;
-    
+
     /**
-     * ConfigRouteModelProvider constructor.
+     * ConfigAbstractModelProvider constructor.
      *
-     * @param array $config
-     * @param ServiceLocatorInterface $serviceManager
+     * @param array              $config
+     * @param ContainerInterface $serviceManager
      */
     public function __construct(
         $config,
-        ServiceLocatorInterface $serviceManager
+        $serviceManager
     ) {
         $this->serviceManager = $serviceManager;
         $this->config = $config;
@@ -44,7 +42,7 @@ abstract class ZfConfigAbstractModelProvider
     /**
      * buildServiceArray
      *
-     * @param $serviceNames
+     * @param array $serviceNames
      *
      * @return array
      */

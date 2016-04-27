@@ -4,18 +4,16 @@ namespace Reliv\PipeRat\Provider;
 
 use Reliv\PipeRat\ServiceModel\BaseRouteModel;
 use Reliv\PipeRat\ServiceModel\RouteModel;
-use Reliv\PipeRat\Options\GenericOptions;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * class ZfConfigRouteModelProvider
+ * class ConfigRouteModelProvider
  *
  * @author    James Jervis <jjervis@relivinc.com>
  * @copyright 2016 Reliv International
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class ZfConfigRouteModelProvider extends ZfConfigAbstractModelProvider implements ModelProvider
+class ConfigRouteModelProvider extends ConfigAbstractModelProvider implements ModelProvider
 {
     /**
      * @var RouteModel
@@ -31,13 +29,13 @@ class ZfConfigRouteModelProvider extends ZfConfigAbstractModelProvider implement
     {
         if (empty($this->routerModel)) {
             $services = $this->buildServiceArray(
-                $this->config['Reliv\\RcmApiLib']['resource']['routeServiceNames']
+                $this->config['Reliv\\PipeRat']['resource']['routeServiceNames']
             );
             $servicesOptions = $this->buildOptionArray(
-                $this->config['Reliv\\RcmApiLib']['resource']['routeServiceOptions']
+                $this->config['Reliv\\PipeRat']['resource']['routeServiceOptions']
             );
             $servicePriorities = $this->buildOptionArray(
-                $this->config['Reliv\\RcmApiLib']['resource']['routeServicePriority']
+                $this->config['Reliv\\PipeRat']['resource']['routeServicePriority']
             );
             $this->routerModel = new BaseRouteModel(
                 $services,

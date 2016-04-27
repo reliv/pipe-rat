@@ -2,22 +2,22 @@
 
 namespace Reliv\PipeRat\Provider;
 
+use Interop\Container\ContainerInterface;
 use Reliv\PipeRat\Options\GenericOptions;
 use Reliv\PipeRat\Options\Options;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Class ZfConfigAbstractResourceModelProvider
+ * Class ConfigAbstractResourceModelProvider
  *
  * @author    James Jervis <jjervis@relivinc.com>
  * @copyright 2016 Reliv International
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-abstract class ZfConfigAbstractResourceModelProvider
+abstract class ConfigAbstractResourceModelProvider
 {
     /**
-     * @var ServiceLocatorInterface
+     * @var ContainerInterface
      */
     protected $serviceManager;
 
@@ -32,22 +32,22 @@ abstract class ZfConfigAbstractResourceModelProvider
     protected $resourcesOptions;
 
     /**
-     * ZfConfigResourceModelProvider constructor.
+     * ConfigAbstractResourceModelProvider constructor.
      *
-     * @param array                   $config
-     * @param ServiceLocatorInterface $serviceManager
+     * @param array              $config
+     * @param ContainerInterface $serviceManager
      */
     public function __construct(
         $config,
-        ServiceLocatorInterface $serviceManager
+        $serviceManager
     ) {
         $this->serviceManager = $serviceManager;
         $this->defaultOptions = new GenericOptions(
-            $config['Reliv\\RcmApiLib']['resource']['default']
+            $config['Reliv\\PipeRat']['resource']['default']
         );
 
         $this->resourcesOptions = new GenericOptions(
-            $config['Reliv\\RcmApiLib']['resource']['resources']
+            $config['Reliv\\PipeRat']['resource']['resources']
         );
     }
 
@@ -102,7 +102,7 @@ abstract class ZfConfigAbstractResourceModelProvider
      *
      * @param string $resourceKey
      * @param string $key
-     * @param array $default
+     * @param array  $default
      *
      * @return mixed
      */

@@ -1,6 +1,6 @@
 <?php
 /**
- * resource.config.php
+ * config.php
  *
  * PHP version 5
  *
