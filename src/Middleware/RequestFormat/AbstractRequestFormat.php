@@ -2,10 +2,8 @@
 
 namespace Reliv\PipeRat\Middleware\RequestFormat;
 
-use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
-use Reliv\PipeRat\Middleware\Middleware;
 
 /**
  * Class AbstractRequestFormat

@@ -14,7 +14,7 @@ use Reliv\RcmApiLib\Model\ApiSerializableInterface;
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class HtmlResponseFormat extends AbstractResponseFormat implements ResponseFormat
+class HtmlResponseFormat extends AbstractResponseFormat implements Middleware
 {
 
     protected function buildMarkup($content, $tag, $attr = [])

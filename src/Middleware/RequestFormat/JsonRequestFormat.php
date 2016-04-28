@@ -4,7 +4,6 @@ namespace Reliv\PipeRat\Middleware\RequestFormat;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
 
 /**
@@ -26,7 +25,7 @@ class JsonRequestFormat extends AbstractRequestFormat implements Middleware
     protected $defaultContentTypes = [
         'application/json',
     ];
-    
+
     /**
      * If the request is of type application/json, this middleware
      * decodes the json in the body and puts it in the "body" attribute

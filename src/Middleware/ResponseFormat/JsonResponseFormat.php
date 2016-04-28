@@ -14,7 +14,7 @@ use Reliv\PipeRat\Exception\ResponseFormatException;
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class JsonResponseFormat extends AbstractResponseFormat implements ResponseFormat
+class JsonResponseFormat extends AbstractResponseFormat implements Middleware
 {
     /**
      * @var array

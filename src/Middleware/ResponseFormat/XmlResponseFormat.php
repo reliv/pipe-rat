@@ -14,7 +14,7 @@ use Reliv\RcmApiLib\Model\ApiSerializableInterface;
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class XmlResponseFormat extends AbstractResponseFormat implements ResponseFormat
+class XmlResponseFormat extends AbstractResponseFormat implements Middleware
 {
     /**
      * @var array

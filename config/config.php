@@ -15,7 +15,7 @@ return [
     'default' => [
 
         /**
-         * *** DEFAULT: Resource Controller ***
+         * === DEFAULT: Resource Controller ===
          */
         // '{serviceName}'
         'controllerServiceName' => 'Reliv\PipeRat\ResourceController\DoctrineResourceController',
@@ -27,7 +27,7 @@ return [
         ],
 
         /**
-         * *** DEFAULT: Resource Controller Method Definitions ***
+         * === DEFAULT: Resource Controller Method Definitions ===
          * Methods:
          * '{name}' => [
          *   'description' => 'Create new resource',
@@ -175,12 +175,12 @@ return [
         ],
 
         /**
-         * *** DEFAULT: Resource Options ***
+         * === DEFAULT: Resource Options ===
          */
         'options' => [],
 
         /**
-         * *** DEFAULT: Resource Pre-Services ***
+         * === DEFAULT: Resource Pre-Services ===
          */
         // '{serviceAlias}' => '{serviceName}'
         'preServiceNames' => [
@@ -193,9 +193,9 @@ return [
         'preServicePriority' => [
             'JsonRequestFormat' => 1000,
         ],
-
+        
         /**
-         * *** DEFAULT: Resource Post-Services ***
+         * === DEFAULT: Resource Post-Services ===
          */
         //'{serviceAlias}' => '{serviceName}'
         'postServiceNames' => [
@@ -205,16 +205,6 @@ return [
         ],
         // '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ]
         'postServiceOptions' => [
-            'JsonResponseFormat' => [
-                'accepts' => [
-                    'application/json'
-                ],
-            ],
-            'XmlResponseFormat' => [
-                'accepts' => [
-                    'application/xml'
-                ],
-            ],
             'DefaultResponseFormat' => [
                 'accepts' => [
                     '*/*'
@@ -230,14 +220,14 @@ return [
     ],
 
     /**
-     * *** DEFAULT: Resource Options ***
+     * === DEFAULT: Resource Options ===
      * These should be defined by the application
      */
     'resources' => [
     ],
 
     /**
-     * *** DEFAULT: Router ***
+     * === DEFAULT: Router ===
      */
     // '{serviceAlias}' => '{serviceName}'
     'routeServiceNames' => [
@@ -249,7 +239,7 @@ return [
     'routeServicePriority' => [],
 
     /**
-     * *** DEFAULT: Error Handlers ***
+     * === DEFAULT: Error Handlers ===
      */
     'errorServiceNames' => [
         'errorHandler' => 'Reliv\PipeRat\Middleware\Error\TriggerErrorHandler',
