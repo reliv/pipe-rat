@@ -4,9 +4,9 @@
 namespace Reliv\PipeRat\ResponseModel;
 
 /**
- * Class ResponseModelInterface
+ * Class ResponseModel
  *
- * ResponseModel Interface
+ * ResponseModel 
  *
  * PHP version 5
  *
@@ -19,6 +19,6 @@ namespace Reliv\PipeRat\ResponseModel;
  * @link      https://github.com/reliv
  */
 
-interface ResponseModelInterface extends PropertiesInterface, \JsonSerializable
+interface ResponseModel extends Properties, \JsonSerializable
 {
 }

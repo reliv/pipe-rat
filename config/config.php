@@ -17,11 +17,11 @@ return [
         'controllerServiceName' => 'Reliv\PipeRat\ResourceController\DoctrineResourceController',
         'controllerOptions' => [
             'entity' => null,
-            'responsePropertyBlackList' => [
-
+            'propertyList' => [
+                // 'propertyName' => {bool|array}
             ],
-            'responsePropertyDefaultList' => [
-
+            'propertyDefaultList' => [
+                // 'propertyName'
             ],
             // Security is best when 'deepPropertyLimit' is 0
             'propertyDepthLimit' => 0,

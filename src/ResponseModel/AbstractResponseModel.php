@@ -17,8 +17,23 @@ namespace Reliv\PipeRat\ResponseModel;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-abstract class AbstractResponseModel implements ResponseModelInterface
+abstract class AbstractResponseModel implements ResponseModel
 {
+    /**
+     * const
+     */
+    const METHOD_GET_PREFIX = 'get';
+
+    /**
+     * const
+     */
+    const METHOD_BOOL_GET_PREFIX = 'is';
+
+    /**
+     * const
+     */
+    const METHOD_BOOL_SET_PREFIX = 'set';
+
     /**
      * setProperties
      *
@@ -28,26 +43,19 @@ abstract class AbstractResponseModel implements ResponseModelInterface
      * @return mixed
      */
     public function setProperties(
-        \Traversable $data,
+        $data,
         $properties = []
     ) {
-        $prefix = 'get';
-        $data = [];
-
         foreach ($properties as $property => $value) {
 
-            if($value === false) {
+            if ($value === false) {
                 continue;
             }
 
-            $method = $prefix . ucfirst($property);
+            $method = self::METHOD_BOOL_SET_PREFIX . ucfirst($property);
 
             if (method_exists($this, $method)) {
-                $data[$property] = $this->$method();
-            }
-
-            if(is_array($value)) {
-                $data[$property] = $this->getCollectionProperties($data[$property], $value);
+                $this->$method($data[$property]);
             }
         }
     }
@@ -62,23 +70,31 @@ abstract class AbstractResponseModel implements ResponseModelInterface
     public function getProperties(
         $properties = []
     ) {
-        $prefix = 'get';
         $data = [];
 
         foreach ($properties as $property => $value) {
 
-            if($value === false) {
+            if ($value === false) {
                 continue;
             }
 
-            $method = $prefix . ucfirst($property);
+            $method = self::METHOD_GET_PREFIX . ucfirst($property);
 
             if (method_exists($this, $method)) {
                 $data[$property] = $this->$method();
             }
 
-            if(is_array($value)) {
-                $data[$property] = $this->getCollectionProperties($data[$property], $value);
+            $methodBool = self::METHOD_BOOL_GET_PREFIX . ucfirst($property);
+
+            if (method_exists($this, $methodBool)) {
+                $data[$property] = $this->$methodBool();
+            }
+
+            if (is_array($value)) {
+                $data[$property] = $this->getCollectionProperties(
+                    $data[$property],
+                    $value
+                );
             }
         }
 
@@ -88,14 +104,18 @@ abstract class AbstractResponseModel implements ResponseModelInterface
     /**
      * setAllProperties
      *
-     * @param \Traversable $data
+     * @param array|\Traversable $data
      *
      * @return mixed
      */
     public function setAllProperties(
-        \Traversable $data
+        $data
     ) {
-        
+        $properties = get_object_vars($this);
+        foreach ($properties as $propertyName => $value) {
+            $properties[$propertyName] = true;
+        }
+        $this->setProperties($data, $properties);
     }
 
     /**
@@ -105,7 +125,12 @@ abstract class AbstractResponseModel implements ResponseModelInterface
      */
     public function getAllProperties()
     {
-        
+        $properties = get_object_vars($this);
+        foreach ($properties as $propertyName => $value) {
+            $properties[$propertyName] = true;
+        }
+
+        return $this->getAllProperties();
     }
 
     /**
@@ -115,48 +140,38 @@ abstract class AbstractResponseModel implements ResponseModelInterface
      */
     public function jsonSerialize()
     {
-        return $this->getProperties();
-    }
-
-    /**
-     * setCollectionProperties
-     *
-     * @param \Traversable $modelCollection
-     * @param array        $includeProperties
-     *
-     * @return array
-     */
-    protected function setCollectionProperties(
-        \Traversable $modelCollection,
-        $includeProperties = []
-    ) {
-        $array = [];
-
-        /** @var PropertiesInterface $model */
-        foreach ($modelCollection as $model) {
-            $array[] = $model->setProperties($includeProperties);
-        }
+        return $this->getAllProperties();
     }
 
     /**
      * getCollectionProperties
      *
-     * @param \Traversable $modelCollection
-     * @param array        $includeProperties
+     * @param array|\Traversable $collection
+     * @param array              $properties
      *
      * @return array
      */
     protected function getCollectionProperties(
-        \Traversable $modelCollection,
-        $includeProperties = []
+        $collection,
+        $properties = []
     ) {
-        $array = [];
+        $data = [];
 
-        /** @var PropertiesInterface $model */
-        foreach ($modelCollection as $model) {
-            $array[] = $model->getProperties($includeProperties);
+        if (!is_array($collection) && !$collection instanceof \Traversable) {
+            return $data;
         }
 
-        return $array;
+        /** @var ResponseModel $model */
+        foreach ($collection as $model) {
+            if (!$model instanceof ResponseModel) {
+                // noth can be done
+                return $data;
+            }
+            $data[] = $model->getProperties(
+                $properties
+            );
+        }
+
+        return $data;
     }
 }
