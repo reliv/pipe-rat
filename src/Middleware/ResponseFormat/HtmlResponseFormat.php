@@ -4,7 +4,7 @@ namespace Reliv\PipeRat\Middleware\ResponseFormat;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\RcmApiLib\Model\ApiSerializableInterface;
+use Reliv\PipeRat\Middleware\Middleware;
 
 /**
  * Class HtmlResponseFormat
