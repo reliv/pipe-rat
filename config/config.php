@@ -13,24 +13,45 @@
  */
 return [
     'default' => [
-        /* DEFAULT: Resource Controller */
+
+        /**
+         * *** DEFAULT: Resource Controller ***
+         */
+        // '{serviceName}'
         'controllerServiceName' => 'Reliv\PipeRat\ResourceController\DoctrineResourceController',
-        'controllerOptions' => [
+        // '{optionKey}' => '{optionValue}'
+        'controllerServiceOptions' => [
             'entity' => null,
-            'propertyList' => [
-                // 'propertyName' => {bool|array}
-            ],
-            'propertyDefaultList' => [
-                // 'propertyName'
-            ],
-            // Security is best when 'deepPropertyLimit' is 0
-            'propertyDepthLimit' => 0,
             // Security is best when 'allowDeepWheres' is false
             'allowDeepWheres' => false,
         ],
-        /* DEFAULT: Resource Controller Method Definitions */
+
+        /**
+         * *** DEFAULT: Resource Controller Method Definitions ***
+         * Methods:
+         * '{name}' => [
+         *   'description' => 'Create new resource',
+         *   'httpVerb' => 'POST',
+         *   'name' => 'create',
+         *   // '{optionKey}' => '{optionValue}'
+         *   'options' => [],
+         *   'path' => '{path}',
+         *   // '{serviceAlias}' => '{serviceName}'
+         *   'preServiceNames' => [],
+         *   // '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ]
+         *   'preServiceOptions' => [],
+         *   // '{serviceAlias}' => {priority}
+         *   'preServicePriority' => [],
+         *   // '{serviceAlias}' => '{serviceName}'
+         *   'postServiceNames' => [],
+         *   // '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ]
+         *   'postServiceOptions' => [],
+         *   // '{serviceAlias}' => {priority}
+         *   'postServicePriority' => [],
+         * ]
+         *
+         */
         'methods' => [
-            /* Default Methods */
             'create' => [
                 'description' => 'Create new resource',
                 'httpVerb' => 'POST',
@@ -149,39 +170,40 @@ return [
                 'postServicePriority' => [],
             ],
         ],
+        // '{method}' => {priority}
         'methodPriority' => [
         ],
-        /* Resource Options */
-        'options' => [],
-        /* Pre Controller Middleware  */
-        /*
-         * '{serviceAlias}' => '{serviceName}',
+
+        /**
+         * *** DEFAULT: Resource Options ***
          */
+        'options' => [],
+
+        /**
+         * *** DEFAULT: Resource Pre-Services ***
+         */
+        // '{serviceAlias}' => '{serviceName}'
         'preServiceNames' => [
             'JsonRequestFormat' => 'Reliv\PipeRat\Middleware\RequestFormat\JsonRequestFormat',
         ],
-        /*
-         * '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ],
-         */
+        // '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ]
         'preServiceOptions' => [
         ],
-        /*
-         * '{serviceAlias}' => {priority},
-         */
+        // '{serviceAlias}' => {priority}
         'preServicePriority' => [
             'JsonRequestFormat' => 1000,
         ],
-        /*
-         * '{serviceAlias}' => '{serviceName}',
+
+        /**
+         * *** DEFAULT: Resource Post-Services ***
          */
+        //'{serviceAlias}' => '{serviceName}'
         'postServiceNames' => [
             'JsonResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
             'XmlResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat',
             'DefaultResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
         ],
-        /*
-         * '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ],
-         */
+        // '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ]
         'postServiceOptions' => [
             'JsonResponseFormat' => [
                 'accepts' => [
@@ -199,26 +221,39 @@ return [
                 ],
             ],
         ],
+        // '{serviceAlias}' => {priority}
         'postServicePriority' => [
             'JsonRequestFormat' => 1000,
             'XmlResponseFormat' => 900,
             'DefaultResponseFormat' => 800
         ],
     ],
+
     /**
-     *
+     * *** DEFAULT: Resource Options ***
+     * These should be defined by the application
      */
     'resources' => [
     ],
-    /* DEFAULT: Route */
+
+    /**
+     * *** DEFAULT: Router ***
+     */
+    // '{serviceAlias}' => '{serviceName}'
     'routeServiceNames' => [
-        'baseRoute' => 'Reliv\PipeRat\Middleware\Router',
+        'baseRouter' => 'Reliv\PipeRat\Middleware\Router',
     ],
+    // '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ]
     'routeServiceOptions' => [],
+    // '{serviceAlias}' => {priority}
     'routeServicePriority' => [],
-    /* DEFAULT: Error Handlers */
+
+    /**
+     * *** DEFAULT: Error Handlers ***
+     */
     'errorServiceNames' => [
         'errorHandler' => 'Reliv\PipeRat\Middleware\Error\TriggerErrorHandler',
     ],
+    // '{serviceAlias}' => {priority}
     'errorServicePriority' => [],
 ];

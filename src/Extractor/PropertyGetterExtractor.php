@@ -27,8 +27,8 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
     /**
      * extract
      *
-     * @param mixed   $object
-     * @param Options $options
+     * @param \stdClass|array $object
+     * @param Options         $options
      *
      * @return array
      */
@@ -70,14 +70,18 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
 
             $method = self::METHOD_PREFIX . ucfirst($property);
 
-            if (method_exists($object, $method)) {
+            if (is_object($object) && method_exists($object, $method)) {
                 $data[$property] = $object->$method();
             }
 
             $methodBool = self::METHOD_BOOL_PREFIX . ucfirst($property);
 
-            if (method_exists($object, $methodBool)) {
+            if (is_object($object) && method_exists($object, $methodBool)) {
                 $data[$property] = $object->$methodBool();
+            }
+
+            if (is_array($object) && array_key_exists($property, $object)) {
+                $data[$property] = $object[$property];
             }
 
             if (is_array($value)) {

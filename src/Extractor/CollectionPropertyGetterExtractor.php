@@ -25,7 +25,8 @@ class CollectionPropertyGetterExtractor extends PropertyGetterExtractor implemen
     public function extract($object, Options $options)
     {
         $properties = $this->getPropertyList($options);
+        $depthLimit = $this->getPropertyDepthLimit($options, -1);
 
-        return $this->getCollectionProperties($object, $properties);
+        return $this->getCollectionProperties($object, $properties, 0, $depthLimit);
     }
 }

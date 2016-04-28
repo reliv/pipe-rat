@@ -17,6 +17,13 @@ use Reliv\RcmApiLib\Model\ApiSerializableInterface;
 class XmlResponseFormat extends AbstractResponseFormat implements ResponseFormat
 {
     /**
+     * @var array
+     */
+    protected $defaultAcceptTypes = [
+        'application/xml'
+    ];
+
+    /**
      * arrayToXml
      *
      * @param array             $data
