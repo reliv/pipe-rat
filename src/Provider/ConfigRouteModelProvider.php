@@ -29,13 +29,13 @@ class ConfigRouteModelProvider extends ConfigAbstractModelProvider implements Mo
     {
         if (empty($this->routerModel)) {
             $services = $this->buildServiceArray(
-                $this->config['Reliv\\PipeRat']['resource']['routeServiceNames']
+                $this->config['Reliv\\PipeRat']['routeServiceNames']
             );
             $servicesOptions = $this->buildOptionArray(
-                $this->config['Reliv\\PipeRat']['resource']['routeServiceOptions']
+                $this->config['Reliv\\PipeRat']['routeServiceOptions']
             );
             $servicePriorities = $this->buildOptionArray(
-                $this->config['Reliv\\PipeRat']['resource']['routeServicePriority']
+                $this->config['Reliv\\PipeRat']['routeServicePriority']
             );
             $this->routerModel = new BaseRouteModel(
                 $services,
