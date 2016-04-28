@@ -14,6 +14,11 @@
                 'entity' => 'Rcm\Entity\Country',
                 // Security is best when 'allowDeepWheres' is false
                 'allowDeepWheres' => false,
+                'propertyList' => [
+                    // 'propertyName' => {bool|array}
+                ],
+                // Security is best when 'deepPropertyLimit' is 1
+                'propertyDepthLimit' => 1,
             ],
             'methods' => [],
             /* Methods White-list */

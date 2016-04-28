@@ -9,6 +9,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\DoctrineEntityException;
 use Reliv\PipeRat\Exception\InvalidWhereException;
+use Reliv\PipeRat\Extractor\Extractor;
+use Reliv\PipeRat\Hydrator\Hydrator;
 use Reliv\RcmApiLib\Model\ApiPopulatableInterface;
 
 /**
@@ -30,9 +32,13 @@ class DoctrineResourceController extends AbstractResourceController
      * DoctrineResourceController constructor.
      *
      * @param EntityManager $entityManager
+     * @param Extractor     $extractor
+     * @param Hydrator      $hydrator
      */
     public function __construct(
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        Extractor $extractor,
+        Hydrator $hydrator
     ) {
         $this->entityManager = $entityManager;
     }

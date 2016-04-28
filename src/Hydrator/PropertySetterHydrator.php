@@ -30,25 +30,55 @@ class PropertySetterHydrator extends AbstractHydrator implements Hydrator
      */
     public function hydrate(array $data, $object, Options $options)
     {
-        $properties = $this->getPropertyList($options);
+        $properties = $this->getPropertyList($options, null);
 
-        return $this->setProperties($object, $properties);
+        // If no properties are set, we get them all if we can
+        if (!is_array($properties)) {
+            return $this->setByMethods($data, $object);
+        }
+
+        $this->setProperties($data, $object, $properties);
     }
 
     /**
-     * getProperties
+     * setByMethods
      *
-     * @param \stdClass $object
-     * @param array     $properties
+     * @param $object
      *
      * @return array
      */
+    protected function setByMethods(
+        array $data,
+        $object
+    ) {
+        $methods = get_class_methods(get_class($object));
+
+        foreach ($methods as $method) {
+
+            $prefixLen = strlen(self::METHOD_PREFIX);
+            if (substr($method, 0, strlen($prefixLen)) === self::METHOD_PREFIX) {
+                $property = lcfirst(substr($method, $prefixLen));
+                $object->$method($data[$property]);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * setProperties
+     *
+     * @param array $data
+     * @param       $object
+     * @param array $properties
+     *
+     * @return void
+     */
     protected function setProperties(
+        array $data,
         $object,
         array $properties
     ) {
-        $data = [];
-
         foreach ($properties as $property => $value) {
 
             if ($value === false) {

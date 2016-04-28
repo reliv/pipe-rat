@@ -34,10 +34,46 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
      */
     public function extract($object, Options $options)
     {
-        $properties = $this->getPropertyList($options);
-        $depthLimit = $this->getPropertyDepthLimit($options, -1);
+        $properties = $this->getPropertyList($options, null);
 
-        return $this->getProperties($object, $properties, 0, $depthLimit);
+        // If no properties are set, we get them all if we can
+        if (!is_array($properties)) {
+            return $this->getByMethods($object);
+        }
+        $depthLimit = $this->getPropertyDepthLimit($options, 1);
+
+        return $this->getProperties($object, $properties, 1, $depthLimit);
+    }
+
+    /**
+     * getByMethods
+     *
+     * @param $object
+     *
+     * @return array
+     */
+    protected function getByMethods($object)
+    {
+        $data = [];
+
+        $methods = get_class_methods(get_class($object));
+
+        foreach ($methods as $method) {
+
+            $prefixLen = strlen(self::METHOD_PREFIX);
+            if (substr($method, 0, strlen($prefixLen)) === self::METHOD_PREFIX) {
+                $property = lcfirst(substr($method, $prefixLen));
+                $data[$property] = $object->$method();
+            }
+
+            $prefixLen = strlen(self::METHOD_BOOL_PREFIX);
+            if (substr($method, 0, strlen($prefixLen)) === self::METHOD_BOOL_PREFIX) {
+                $property = lcfirst(substr($method, $prefixLen));
+                $data[$property] = $object->$method();
+            }
+        }
+
+        return $data;
     }
 
     /**
@@ -147,7 +183,8 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
         $depth,
         $depthLimit
     ) {
-        if ($depthLimit === -1) {
+        // 0 depth = no limit
+        if ($depthLimit === 0) {
             return false;
         }
 

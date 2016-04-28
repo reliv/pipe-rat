@@ -2,11 +2,12 @@
 
 namespace Reliv\PipeRat\Middleware\InputFilter;
 
+use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\RcmApiLib\Model\InputFilterApiMessages;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
+use Reliv\RcmApiLib\Model\InputFilterApiMessages;
 use Zend\InputFilter\InputFilter;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -21,15 +22,15 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class ZfInputFilterService extends AbstractMiddleware implements Middleware
 {
     /**
-     * @var ServiceLocatorInterface
+     * @var ContainerInterface
      */
     protected $serviceManager;
 
     /**
-     * @param ServiceLocatorInterface $serviceManager
+     * @param ContainerInterface $serviceManager
      */
     public function __construct(
-        ServiceLocatorInterface $serviceManager
+        $serviceManager
     ) {
         $this->serviceManager = $serviceManager;
     }
@@ -46,8 +47,10 @@ class ZfInputFilterService extends AbstractMiddleware implements Middleware
     {
         $filterService = $this->getOption($request, 'serviceName', '');
 
-        /** @var InputFilter $inputFilter */
-        $inputFilter = $this->serviceManager->get($filterService);
+        /** @var InputFilter $service */
+        $service = $this->serviceManager->get($filterService);
+
+        $inputFilter = clone($service);
 
         $dataModel = $this->getRequestData($request, []);
 
