@@ -32,7 +32,7 @@ class PropertyGetterExtractor extends AbstractExtractor implements Middleware
      */
     public function getExtractor()
     {
-        if(empty($this->extractor)) {
+        if (empty($this->extractor)) {
             $this->extractor = new \Reliv\PipeRat\Extractor\PropertyGetterExtractor();
         }
 
@@ -43,19 +43,19 @@ class PropertyGetterExtractor extends AbstractExtractor implements Middleware
      * __invoke
      *
      * @param Request|DataResponse $request
-     * @param Response             $response
-     * @param callable|null        $out
+     * @param Response $response
+     * @param callable|null $out
      *
      * @return static
      */
     public function __invoke(Request $request, Response $response, callable $out = null)
     {
         $dataModel = $this->getDataModel($response);
-        
+
         if (!is_array($dataModel) && !is_object($dataModel)) {
             return $out($request, $response);
         }
-        
+
         return parent::__invoke($request, $response, $out);
     }
 }
