@@ -32,7 +32,7 @@ class CollectionPropertyGetterExtractor extends AbstractExtractor implements Mid
      */
     public function getExtractor()
     {
-        if(empty($this->extractor)) {
+        if (empty($this->extractor)) {
             $this->extractor = new \Reliv\PipeRat\Extractor\CollectionPropertyGetterExtractor();
         }
 
@@ -43,8 +43,8 @@ class CollectionPropertyGetterExtractor extends AbstractExtractor implements Mid
      * __invoke
      *
      * @param Request|DataResponse $request
-     * @param Response             $response
-     * @param callable|null        $out
+     * @param Response $response
+     * @param callable|null $out
      *
      * @return static
      */
