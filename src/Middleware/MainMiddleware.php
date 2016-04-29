@@ -67,23 +67,16 @@ class MainMiddleware extends AbstractModelMiddleware implements Middleware
         Response $response,
         callable $out = null
     ) {
-        if (empty($this->getResourceKey($request))
-            || empty($this->getMethodKey($request))
-        ) {
+        if (empty($this->getResourceKey($request))) {
+            return $out($request, $response);
+        }
+
+        if (empty($this->getMethodKey($request))) {
             return $out($request, $response);
         }
 
         $resourceModel = $this->getResourceModel($request);
         $methodModel = $this->getMethodModel($request);
-
-        /** @var ControllerModel $controllerModel */
-        $controllerModel = $resourceModel->getControllerModel();
-        $controllerOptions = $controllerModel->getOptions();
-        $controllerService = $controllerModel->getService();
-
-        if (empty($controllerService)) {
-            return $out($request, $response);
-        }
 
         $middlewarePipe = new MiddlewarePipe();
 
@@ -94,6 +87,11 @@ class MainMiddleware extends AbstractModelMiddleware implements Middleware
         /** @var ServiceModelCollection $resourceMethodPreServiceModel */
         $methodPreServiceModel = $methodModel->getPreServiceModel();
         $middlewarePipe->pipeServices($methodPreServiceModel);
+
+        /** @var ControllerModel $controllerModel */
+        $controllerModel = $resourceModel->getControllerModel();
+        $controllerService = $controllerModel->getService();
+        $controllerOptions = $controllerModel->getOptions();
 
         // run method(Request $request, Response $response);
         $method = $methodModel->getName();
@@ -115,6 +113,6 @@ class MainMiddleware extends AbstractModelMiddleware implements Middleware
         $resourcePostServiceModel = $resourceModel->getPostServiceModel();
         $middlewarePipe->pipeServices($resourcePostServiceModel);
 
-        return $middlewarePipe($request, $response, $out);
+        return $middlewarePipe($request,$response, $out);
     }
 }
