@@ -146,7 +146,8 @@ class ConfigResourceModelProvider extends ConfigAbstractResourceModelProvider im
      *
      * @param string $resourceKey
      *
-     * @return ResourceModel
+     * @return mixed
+     * @throws \Exception
      */
     public function get($resourceKey)
     {
@@ -157,9 +158,12 @@ class ConfigResourceModelProvider extends ConfigAbstractResourceModelProvider im
         // ControllerModel
         $controllerServiceAlias = $this->buildValue(
             $resourceKey,
-            'controllerServiceName',
-            'UNDEFINED'
+            'controllerServiceName'
         );
+
+        if(empty($controllerServiceAlias)) {
+            throw new \Exception("controllerServiceName missing $resourceKey");
+        }
 
         $controllerService = $this->serviceManager->get(
             $controllerServiceAlias
