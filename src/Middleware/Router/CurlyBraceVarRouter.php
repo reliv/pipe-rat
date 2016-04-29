@@ -4,6 +4,7 @@ namespace Reliv\PipeRat\Middleware\Router;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Reliv\PipeRat\Exception\ResourceControllerServiceNotDefinedInConfigException;
 use Reliv\PipeRat\Exception\RouteException;
 use Reliv\PipeRat\Middleware\AbstractModelMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
@@ -72,7 +73,13 @@ class CurlyBraceVarRouter extends AbstractModelMiddleware implements Middleware
         $uri = implode('/', $uriParts);
 
         /** @var ResourceModel $resourceModel */
-        $resourceModel = $this->getResourceModel($request);
+        try {
+            $resourceModel = $this->getResourceModel($request);
+        } catch (ResourceControllerServiceNotDefinedInConfigException $e) {
+            //Route is not for us so leave
+            return $out($request, $response);
+        }
+
 
         /** @var MethodModel $methodModel */
         $methodModel = null;
