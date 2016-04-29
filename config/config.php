@@ -97,7 +97,9 @@ return [
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
-                    'postServiceNames' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                    ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
                 ],
@@ -110,7 +112,9 @@ return [
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
-                    'postServiceNames' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                    ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
                 ],
@@ -149,7 +153,9 @@ return [
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
-                    'postServiceNames' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                    ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
                 ],
@@ -190,7 +196,9 @@ return [
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
-                    'postServiceNames' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                    ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
                 ],
