@@ -24,16 +24,7 @@ abstract class AbstractHydrator
      */
     public function getPropertyList(Options $options, $default = [])
     {
-        $propertyList = $options->get('propertyList', []);
-        $propertyDefaultList = $options->get('propertyDefaultList', []);
-
-        $defaultList = [];
-
-        foreach ($propertyDefaultList as $propertyName) {
-            $defaultList[$propertyName] = true;
-        }
-        
-        return array_merge($defaultList, $propertyList);
+        return $options->get('propertyList', []);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Reliv\PipeRat\Middleware\ResponseFormat;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Reliv\PipeRat\Exception\ResponseFormatException;
 use Reliv\PipeRat\Middleware\Middleware;
 
 /**
@@ -16,7 +17,23 @@ use Reliv\PipeRat\Middleware\Middleware;
  */
 class HtmlResponseFormat extends AbstractResponseFormat implements Middleware
 {
+    /**
+     * @var array
+     */
+    protected $defaultAcceptTypes= [
+        'text/html',
+        'application/xhtml',
+    ];
 
+    /**
+     * buildMarkup
+     *
+     * @param string $content
+     * @param string $tag
+     * @param array  $attr
+     *
+     * @return string
+     */
     protected function buildMarkup($content, $tag, $attr = [])
     {
         $markup = '<' . $tag;
@@ -38,7 +55,8 @@ class HtmlResponseFormat extends AbstractResponseFormat implements Middleware
      * @param Response      $response
      * @param callable|null $next
      *
-     * @return \Psr\Http\Message\MessageInterface
+     * @return static
+     * @throws ResponseFormatException
      */
     public function __invoke(
         Request $request,
@@ -48,17 +66,17 @@ class HtmlResponseFormat extends AbstractResponseFormat implements Middleware
         if (!$this->isValidAcceptType($request)) {
             return $next($request, $response);
         }
+        $dataModel = $this->getDataModel($response, null);
+
+        if (!is_array($dataModel)) {
+            throw new ResponseFormatException(get_class($this) . ' requires dataModel to be an array');
+        }
 
         $containerTag = $this->getOption($request, 'containerTag', 'div');
 
-        $dataModel = $this->getDataModelArray($response, null);
-
         $body = $response->getBody();
         $content = $body->getContents();
-
-        if (is_array($dataModel)) {
-            $content = $this->buildMarkup($dataModel, $containerTag, []);
-        }
+        $content = $this->buildMarkup($dataModel, $containerTag, []);
 
         $body->write($content);
 

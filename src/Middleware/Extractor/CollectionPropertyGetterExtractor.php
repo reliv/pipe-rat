@@ -2,6 +2,9 @@
 
 namespace Reliv\PipeRat\Middleware\Extractor;
 
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Reliv\PipeRat\Http\DataResponse;
 use Reliv\PipeRat\Middleware\Middleware;
 
 /**
@@ -34,5 +37,25 @@ class CollectionPropertyGetterExtractor extends AbstractExtractor implements Mid
         }
 
         return $this->extractor;
+    }
+
+    /**
+     * __invoke
+     *
+     * @param Request|DataResponse $request
+     * @param Response             $response
+     * @param callable|null        $out
+     *
+     * @return static
+     */
+    public function __invoke(Request $request, Response $response, callable $out = null)
+    {
+        $dataModel = $this->getDataModel($response);
+
+        if (!is_array($dataModel) && !$dataModel instanceof \Traversable) {
+            return $out($request, $response);
+        }
+
+        return parent::__invoke($request, $response, $out);
     }
 }

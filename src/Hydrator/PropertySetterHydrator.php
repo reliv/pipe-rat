@@ -22,61 +22,36 @@ class PropertySetterHydrator extends AbstractHydrator implements Hydrator
     /**
      * hydrate
      *
-     * @param array   $data
-     * @param mixed   $object
-     * @param Options $options
+     * @param array           $data
+     * @param \stdClass|array $dataModel
+     * @param Options         $options
      *
-     * @return mixed
+     * @return void
      */
-    public function hydrate(array $data, $object, Options $options)
+    public function hydrate(array $data, $dataModel, Options $options)
     {
         $properties = $this->getPropertyList($options, null);
 
         // If no properties are set, we get them all if we can
         if (!is_array($properties)) {
-            return $this->setByMethods($data, $object);
+            $properties = $this->getPropertyListByMethods($dataModel);
         }
 
-        $this->setProperties($data, $object, $properties);
-    }
-
-    /**
-     * setByMethods
-     *
-     * @param $object
-     *
-     * @return array
-     */
-    protected function setByMethods(
-        array $data,
-        $object
-    ) {
-        $methods = get_class_methods(get_class($object));
-
-        foreach ($methods as $method) {
-
-            $prefixLen = strlen(self::METHOD_PREFIX);
-            if (substr($method, 0, strlen($prefixLen)) === self::METHOD_PREFIX) {
-                $property = lcfirst(substr($method, $prefixLen));
-                $object->$method($data[$property]);
-            }
-        }
-
-        return $data;
+        $this->setProperties($data, $dataModel, $properties);
     }
 
     /**
      * setProperties
      *
      * @param array $data
-     * @param       $object
+     * @param       $dataModel
      * @param array $properties
      *
      * @return void
      */
     protected function setProperties(
         array $data,
-        $object,
+        $dataModel,
         array $properties
     ) {
         foreach ($properties as $property => $value) {
@@ -85,11 +60,76 @@ class PropertySetterHydrator extends AbstractHydrator implements Hydrator
                 continue;
             }
 
-            $method = self::METHOD_PREFIX . ucfirst($property);
+            if (is_object($dataModel)) {
+                $this->setDataToObject($property, $data[$property], $dataModel);
+            }
 
-            if (method_exists($object, $method)) {
-                $object->$method($data[$property]);
+            if (is_array($dataModel)) {
+                $this->setDataToArray($property, $data[$property], $dataModel);
             }
         }
+    }
+
+    /**
+     * setDataToArray
+     *
+     * @param string $property
+     * @param mixed  $value
+     * @param array  $dataModel
+     *
+     * @return void
+     */
+    protected function setDataToArray($property, $value, array $dataModel)
+    {
+        if (array_key_exists($property, $dataModel)) {
+            $dataModel[$property] = $value;
+        }
+    }
+
+    /**
+     * setDataToObject
+     *
+     * @param $property
+     * @param $value
+     * @param $dataModel
+     *
+     * @return void
+     */
+    protected function setDataToObject($property, $value, $dataModel)
+    {
+        $method = self::METHOD_PREFIX . ucfirst($property);
+
+        if (method_exists($dataModel, $method)) {
+            $dataModel->$method($value);
+        }
+    }
+    
+    /**
+     * getPropertiesByMethods
+     *
+     * @param \stdClass|array $dataModel
+     *
+     * @return array
+     */
+    protected function getPropertyListByMethods($dataModel)
+    {
+        $properties = [];
+
+        if (!is_object($dataModel)) {
+            return $properties;
+        }
+
+        $methods = get_class_methods(get_class($dataModel));
+
+        foreach ($methods as $method) {
+
+            $prefixLen = strlen(self::METHOD_PREFIX);
+            if (substr($method, 0, strlen($prefixLen)) === self::METHOD_PREFIX) {
+                $property = lcfirst(substr($method, $prefixLen));
+                $properties[$property] = true;
+            }
+        }
+
+        return $properties;
     }
 }

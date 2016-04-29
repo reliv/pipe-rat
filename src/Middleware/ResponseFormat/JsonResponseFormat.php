@@ -20,15 +20,15 @@ class JsonResponseFormat extends AbstractResponseFormat implements Middleware
     /**
      * @var array
      */
-    protected $defaultAcceptTypes = [
-        'application/json'
-    ];
-    
+    protected $defaultAcceptTypes= [
+            'application/json'
+        ];
+
     /**
      * __invoke
      *
-     * @param Request $request
-     * @param Response $response
+     * @param Request       $request
+     * @param Response      $response
      * @param callable|null $next
      *
      * @return \Psr\Http\Message\MessageInterface

@@ -17,17 +17,17 @@ class CollectionPropertyGetterExtractor extends PropertyGetterExtractor implemen
     /**
      * extract
      *
-     * @param mixed   $object
-     * @param Options $options
+     * @param array|\Traversable $collectionDataModel
+     * @param Options            $options
      *
      * @return array
      */
-    public function extract($object, Options $options)
+    public function extract($collectionDataModel, Options $options)
     {
         $properties = $this->getPropertyList($options);
 
         $depthLimit = $this->getPropertyDepthLimit($options, -1);
 
-        return $this->getCollectionProperties($object, $properties, 0, $depthLimit);
+        return $this->getCollectionProperties($collectionDataModel, $properties, 0, $depthLimit);
     }
 }

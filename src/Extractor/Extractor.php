@@ -20,12 +20,12 @@ use Reliv\PipeRat\Options\Options;
 interface Extractor
 {
     /**
-     * extract
+     * extract and return data if possible
      *
-     * @param mixed   $object
-     * @param Options $options
+     * @param \stdClass|array $dataModel
+     * @param Options         $options
      *
-     * @return mixed
+     * @return array|mixed
      */
-    public function extract($object, Options $options);
+    public function extract($dataModel, Options $options);
 }

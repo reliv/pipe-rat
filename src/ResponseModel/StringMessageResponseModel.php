@@ -2,20 +2,16 @@
 
 namespace Reliv\PipeRat\ResponseModel;
 
-use Reliv\RcmApiLib\Http\ApiResponse;
-
 /**
- * Class MessageResponseModel
- *
- * API message format
+ * Class StringMessageResponseModel
  *
  * PHP version 5
  *
  * @category  Reliv
- * @package   Reliv\RcmApiLib\Message
+ * @package   Reliv\PipeRat\ResponseModel
  * @author    James Jervis <jjervis@relivinc.com>
- * @copyright ${YEAR} Reliv International
- * @license   License.txt New BSD License
+ * @copyright 2015 Reliv International
+ * @license   License.txt
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */

@@ -17,11 +17,11 @@ interface Hydrator
     /**
      * hydrate
      *
-     * @param array   $data
-     * @param mixed   $object
-     * @param Options $options
+     * @param array           $data
+     * @param \stdClass|array $dataModel
+     * @param Options         $options
      *
      * @return mixed
      */
-    public function hydrate(array $data, $object, Options $options);
+    public function hydrate(array $data, $dataModel, Options $options);
 }

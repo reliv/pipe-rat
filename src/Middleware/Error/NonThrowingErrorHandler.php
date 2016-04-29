@@ -13,7 +13,7 @@ use Reliv\PipeRat\Middleware\ErrorMiddlewareInterface;
  * PHP version 5
  *
  * @category  Reliv
- * @copyright 2015 Reliv International
+ * @copyright 2016 Reliv International
  * @license   License.txt
  * @version   Release: <package_version>
  * @link      https://github.com/reliv

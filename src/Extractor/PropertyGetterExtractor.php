@@ -2,6 +2,7 @@
 
 namespace Reliv\PipeRat\Extractor;
 
+use Reliv\PipeRat\Extractor\Exception\ExtractorException;
 use Reliv\PipeRat\Options\Options;
 
 /**
@@ -27,67 +28,37 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
     /**
      * extract
      *
-     * @param \stdClass|array $object
+     * @param \stdClass|array $dataModel
      * @param Options         $options
      *
      * @return array
      */
-    public function extract($object, Options $options)
+    public function extract($dataModel, Options $options)
     {
         $properties = $this->getPropertyList($options, null);
 
         // If no properties are set, we get them all if we can
         if (!is_array($properties)) {
-            return $this->getByMethods($object);
+            $properties = $this->getPropertyListByMethods($dataModel);
         }
+
         $depthLimit = $this->getPropertyDepthLimit($options, 1);
 
-        return $this->getProperties($object, $properties, 1, $depthLimit);
-    }
-
-    /**
-     * getByMethods
-     *
-     * @param $object
-     *
-     * @return array
-     */
-    protected function getByMethods($object)
-    {
-        $data = [];
-
-        $methods = get_class_methods(get_class($object));
-
-        foreach ($methods as $method) {
-
-            $prefixLen = strlen(self::METHOD_PREFIX);
-            if (substr($method, 0, strlen($prefixLen)) === self::METHOD_PREFIX) {
-                $property = lcfirst(substr($method, $prefixLen));
-                $data[$property] = $object->$method();
-            }
-
-            $prefixLen = strlen(self::METHOD_BOOL_PREFIX);
-            if (substr($method, 0, strlen($prefixLen)) === self::METHOD_BOOL_PREFIX) {
-                $property = lcfirst(substr($method, $prefixLen));
-                $data[$property] = $object->$method();
-            }
-        }
-
-        return $data;
+        return $this->getProperties($dataModel, $properties, 1, $depthLimit);
     }
 
     /**
      * getProperties
      *
-     * @param \stdClass $object
-     * @param array     $properties
-     * @param int       $depth
-     * @param int       $depthLimit
+     * @param \stdClass|array $dataModel $dataModel
+     * @param array           $properties
+     * @param int             $depth
+     * @param int             $depthLimit
      *
      * @return array
      */
     protected function getProperties(
-        $object,
+        $dataModel,
         array $properties,
         $depth,
         $depthLimit
@@ -104,20 +75,12 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
                 continue;
             }
 
-            $method = self::METHOD_PREFIX . ucfirst($property);
-
-            if (is_object($object) && method_exists($object, $method)) {
-                $data[$property] = $object->$method();
+            if (is_object($dataModel)) {
+                $data[$property] = $this->getDataFromObject($property, $dataModel);
             }
 
-            $methodBool = self::METHOD_BOOL_PREFIX . ucfirst($property);
-
-            if (is_object($object) && method_exists($object, $methodBool)) {
-                $data[$property] = $object->$methodBool();
-            }
-
-            if (is_array($object) && array_key_exists($property, $object)) {
-                $data[$property] = $object[$property];
+            if (is_array($dataModel)) {
+                $data[$property] = $this->getDataFromArray($property, $dataModel);
             }
 
             if (is_array($value)) {
@@ -134,9 +97,53 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
     }
 
     /**
+     * getDataFromArray
+     *
+     * @param string $property
+     * @param array  $dataModel
+     * @param null   $default
+     *
+     * @return mixed|null
+     */
+    protected function getDataFromArray($property, array $dataModel, $default = null)
+    {
+        if (array_key_exists($property, $dataModel)) {
+            return $dataModel[$property];
+        }
+
+        return $default;
+    }
+
+    /**
+     * getDataFromObject
+     *
+     * @param string    $property
+     * @param \stdClass $dataModel
+     * @param null      $default
+     *
+     * @return mixed|null
+     */
+    protected function getDataFromObject($property, $dataModel, $default = null)
+    {
+        $methodBool = self::METHOD_BOOL_PREFIX . ucfirst($property);
+
+        if (method_exists($dataModel, $methodBool)) {
+            return $dataModel->$methodBool();
+        }
+
+        $method = self::METHOD_PREFIX . ucfirst($property);
+
+        if (method_exists($dataModel, $method)) {
+            return $dataModel->$method();
+        }
+
+        return $default;
+    }
+
+    /**
      * getCollectionProperties
      *
-     * @param array|\Traversable $collection
+     * @param array|\Traversable $collectionDataModel
      * @param array              $properties
      * @param int                $depth
      * @param int                $depthLimit
@@ -145,12 +152,12 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
      * @throws ExtractorException
      */
     protected function getCollectionProperties(
-        $collection,
+        $collectionDataModel,
         array $properties = [],
         $depth,
         $depthLimit
     ) {
-        if (!$this->isTraversable($collection)) {
+        if (!$this->isTraversable($collectionDataModel)) {
             throw new ExtractorException('Properties are not traversable');
         }
 
@@ -159,7 +166,7 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
             return $data;
         }
 
-        foreach ($collection as $model) {
+        foreach ($collectionDataModel as $model) {
             $data[] = $this->getProperties(
                 $model,
                 $properties,
@@ -201,5 +208,40 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
     protected function isTraversable($value)
     {
         return (is_array($value) || $value instanceOf \Traversable);
+    }
+
+    /**
+     * getPropertyListByMethods
+     *
+     * @param \stdClass|array $dataModel
+     *
+     * @return array
+     */
+    protected function getPropertyListByMethods($dataModel)
+    {
+        $properties = [];
+
+        if (!is_object($dataModel)) {
+            return $properties;
+        }
+
+        $methods = get_class_methods(get_class($dataModel));
+
+        foreach ($methods as $method) {
+
+            $prefixLen = strlen(self::METHOD_PREFIX);
+            if (substr($method, 0, strlen($prefixLen)) === self::METHOD_PREFIX) {
+                $property = lcfirst(substr($method, $prefixLen));
+                $properties[$property] = true;
+            }
+
+            $prefixLen = strlen(self::METHOD_BOOL_PREFIX);
+            if (substr($method, 0, strlen($prefixLen)) === self::METHOD_BOOL_PREFIX) {
+                $property = lcfirst(substr($method, $prefixLen));
+                $properties[$property] = true;
+            }
+        }
+
+        return $properties;
     }
 }

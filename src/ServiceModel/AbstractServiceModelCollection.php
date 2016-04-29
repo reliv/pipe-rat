@@ -53,6 +53,10 @@ abstract class AbstractServiceModelCollection
 
         $cnt = count($services);
         foreach ($services as $serviceAlias => $service) {
+            // in case the service is set to null for over-riding a default
+            if (empty($service)) {
+                continue;
+            }
             $servicePriority = $cnt;
             if (array_key_exists($serviceAlias, $servicePriorities)) {
                 $servicePriority = $servicePriorities[$serviceAlias];

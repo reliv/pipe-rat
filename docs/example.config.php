@@ -5,21 +5,23 @@
 [
     'resources' => [
         'example-path' => [
-
-            /**** Resource Controller ****/
+            /**
+             * === Resource Controller ===
+             */
+            // '{serviceName}'
             'controllerServiceName' => 'Reliv\PipeRat\ResourceController\DoctrineResourceController',
-            
+            // '{optionKey}' => '{optionValue}'
             'controllerServiceOptions' => [
-                // Doctrine entity
-                'entity' => 'Rcm\Entity\Country',
+                'entity' => null,
                 // Security is best when 'allowDeepWheres' is false
                 'allowDeepWheres' => false,
-                'propertyList' => [
-                    // 'propertyName' => {bool|array}
-                ],
-                // Security is best when 'deepPropertyLimit' is 1
-                'propertyDepthLimit' => 1,
             ],
+            /**
+             * === Extend an existing config ===
+             */
+            // '{serviceName}'
+            'extendsConfig' => 'default:doctrineApi',
+
             'methods' => [],
             /* Methods White-list */
             'methodsAllowed' => [

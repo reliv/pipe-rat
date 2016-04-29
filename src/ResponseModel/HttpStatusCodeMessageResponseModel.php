@@ -14,7 +14,7 @@ namespace Reliv\PipeRat\ResponseModel;
  * @category  Reliv
  * @package   Reliv\PipeRat\ResponseModel
  * @author    James Jervis <jjervis@relivinc.com>
- * @copyright 2015 Reliv International
+ * @copyright 2016 Reliv International
  * @license   License.txt New BSD License
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
@@ -27,6 +27,7 @@ class HttpStatusCodeMessageResponseModel extends MessageResponseModel
      * @var int
      */
     protected $statusCode = 200;
+
     /**
      * @var array Reason Phrases
      */
@@ -97,18 +98,23 @@ class HttpStatusCodeMessageResponseModel extends MessageResponseModel
         ];
 
     /**
-     * @param int $statusCode
+     * HttpStatusCodeMessageResponseModel constructor.
      *
-     * @throws \Exception
+     * @param int   $statusCode
+     * @param array $params
+     * @param bool  $primary
+     * @param array $reasonPhrases
      */
     public function __construct(
         $statusCode = 200,
         $params = [],
-        $primary = true
+        $primary = true,
+        array $reasonPhrases = []
     ) {
         $this->setStatusCode($statusCode);
         $this->setParams($params);
         $this->setPrimary($primary);
+        $this->reasonPhrases = array_merge($this->reasonPhrases, $reasonPhrases);
     }
 
     /**

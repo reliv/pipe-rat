@@ -45,10 +45,6 @@ abstract class AbstractExtractor extends AbstractMiddleware
     {
         $dataModel = $this->getDataModel($response);
 
-        if (!is_array($dataModel) && !is_object($dataModel)) {
-            return $out($request, $response);
-        }
-
         $options = $this->getOptions($request);
 
         $extractor = $this->getExtractor();

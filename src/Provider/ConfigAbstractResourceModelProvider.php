@@ -43,7 +43,7 @@ abstract class ConfigAbstractResourceModelProvider
     ) {
         $this->serviceManager = $serviceManager;
         $this->defaultOptions = new GenericOptions(
-            $config['Reliv\\PipeRat']['default']
+            $config['Reliv\\PipeRat']['defaults']
         );
 
         $this->resourcesOptions = new GenericOptions(
@@ -54,9 +54,9 @@ abstract class ConfigAbstractResourceModelProvider
     /**
      * getResourceValue
      *
-     * @param string $resourceKey
-     * @param string $key
-     * @param null   $default
+     * @param string     $resourceKey
+     * @param string     $key
+     * @param null|mixed $default
      *
      * @return mixed
      */
@@ -71,14 +71,19 @@ abstract class ConfigAbstractResourceModelProvider
     /**
      * getDefaultValue
      *
-     * @param string $key
-     * @param null   $default
+     * @param string     $resourceKey
+     * @param string     $key
+     * @param null|mixed $default
      *
      * @return mixed
      */
-    protected function getDefaultValue($key, $default = null)
+    protected function getDefaultValue($resourceKey, $key, $default = null)
     {
-        return $this->defaultOptions->get($key, $default);
+        $extendsConfig = $this->getResourceValue($resourceKey, 'extendsConfig', 'default:empty');
+
+        $defaultOptions = $this->defaultOptions->getOptions($extendsConfig);
+
+        return $defaultOptions->get($key, $default);
     }
 
     /**
@@ -92,7 +97,7 @@ abstract class ConfigAbstractResourceModelProvider
      */
     protected function buildValue($resourceKey, $key, $default = null)
     {
-        $defaultValue = $this->getDefaultValue($key, $default);
+        $defaultValue = $this->getDefaultValue($resourceKey, $key, $default);
 
         return $this->getResourceValue($resourceKey, $key, $defaultValue);
     }
@@ -108,7 +113,7 @@ abstract class ConfigAbstractResourceModelProvider
      */
     protected function buildMergeValue($resourceKey, $key, $default = [])
     {
-        $defaultValue = $this->getDefaultValue($key, []);
+        $defaultValue = $this->getDefaultValue($resourceKey, $key, []);
 
         $resourceValue = $this->getResourceValue($resourceKey, $key, []);
 
