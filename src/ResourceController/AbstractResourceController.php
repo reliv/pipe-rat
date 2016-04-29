@@ -37,6 +37,15 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
         return $routeModel->getRouteParam($key, $default);
     }
 
+    /**
+     * Get the where param form the URL.
+     *
+     * Looks like:{"country":"CAN"} or {"country":{"name":"United States"}}
+     *
+     * @param Request $request
+     * @return array|mixed
+     * @throws InvalidWhereException
+     */
     public function getWhere(Request $request)
     {
         $allowDeepWheres = $this->getOption($request, 'allowDeepWheres', false);
@@ -59,5 +68,26 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
         }
 
         return $where;
+    }
+
+    /**
+     * Get teh order param from the url to find out how the response
+     * should be ordered.
+     *
+     * Looks like {"name":"ASC"} or {"name":"DESC"} in URL
+     *
+     * @param Request $request
+     * @return array|mixed
+     */
+    public function getOrder(Request $request)
+    {
+        $params = $request->getQueryParams();
+        if (!array_key_exists('order', $params)) {
+            return [];
+        }
+
+        $order = json_decode($params['order'], true);
+
+        return $order;
     }
 }

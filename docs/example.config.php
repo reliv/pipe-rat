@@ -85,8 +85,9 @@
                 'JsonRequestFormat' => 1000,
             ],
             'postServiceNames' => [
-                'PropertyExtractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-                'CollectionPropertyExtractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyExtractor',
+                //@TODO should these be here if they are already in the methods? -Rod
+//                'PropertyExtractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+//                'CollectionPropertyExtractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyExtractor',
                 'JsonResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
                 'XmlResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat',
                 'DefaultResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',

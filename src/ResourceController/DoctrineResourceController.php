@@ -35,7 +35,7 @@ class DoctrineResourceController extends AbstractResourceController
      * DoctrineResourceController constructor.
      *
      * @param EntityManager $entityManager
-     * @param Hydrator      $hydrator
+     * @param Hydrator $hydrator
      */
     public function __construct(
         EntityManager $entityManager,
@@ -109,7 +109,7 @@ class DoctrineResourceController extends AbstractResourceController
     /**
      * Adds the given entity to the DB.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      *
      * @return Response
@@ -136,7 +136,7 @@ class DoctrineResourceController extends AbstractResourceController
      * Updates the entity with the given ID with the request body.
      * If the entity is not in the DB, it will be created.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $out
      *
@@ -172,7 +172,7 @@ class DoctrineResourceController extends AbstractResourceController
      * Returns 200, true if the entity with the given ID exists in DB.
      * Returns 404, false if the entity does not exist in DB.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $out
      *
@@ -192,7 +192,7 @@ class DoctrineResourceController extends AbstractResourceController
      * Finds the the entity with the given ID and returns it.
      * If the entity is not in the DB, return 404.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $out
      *
@@ -213,7 +213,7 @@ class DoctrineResourceController extends AbstractResourceController
      * Returns a list of all enitites that match the json encoded "where" query param.
      * If "where" is not in the query, all entities are returned.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $out
      *
@@ -230,7 +230,7 @@ class DoctrineResourceController extends AbstractResourceController
         }
 
         try {
-            $results = $repo->findBy($where);
+            $results = $repo->findBy($where, $this->getOrder($request));
         } catch (ORMException $e) {
             return $response->withStatus(400);
         }
@@ -239,7 +239,7 @@ class DoctrineResourceController extends AbstractResourceController
     }
 
     /**
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $out
      *
@@ -267,7 +267,7 @@ class DoctrineResourceController extends AbstractResourceController
     /**
      * Deletes the entity with the give ID from the DB.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $out
      *
@@ -290,7 +290,7 @@ class DoctrineResourceController extends AbstractResourceController
     /**
      * Returns the count of the entities given.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $out
      *
@@ -329,7 +329,7 @@ class DoctrineResourceController extends AbstractResourceController
      * Updates the entity with the given ID with the request body.
      * IF the entity is not in the DB, return 404.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $out
      *
