@@ -43,7 +43,7 @@ abstract class ConfigAbstractResourceModelProvider
     ) {
         $this->serviceManager = $serviceManager;
         $this->defaultOptions = new GenericOptions(
-            $config['Reliv\\PipeRat']['defaults']
+            $config['Reliv\\PipeRat']['defaultResourceConfig']
         );
 
         $this->resourcesOptions = new GenericOptions(

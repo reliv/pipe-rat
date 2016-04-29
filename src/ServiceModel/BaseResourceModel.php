@@ -18,11 +18,6 @@ use Reliv\PipeRat\Options\Options;
 class BaseResourceModel implements ResourceModel
 {
     /**
-     * @var string
-     */
-    protected $resourceKey;
-    
-    /**
      * @var ControllerModel
      */
     protected $controllerModel;

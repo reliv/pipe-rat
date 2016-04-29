@@ -99,18 +99,12 @@
                     'propertyList' => [
                         // 'propertyName' => {bool|array}
                     ],
-                    'propertyDefaultList' => [
-                        // 'propertyName'
-                    ],
                     // Security is best when 'deepPropertyLimit' is 0
                     'propertyDepthLimit' => 0,
                 ],
                 'CollectionPropertyExtractor' => [
                     'propertyList' => [
                         // 'propertyName' => {bool|array}
-                    ],
-                    'propertyDefaultList' => [
-                        // 'propertyName'
                     ],
                     // Security is best when 'deepPropertyLimit' is 0
                     'propertyDepthLimit' => 0,

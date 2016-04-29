@@ -87,8 +87,8 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
                 $data[$property] = $this->getCollectionProperties(
                     $data[$property],
                     $value,
-                    $depth,
-                    $depthLimit + 1
+                    $depth + 1,
+                    $depthLimit
                 );
             }
         }
@@ -162,6 +162,7 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
         }
 
         $data = [];
+
         if ($this->isOverDepthLimit($depth, $depthLimit)) {
             return $data;
         }
@@ -195,7 +196,7 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
             return false;
         }
 
-        return ($depth < $depthLimit);
+        return ($depth > $depthLimit);
     }
 
     /**
@@ -230,13 +231,13 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
         foreach ($methods as $method) {
 
             $prefixLen = strlen(self::METHOD_PREFIX);
-            if (substr($method, 0, strlen($prefixLen)) === self::METHOD_PREFIX) {
+            if (substr($method, 0, $prefixLen) === self::METHOD_PREFIX) {
                 $property = lcfirst(substr($method, $prefixLen));
                 $properties[$property] = true;
             }
 
             $prefixLen = strlen(self::METHOD_BOOL_PREFIX);
-            if (substr($method, 0, strlen($prefixLen)) === self::METHOD_BOOL_PREFIX) {
+            if (substr($method, 0, $prefixLen) === self::METHOD_BOOL_PREFIX) {
                 $property = lcfirst(substr($method, $prefixLen));
                 $properties[$property] = true;
             }

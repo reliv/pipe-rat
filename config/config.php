@@ -80,7 +80,7 @@ return [
         /**
          * === Example of a Default Doctrine API ==
          */
-        'default:doctrineApi' => [
+        'doctrine-api' => [
             'controllerServiceName' => 'Reliv\PipeRat\ResourceController\DoctrineResourceController',
             'controllerServiceOptions' => [
                 'entity' => null,
@@ -162,7 +162,9 @@ return [
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
-                    'postServiceNames' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor',
+                    ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
                 ],
@@ -201,7 +203,9 @@ return [
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
-                    'postServiceNames' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor',
+                    ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
                 ],
@@ -235,32 +239,32 @@ return [
                 'DefaultResponseFormat' => 800
             ],
         ],
-        /**
-         * === DEFAULT: Router ===
-         */
-        // '{serviceAlias}' => '{serviceName}'
-        'routeServiceNames' => [
-            'baseRouter' => 'Reliv\PipeRat\Middleware\Router',
-        ],
-        // '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ]
-        'routeServiceOptions' => [],
-        // '{serviceAlias}' => {priority}
-        'routeServicePriority' => [],
-
-        /**
-         * === DEFAULT: Error Handlers ===
-         */
-        'errorServiceNames' => [
-            'errorHandler' => 'Reliv\PipeRat\Middleware\Error\TriggerErrorHandler',
-        ],
-        // '{serviceAlias}' => {priority}
-        'errorServicePriority' => [],
     ],
-
     /**
-     * === DEFAULT: Resource Options ===
+     * === DEFAULT: Resources Config ===
      * These should be defined by the application
      */
     'resources' => [
     ],
+
+    /**
+     * === Router ===
+     */
+    // '{serviceAlias}' => '{serviceName}'
+    'routeServiceNames' => [
+        'baseRouter' => 'Reliv\PipeRat\Middleware\Router',
+    ],
+    // '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ]
+    'routeServiceOptions' => [],
+    // '{serviceAlias}' => {priority}
+    'routeServicePriority' => [],
+
+    /**
+     * === Error Handlers ===
+     */
+    'errorServiceNames' => [
+        'errorHandler' => 'Reliv\PipeRat\Middleware\Error\TriggerErrorHandler',
+    ],
+    // '{serviceAlias}' => {priority}
+    'errorServicePriority' => [],
 ];

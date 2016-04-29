@@ -24,10 +24,34 @@ class CollectionPropertyGetterExtractor extends PropertyGetterExtractor implemen
      */
     public function extract($collectionDataModel, Options $options)
     {
-        $properties = $this->getPropertyList($options);
+        $properties = $this->getPropertyList($options, null);
 
-        $depthLimit = $this->getPropertyDepthLimit($options, -1);
+        // If no properties are set, we get them all if we can
+        if (!is_array($properties)) {
+            $properties = $this->getPropertyListByCollectionMethods($collectionDataModel);
+        }
 
-        return $this->getCollectionProperties($collectionDataModel, $properties, 0, $depthLimit);
+        $depthLimit = $this->getPropertyDepthLimit($options, 1);
+
+        return $this->getCollectionProperties($collectionDataModel, $properties, 1, $depthLimit);
+    }
+
+    /**
+     * getPropertyListByCollectionMethods
+     *
+     * @param \stdClass|array $collectionDataModel
+     *
+     * @return array
+     */
+    protected function getPropertyListByCollectionMethods($collectionDataModel)
+    {
+        $dataModel = null;
+
+        foreach ($collectionDataModel as $ldataModel) {
+            $dataModel = $ldataModel;
+            break;
+        }
+
+        return $this->getPropertyListByMethods($dataModel);
     }
 }

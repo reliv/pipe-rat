@@ -24,7 +24,7 @@ abstract class AbstractExtractor
      */
     public function getPropertyList(Options $options, $default = [])
     {
-        return $options->get('propertyList', []);
+        return $options->get('propertyList', $default);
     }
 
     /**
@@ -35,7 +35,7 @@ abstract class AbstractExtractor
      *
      * @return int
      */
-    public function getPropertyDepthLimit(Options $options, $default = -1)
+    public function getPropertyDepthLimit(Options $options, $default = 1)
     {
         return (int) $options->get('propertyDepthLimit', $default);
     }
