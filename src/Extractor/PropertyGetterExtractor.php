@@ -69,11 +69,13 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
             return $data;
         }
 
-        foreach ($properties as $property => $value) {
+        foreach ($properties as $property => $configValue) {
 
-            if ($value === false) {
+            if ($configValue === false) {
                 continue;
             }
+
+            $data[$property] = $dataModel;
 
             if (is_object($dataModel)) {
                 $data[$property] = $this->getDataFromObject($property, $dataModel);
@@ -83,10 +85,10 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
                 $data[$property] = $this->getDataFromArray($property, $dataModel);
             }
 
-            if (is_array($value)) {
+            if (is_array($configValue)) {
                 $data[$property] = $this->getCollectionProperties(
                     $data[$property],
-                    $value,
+                    $configValue,
                     $depth + 1,
                     $depthLimit
                 );
@@ -158,7 +160,7 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
         $depthLimit
     ) {
         if (!$this->isTraversable($collectionDataModel)) {
-            throw new ExtractorException('Properties are not traversable');
+            throw new ExtractorException('Properties are not traversable, got: ' . gettype($collectionDataModel));
         }
 
         $data = [];
@@ -202,13 +204,13 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
     /**
      * isTraversable
      *
-     * @param $value
+     * @param $dataModel
      *
      * @return bool
      */
-    protected function isTraversable($value)
+    protected function isTraversable($dataModel)
     {
-        return (is_array($value) || $value instanceOf \Traversable);
+        return (is_array($dataModel) || $dataModel instanceOf \Traversable);
     }
 
     /**

@@ -204,7 +204,7 @@ return [
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor',
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
