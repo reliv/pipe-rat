@@ -3,43 +3,48 @@
 namespace Reliv\PipeRat\ResponseModel;
 
 /**
- * interface ResponsePropertiesInterface
+ *  ResponseProperties
  *
- * PropertiesInterface Interface
+ * Properties
  *
  * PHP version 5
  *
  * @category  Reliv
  * @package   Rcm\Entity
  * @author    James Jervis <jjervis@relivinc.com>
- * @copyright 2015 Reliv International
+ * @copyright 2016 Reliv International
  * @license   License.txt New BSD License
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-interface PropertiesInterface
+interface Properties
 {
     /**
      * setProperties
+     * List of properties to include
+     *  [
+     *   '{property}' => {bool}
+     *   '{propertyCollection}' => ['{property}' => {bool}]
+     *  ]
      *
-     * @param \Traversable $data
-     * @param array        $properties List of properties to include
+     * @param array|\Traversable $data
+     * @param array              $properties
      *
      * @return mixed
      */
     public function setProperties(
-        \Traversable $data,
+        $data,
         $properties = []
     );
 
     /**
      * getProperties
-     *   Properties List of properties to include
-     *    [
+     * Properties List of properties to include
+     *  [
      *    '{property}' => {bool}
      *    '{propertyCollection}' => ['{property}' => {bool}]
-     *    ]
-     * 
+     *  ]
+     *
      * @param array $properties List of properties to include
      *
      * @return array
@@ -51,18 +56,18 @@ interface PropertiesInterface
     /**
      * setAllProperties
      *
-     * @param \Traversable $data
+     * @param array|\Traversable $data
      *
      * @return mixed
      */
     public function setAllProperties(
-        \Traversable $data
+        $data
     );
 
     /**
      * getAllProperties
      *
-     * @return mixed
+     * @return array
      */
     public function getAllProperties();
 }

@@ -17,8 +17,15 @@ use Reliv\PipeRat\Middleware\Middleware;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-class JsonRequestFormat implements Middleware
+class JsonRequestFormat extends AbstractRequestFormat implements Middleware
 {
+    /**
+     * @var array
+     */
+    protected $defaultContentTypes = [
+        'application/json',
+    ];
+
     /**
      * If the request is of type application/json, this middleware
      * decodes the json in the body and puts it in the "body" attribute
@@ -31,7 +38,7 @@ class JsonRequestFormat implements Middleware
      */
     public function __invoke(Request $request, Response $response, callable $out = null)
     {
-        if (in_array('application/json', $request->getHeader('Content-Type'))) {
+        if ($this->isValidContentType($request)) {
             $body = json_decode($request->getBody()->getContents(), true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {

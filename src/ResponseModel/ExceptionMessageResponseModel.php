@@ -5,15 +5,13 @@ namespace Reliv\PipeRat\ResponseModel;
 /**
  * Class ExceptionMessageResponseModel
  *
- * API Exception message format
- *
  * PHP version 5
  *
  * @category  Reliv
- * @package   Reliv\RcmApiLib\Message
+ * @package   Reliv\PipeRat\ResponseModel
  * @author    James Jervis <jjervis@relivinc.com>
- * @copyright ${YEAR} Reliv International
- * @license   License.txt New BSD License
+ * @copyright 2015 Reliv International
+ * @license   License.txt
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
@@ -78,11 +76,11 @@ class ExceptionMessageResponseModel extends MessageResponseModel
      */
     public function getSourceString(\Exception $exception)
     {
-        $classname = get_class($exception);
-        if ($pos = strrpos($classname, '\\')) {
-            $classname = lcfirst(substr($classname, $pos + 1));
+        $className = get_class($exception);
+        if ($pos = strrpos($className, '\\')) {
+            $className = lcfirst(substr($className, $pos + 1));
         }
 
-        return $classname;
+        return $className;
     }
 }

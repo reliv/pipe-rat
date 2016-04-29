@@ -12,7 +12,7 @@ namespace Reliv\PipeRat\ResponseModel;
  * @category  Reliv
  * @package   Reliv\PipeRat\ResponseModel
  * @author    James Jervis <jjervis@relivinc.com>
- * @copyright 2015 Reliv International
+ * @copyright 2016 Reliv International
  * @license   License.txt New BSD License
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
@@ -100,25 +100,12 @@ class MessageResponseModels extends AbstractResponseModel implements \IteratorAg
     }
 
     /**
-     * toArray
-     *
-     * @param array $ignore
-     *
-     * @return array
-     */
-    public function toArray($ignore = [])
-    {
-        // re-index so array is valid for json array
-        return array_values($this->messages);
-    }
-
-    /**
      * getIterator
      *
      * @return array
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->toArray());
+        return new \ArrayIterator(array_values($this->messages));
     }
 }

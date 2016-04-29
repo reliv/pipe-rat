@@ -2,13 +2,12 @@
 
 namespace Reliv\PipeRat\ResponseModel;
 
-use Reliv\RcmApiLib\InputFilter\MessageParamInterface;
 use Zend\InputFilter\CollectionInputFilter;
-use Zend\InputFilter\InputFilterInterface;
-use Zend\InputFilter\InputInterface;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\Input;
 
 /**
- * Class InputFilterMessageResponseModels
+ * Class ZfInputFilterMessageResponseModels
  *
  * InputFilterMessageResponseModels
  *
@@ -17,12 +16,12 @@ use Zend\InputFilter\InputInterface;
  * @category  Reliv
  * @package   Reliv\PipeRat\ResponseModel
  * @author    James Jervis <jjervis@relivinc.com>
- * @copyright 2015 Reliv International
+ * @copyright 2016 Reliv International
  * @license   License.txt New BSD License
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-class InputFilterMessageResponseModels extends MessageResponseModels
+class ZfInputFilterMessageResponseModels extends MessageResponseModels
 {
     /**
      * @var string
@@ -45,12 +44,12 @@ class InputFilterMessageResponseModels extends MessageResponseModels
     protected $primaryCode = 'error';
 
     /**
-     * @param InputFilterInterface $inputFilter
-     * @param string               $primaryMessage
-     * @param array                $params
+     * @param InputFilter $inputFilter
+     * @param string      $primaryMessage
+     * @param array       $params
      */
     public function __construct(
-        InputFilterInterface $inputFilter,
+        InputFilter $inputFilter,
         $primaryMessage = 'An Error Occurred',
         $params = []
     ) {
@@ -61,15 +60,15 @@ class InputFilterMessageResponseModels extends MessageResponseModels
     /**
      * build
      *
-     * @param InputFilterInterface $inputFilter
-     * @param array                $params
+     * @param InputFilter $inputFilter
+     * @param array       $params
      *
      * @return void
      */
-    public function build(InputFilterInterface $inputFilter, $params = [])
+    public function build(InputFilter $inputFilter, $params = [])
     {
 
-        if ($inputFilter instanceof MessageParamInterface) {
+        if ($inputFilter instanceof MessageParam) {
             $params = array_merge($inputFilter->getMessageParams(), $params);
         }
 
@@ -117,7 +116,7 @@ class InputFilterMessageResponseModels extends MessageResponseModels
             return;
         }
 
-        if ($input instanceof InputFilterInterface) {
+        if ($input instanceof InputFilter) {
             $inputs = $input->getInvalidInput();
 
             foreach ($inputs as $key => $subinput) {
@@ -157,13 +156,13 @@ class InputFilterMessageResponseModels extends MessageResponseModels
      * buildValidatorMessages
      *
      * @param                $fieldName
-     * @param InputInterface $input
+     * @param Input          $input
      *
      * @return void
      */
     protected function buildValidatorMessages(
         $fieldName,
-        InputInterface $input
+        Input $input
     ) {
         $validatorChain = $input->getValidatorChain();
         $validators = $validatorChain->getValidators();
@@ -177,7 +176,7 @@ class InputFilterMessageResponseModels extends MessageResponseModels
 
             $params = [];
 
-            if ($validator instanceof MessageParamInterface) {
+            if ($validator instanceof MessageParam) {
                 $params = $validator->getMessageParams();
             }
 
@@ -200,7 +199,7 @@ class InputFilterMessageResponseModels extends MessageResponseModels
 
         $params = [];
 
-        if ($input instanceof MessageParamInterface) {
+        if ($input instanceof MessageParam) {
             $params = $input->getMessageParams();
         }
 

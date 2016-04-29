@@ -9,7 +9,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\DoctrineEntityException;
 use Reliv\PipeRat\Exception\InvalidWhereException;
-use Reliv\RcmApiLib\Model\ApiPopulatableInterface;
+use Reliv\PipeRat\Extractor\Extractor;
+use Reliv\PipeRat\Hydrator\Hydrator;
 
 /**
  * Class DoctrineResourceController
@@ -27,14 +28,60 @@ class DoctrineResourceController extends AbstractResourceController
     protected $entityManager;
 
     /**
+     * @var Extractor
+     */
+    protected $extractor;
+
+    /**
+     * @var Hydrator
+     */
+    protected $hydrator;
+
+    /**
      * DoctrineResourceController constructor.
      *
      * @param EntityManager $entityManager
+     * @param Extractor     $extractor
+     * @param Hydrator      $hydrator
      */
     public function __construct(
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        Extractor $extractor,
+        Hydrator $hydrator
     ) {
         $this->entityManager = $entityManager;
+        $this->extractor = $extractor;
+        $this->hydrator = $hydrator;
+    }
+
+    /**
+     * getEntityManager
+     *
+     * @return EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->entityManager;
+    }
+
+    /**
+     * getExtractor
+     *
+     * @return Extractor
+     */
+    public function getExtractor()
+    {
+        return $this->extractor;
+    }
+
+    /**
+     * getHydrator
+     *
+     * @return Hydrator
+     */
+    public function getHydrator()
+    {
+        return $this->hydrator;
     }
 
     /**
@@ -75,7 +122,7 @@ class DoctrineResourceController extends AbstractResourceController
     {
         $entityName = $this->getEntityName($request);
 
-        return $this->entityManager->getRepository($entityName);
+        return $this->getEntityManager()->getRepository($entityName);
     }
 
     /**
@@ -93,10 +140,10 @@ class DoctrineResourceController extends AbstractResourceController
 
         $this->populateEntity($entity, $request);
 
-        $this->entityManager->persist($entity);
+        $this->getEntityManager()->persist($entity);
 
         try {
-            $this->entityManager->flush($entity);
+            $this->getEntityManager()->flush($entity);
         } catch (UniqueConstraintViolationException $e) {
             return $response->withStatus(409);
         }
@@ -130,12 +177,12 @@ class DoctrineResourceController extends AbstractResourceController
             $entityName = $this->getEntityName($request);
             $entity = new $entityName();
             $this->populateEntity($entity, $request);
-            $this->entityManager->persist($entity);
+            $this->getEntityManager()->persist($entity);
         } else {
             $this->populateEntity($entity, $request);
         }
 
-        $this->entityManager->flush($entity);
+        $this->getEntityManager()->flush($entity);
 
         return $out($request, $this->withDataResponse($response, $entity));
     }
@@ -253,8 +300,8 @@ class DoctrineResourceController extends AbstractResourceController
             return $response->withStatus(404);
         }
 
-        $this->entityManager->remove($entity);
-        $this->entityManager->flush($entity);
+        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()->flush($entity);
 
         return $out($request, $this->withDataResponse($response, $entity));
     }
@@ -279,7 +326,7 @@ class DoctrineResourceController extends AbstractResourceController
         if (empty($where)) {
             //When there is no "where", running a query is likely faster than findBy.
             $entityName = $this->getEntityName($request);
-            $count = $this->entityManager
+            $count = $this->getEntityManager()
                 ->createQuery('SELECT COUNT(e) FROM ' . $entityName . ' e')
                 ->getSingleScalarResult();
 
@@ -320,7 +367,7 @@ class DoctrineResourceController extends AbstractResourceController
         }
 
         $this->populateEntity($entity, $request);
-        $this->entityManager->flush($entity);
+        $this->getEntityManager()->flush($entity);
 
         return $out($request, $this->withDataResponse($response, $entity));
     }
@@ -357,7 +404,7 @@ class DoctrineResourceController extends AbstractResourceController
 
     protected function getEntityIdFieldName($entityName)
     {
-        $meta = $this->entityManager->getClassMetadata($entityName);
+        $meta = $this->getEntityManager()->getClassMetadata($entityName);
 
         return $meta->getSingleIdentifierFieldName();
     }
@@ -377,12 +424,11 @@ class DoctrineResourceController extends AbstractResourceController
         $entity,
         Request $request
     ) {
-        if (!$entity instanceof ApiPopulatableInterface) {
-            throw new DoctrineEntityException(
-                'Entity ' . get_class($entity) . ' not instance of ApiPopulatableInterface'
-            );
-        }
 
-        $entity->populate($this->getRequestData($request, []));
+        $this->getHydrator()->hydrate(
+            $this->getRequestData($request, []),
+            $entity,
+            $this->getOptions($request)
+        );
     }
 }

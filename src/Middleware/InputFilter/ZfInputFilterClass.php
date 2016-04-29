@@ -2,11 +2,11 @@
 
 namespace Reliv\PipeRat\Middleware\InputFilter;
 
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Reliv\RcmApiLib\Model\InputFilterApiMessages;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
+use Reliv\PipeRat\ResponseModel\ZfInputFilterMessageResponseModels;
 use Zend\InputFilter\InputFilter;
 
 /**
@@ -43,7 +43,7 @@ class ZfInputFilterClass extends AbstractMiddleware implements Middleware
             return $out($request, $response);
         }
 
-        $messages = new InputFilterApiMessages(
+        $messages = new ZfInputFilterMessageResponseModels(
             $inputFilter,
             $this->getOption($request, 'primaryMessage', 'An Error Occurred'),
             $this->getOption($request, 'messageParams', [])

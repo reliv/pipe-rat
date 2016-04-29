@@ -29,13 +29,13 @@ class ConfigErrorModelProvider extends ConfigAbstractModelProvider implements Mo
     {
         if (empty($this->errorModel)) {
             $services = $this->buildServiceArray(
-                $this->config['Reliv\\PipeRat']['resource']['errorServiceNames']
+                $this->config['Reliv\\PipeRat']['errorServiceNames']
             );
             // Options cannot be supported
             $servicesOptions = [];
 
             $servicePriorities = $this->buildOptionArray(
-                $this->config['Reliv\\PipeRat']['resource']['errorServicePriority']
+                $this->config['Reliv\\PipeRat']['errorServicePriority']
             );
             $this->errorModel = new BaseErrorModel(
                 $services,

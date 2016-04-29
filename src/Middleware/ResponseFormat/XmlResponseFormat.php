@@ -4,7 +4,8 @@ namespace Reliv\PipeRat\Middleware\ResponseFormat;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\RcmApiLib\Model\ApiSerializableInterface;
+use Reliv\PipeRat\Exception\ResponseFormatException;
+use Reliv\PipeRat\Middleware\Middleware;
 
 /**
  * Class XmlResponseFormat
@@ -14,8 +15,15 @@ use Reliv\RcmApiLib\Model\ApiSerializableInterface;
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class XmlResponseFormat extends AbstractResponseFormat implements ResponseFormat
+class XmlResponseFormat extends AbstractResponseFormat implements Middleware
 {
+    /**
+     * @var array
+     */
+    protected $defaultAcceptTypes = [
+        'application/xml'
+    ];
+
     /**
      * arrayToXml
      *
@@ -47,7 +55,8 @@ class XmlResponseFormat extends AbstractResponseFormat implements ResponseFormat
      * @param Response      $response
      * @param callable|null $next
      *
-     * @return \Psr\Http\Message\MessageInterface
+     * @return static
+     * @throws ResponseFormatException
      */
     public function __invoke(
         Request $request,
@@ -57,7 +66,11 @@ class XmlResponseFormat extends AbstractResponseFormat implements ResponseFormat
         if (!$this->isValidAcceptType($request)) {
             return $next($request, $response);
         }
-        $dataModel = $this->getDataModelArray($response, null);
+        $dataModel = $this->getDataModel($response, null);
+
+        if(!is_array($dataModel)) {
+            throw new ResponseFormatException(get_class($this) . ' requires dataModel to be an array');
+        }
 
         $body = $response->getBody();
 

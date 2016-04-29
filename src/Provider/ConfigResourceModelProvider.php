@@ -76,7 +76,7 @@ class ConfigResourceModelProvider extends ConfigAbstractResourceModelProvider im
      */
     protected function buildMethodModels($resourceKey)
     {
-        $methods = $this->getDefaultValue('methods', []);
+        $methods = $this->getDefaultValue($resourceKey, 'methods', []);
         $userMethods = $this->getResourceValue($resourceKey, 'methods', []);
 
         $customMethods = [];
@@ -135,7 +135,7 @@ class ConfigResourceModelProvider extends ConfigAbstractResourceModelProvider im
      */
     public function getMethodPriorities($resourceKey)
     {
-        $defaultMethodPriorities = $this->getDefaultValue('methodPriority', []);
+        $defaultMethodPriorities = $this->getDefaultValue($resourceKey, 'methodPriority', []);
         $userMethodPriorities = $this->getResourceValue($resourceKey, 'methodPriority', []);
 
         return array_merge($defaultMethodPriorities, $userMethodPriorities);
@@ -146,7 +146,8 @@ class ConfigResourceModelProvider extends ConfigAbstractResourceModelProvider im
      *
      * @param string $resourceKey
      *
-     * @return ResourceModel
+     * @return mixed
+     * @throws \Exception
      */
     public function get($resourceKey)
     {
@@ -157,9 +158,12 @@ class ConfigResourceModelProvider extends ConfigAbstractResourceModelProvider im
         // ControllerModel
         $controllerServiceAlias = $this->buildValue(
             $resourceKey,
-            'controllerServiceName',
-            'UNDEFINED'
+            'controllerServiceName'
         );
+
+        if(empty($controllerServiceAlias)) {
+            throw new \Exception("controllerServiceName missing $resourceKey");
+        }
 
         $controllerService = $this->serviceManager->get(
             $controllerServiceAlias

@@ -11,17 +11,12 @@ use Reliv\PipeRat\Options\Options;
  *
  * @category  Reliv
  * @author    James Jervis <jjervis@relivinc.com>
- * @copyright 2015 Reliv International
+ * @copyright 2016 Reliv International
  * @license   License.txt
  * @link      https://github.com/reliv
  */
 class BaseResourceModel implements ResourceModel
 {
-    /**
-     * @var string
-     */
-    protected $resourceKey;
-    
     /**
      * @var ControllerModel
      */
@@ -89,7 +84,8 @@ class BaseResourceModel implements ResourceModel
         ServiceModelCollection $postServiceModel,
         Options $options
     ) {
-        $this->methodsIndex = new \SplPriorityQueue();
+        $methodsIndex = new \SplPriorityQueue();
+
         $this->controllerModel = $controllerModel;
         $this->methodsAllowed = $methodsAllowed;
 
@@ -99,9 +95,14 @@ class BaseResourceModel implements ResourceModel
             if (array_key_exists($methodName, $methodPriorities)) {
                 $priority = $methodPriorities[$methodName];
             }
-            $this->addMethod($methodName, $methodModel, $priority);
+            $methodsIndex->insert($methodName, $priority);
             $cnt--;
         }
+
+        foreach ($methodsIndex as $methodName) {
+            $this->methodModels[$methodName] = $methodModels[$methodName];
+        }
+
         $this->options = $options;
         $this->path = $path;
         $this->preServiceModel = $preServiceModel;
@@ -120,7 +121,6 @@ class BaseResourceModel implements ResourceModel
      */
     protected function addMethod($methodName, MethodModel $methodModel, $priority = 0)
     {
-        $this->methodsIndex->insert($methodName, $priority);
         $this->methodModels[$methodName] = $methodModel;
     }
 
@@ -151,12 +151,7 @@ class BaseResourceModel implements ResourceModel
      */
     public function getMethodModels()
     {
-        $methodModels = [];
-        foreach ($this->methodsIndex as $serviceAlias) {
-            $methodModels[$serviceAlias] = $this->methodModels[$serviceAlias];
-        }
-
-        return $methodModels;
+        return $this->methodModels;
     }
 
     /**

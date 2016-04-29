@@ -4,7 +4,6 @@ namespace Reliv\PipeRat\Middleware;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\RcmApiLib\Model\ApiSerializableInterface;
 use Reliv\PipeRat\Http\BasicDataResponse;
 use Reliv\PipeRat\Http\DataResponse;
 use Reliv\PipeRat\Options\GenericOptions;
@@ -111,52 +110,6 @@ abstract class AbstractMiddleware
     {
         if ($response instanceof DataResponse) {
             return $response->getDataBody();
-        }
-
-        return $default;
-    }
-
-    /**
-     * getDataModelArray
-     *
-     * @param Response $response
-     * @param array    $ignore
-     * @param array    $default
-     *
-     * @return array|mixed|null
-     */
-    public function getDataModelArray(Response $response, $ignore = [], $default = [])
-    {
-        $dataModel = $this->getDataModel($response, []);
-
-        if (is_array($dataModel)) {
-            return $dataModel;
-        }
-
-        if ($dataModel instanceof ApiSerializableInterface) {
-            return $dataModel->toArray($ignore);
-        }
-        
-        $toArrayMethod = null;
-
-        if (method_exists($dataModel, '__toArray')) {
-            $toArrayMethod = '__toArray';
-        }
-
-        if (method_exists($dataModel, 'toArray')) {
-            $toArrayMethod = 'toArray';
-        }
-
-        if ($toArrayMethod !== null) {
-            $array = $dataModel->toArray();
-            $return = [];
-            foreach ($array as $key => $value) {
-                if (!in_array($key, $ignore)) {
-                    $return[$key] = $value;
-                }
-            }
-
-            return $return;
         }
 
         return $default;

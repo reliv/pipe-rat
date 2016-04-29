@@ -23,11 +23,6 @@ use Reliv\PipeRat\Options\Options;
 abstract class AbstractServiceModelCollection
 {
     /**
-     * @var \SplPriorityQueue
-     */
-    protected $servicesIndex;
-    
-    /**
      * @var array
      */
     protected $services = [];
@@ -54,16 +49,23 @@ abstract class AbstractServiceModelCollection
         array $serviceOptions,
         array $servicePriorities
     ) {
-        $this->servicesIndex = new \SplPriorityQueue();
+        $servicesIndex = new \SplPriorityQueue();
 
         $cnt = count($services);
         foreach ($services as $serviceAlias => $service) {
+            // in case the service is set to null for over-riding a default
+            if (empty($service)) {
+                continue;
+            }
             $servicePriority = $cnt;
             if (array_key_exists($serviceAlias, $servicePriorities)) {
                 $servicePriority = $servicePriorities[$serviceAlias];
             }
-            $this->addService($serviceAlias, $service, $servicePriority);
+            $servicesIndex->insert($serviceAlias, $servicePriority);
             $cnt--;
+        }
+        foreach ($servicesIndex as $serviceAlias) {
+            $this->services[$serviceAlias] = $services[$serviceAlias];
         }
 
         foreach ($serviceOptions as $serviceAlias => $serviceOption) {
@@ -82,7 +84,6 @@ abstract class AbstractServiceModelCollection
      */
     protected function addService($serviceAlias, callable $service, $priority = 0)
     {
-        $this->servicesIndex->insert($serviceAlias, $priority);
         $this->services[$serviceAlias] = $service;
     }
 
@@ -106,12 +107,7 @@ abstract class AbstractServiceModelCollection
      */
     public function getServices()
     {
-        $services = [];
-        foreach ($this->servicesIndex as $serviceAlias) {
-            $services[$serviceAlias] = $this->services[$serviceAlias];
-        }
-
-        return $services;
+        return $this->services;
     }
 
     /**

@@ -1,25 +1,28 @@
 <?php
 
-namespace Reliv\PipeRat\Middleware\ResponseFormat;
+namespace Reliv\PipeRat\Middleware\RequestFormat;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
 
 /**
- * Class AbstractResponseFormat
+ * Class AbstractRequestFormat
  *
- * @author    James Jervis <jjervis@relivinc.com>
+ * PHP version 5
+ *
+ * @category  Reliv
  * @copyright 2016 Reliv International
- * @license   License.txt
+ * @license   License.txt New BSD License
+ * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-abstract class AbstractResponseFormat extends AbstractMiddleware
+abstract class AbstractRequestFormat extends AbstractMiddleware
 {
     /**
      * @var array
      */
-    protected $defaultAcceptTypes = [];
-    
+    protected $defaultContentTypes = [];
+
     /**
      * isValidAcceptType
      *
@@ -27,18 +30,21 @@ abstract class AbstractResponseFormat extends AbstractMiddleware
      *
      * @return bool
      */
-    public function isValidAcceptType(Request $request)
+    public function isValidContentType(Request $request)
     {
         $options = $this->getOptions($request);
 
-        $validContentTypes = $options->get('accepts', $this->defaultAcceptTypes);
+        $validContentTypes = $options->get(
+            'contentTypes',
+            $this->defaultContentTypes
+        );
 
         // allow this for all check
         if (in_array('*/*', $validContentTypes)) {
             return true;
         }
 
-        $contentTypes = $request->getHeader('Accept');
+        $contentTypes = $request->getHeader('Content-Type');
 
         foreach ($contentTypes as $contentType) {
             if (in_array($contentType, $validContentTypes)) {

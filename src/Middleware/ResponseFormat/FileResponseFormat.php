@@ -8,14 +8,14 @@ use Reliv\PipeRat\Exception\ResponseFormatException;
 use Reliv\PipeRat\Middleware\Middleware;
 
 /**
- * Class ResponseFormat
+ * Class FileResponseFormat
  *
  * @author    James Jervis <jjervis@relivinc.com>
  * @copyright 2016 Reliv International
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class JsonResponseFormat extends AbstractResponseFormat implements Middleware
+class FileResponseFormat extends AbstractResponseFormat implements Middleware
 {
     /**
      * @var array
@@ -41,17 +41,11 @@ class JsonResponseFormat extends AbstractResponseFormat implements Middleware
         }
         $dataModel = $this->getDataModel($response);
 
-        $body = $response->getBody();
-        $content = json_encode($dataModel);
-        $err = json_last_error();
-        if ($err !== JSON_ERROR_NONE) {
-            throw new ResponseFormatException('json_encode failed to encode');
-        }
-        $body->write($content);
+        // @todo
 
-        return $response->withBody($body)->withHeader(
-            'Content-Type',
-            'application/json'
-        );
+//        return $response->withBody($body)->withHeader(
+//            'Content-Type',
+//            'application/json'
+//        );
     }
 }
