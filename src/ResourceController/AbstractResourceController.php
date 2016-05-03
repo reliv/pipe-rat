@@ -50,12 +50,7 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
     {
         $allowDeepWheres = $this->getOption($request, 'allowDeepWheres', false);
 
-        $params = $request->getQueryParams();
-        if (!array_key_exists('where', $params)) {
-            return [];
-        }
-
-        $where = json_decode($params['where'], true);
+        $where = $request->getAttribute('whereFilterParam', []);
 
         if ($allowDeepWheres) {
             return $where;
@@ -71,7 +66,7 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
     }
 
     /**
-     * Get teh order param from the url to find out how the response
+     * Get the order param from the url to find out how the response
      * should be ordered.
      *
      * Looks like {"name":"ASC"} or {"name":"DESC"} in URL
@@ -81,13 +76,6 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
      */
     public function getOrder(Request $request)
     {
-        $params = $request->getQueryParams();
-        if (!array_key_exists('order', $params)) {
-            return [];
-        }
-
-        $order = json_decode($params['order'], true);
-
-        return $order;
+        return $request->getAttribute('orderByFilterParam', []);;
     }
 }
