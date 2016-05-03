@@ -179,6 +179,7 @@ return [
                     'path' => '',
                     'preServiceNames' => [
                         'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\WhereFilterParamRequestFormat',
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
                     ],
                     'preServiceOptions' => [
                         'WhereFilterParam' => [
