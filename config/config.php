@@ -92,7 +92,9 @@ return [
                     'name' => 'create',
                     'options' => [],
                     'path' => '',
-                    'preServiceNames' => [],
+                    'preServiceNames' => [
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
+                    ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
@@ -107,7 +109,9 @@ return [
                     'name' => 'upsert',
                     'options' => [],
                     'path' => '',
-                    'preServiceNames' => [],
+                    'preServiceNames' => [
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
+                    ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
@@ -157,6 +161,7 @@ return [
                     'path' => 'findOne',
                     'preServiceNames' => [
                         'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\WhereFilterParamRequestFormat',
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
                     ],
                     'preServiceOptions' => [
                         'WhereFilterParam' => [
@@ -213,7 +218,9 @@ return [
                     'name' => 'updateProperties',
                     'options' => [],
                     'path' => '{id}',
-                    'preServiceNames' => [],
+                    'preServiceNames' => [
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
+                    ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
@@ -228,7 +235,9 @@ return [
                     'name' => 'findById',
                     'options' => [],
                     'path' => '{id}',
-                    'preServiceNames' => [],
+                    'preServiceNames' => [
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
+                    ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
