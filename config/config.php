@@ -84,8 +84,6 @@ return [
             'controllerServiceName' => 'Reliv\PipeRat\ResourceController\DoctrineResourceController',
             'controllerServiceOptions' => [
                 'entity' => null,
-                // Security is best when 'allowDeepWheres' is false
-                'allowDeepWheres' => false,
             ],
             'methods' => [
                 'create' => [
@@ -137,8 +135,15 @@ return [
                     'name' => 'count',
                     'options' => [],
                     'path' => 'count',
-                    'preServiceNames' => [],
-                    'preServiceOptions' => [],
+                    'preServiceNames' => [
+                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\WhereFilterParamRequestFormat',
+                    ],
+                    'preServiceOptions' => [
+                        'WhereFilterParam' => [
+                            // Security is best when 'allowDeepWheres' is false
+                            'allowDeepWheres' => false,
+                        ]
+                    ],
                     'preServicePriority' => [],
                     'postServiceNames' => [],
                     'postServiceOptions' => [],
@@ -150,8 +155,15 @@ return [
                     'name' => 'findOne',
                     'options' => [],
                     'path' => 'findOne',
-                    'preServiceNames' => [],
-                    'preServiceOptions' => [],
+                    'preServiceNames' => [
+                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\WhereFilterParamRequestFormat',
+                    ],
+                    'preServiceOptions' => [
+                        'WhereFilterParam' => [
+                            // Security is best when 'allowDeepWheres' is false
+                            'allowDeepWheres' => false,
+                        ]
+                    ],
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
@@ -165,8 +177,16 @@ return [
                     'name' => 'find',
                     'options' => [],
                     'path' => '',
-                    'preServiceNames' => [],
-                    'preServiceOptions' => [],
+                    'preServiceNames' => [
+                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\WhereFilterParamRequestFormat',
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
+                    ],
+                    'preServiceOptions' => [
+                        'WhereFilterParam' => [
+                            // Security is best when 'allowDeepWheres' is false
+                            'allowDeepWheres' => false,
+                        ]
+                    ],
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor',

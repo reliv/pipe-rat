@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Http\DataResponse;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
+use Reliv\PipeRat\Options\Options;
 
 /**
  * Class AbstractExtractor
@@ -26,12 +27,118 @@ abstract class AbstractExtractor extends AbstractMiddleware
     protected $extractor;
 
     /**
+     * getOptions
+     *
+     * @param Request $request
+     *
+     * @return Options
+     */
+    public function getOptions(Request $request)
+    {
+        $options = parent::getOptions($request);
+
+        $this->buildPropertyListOption($request, $options);
+
+        return $options;
+    }
+
+    /**
+     * getFilterPropertyList
+     *
+     * @param Request $request
+     * @param array   $default
+     *
+     * @return array|mixed
+     */
+    public function getFilterPropertyList(Request $request, $default = [])
+    {
+        return $request->getAttribute('propertyFilterParam', $default);
+    }
+
+    /**
+     * buildPropertyListOption
+     *
+     * @param Request $request
+     * @param Options $options
+     *
+     * @return void
+     */
+    public function buildPropertyListOption(Request $request, Options $options)
+    {
+        $filterPropertyList = $this->getFilterPropertyList($request, null);
+        $propertyListMerged = $options->get('propertyListMerged', false);
+        
+        // Nothing to be done
+        if ($filterPropertyList === null && $propertyListMerged) {
+            return;
+        }
+
+        $defaultPropertyList = $options->get('propertyList', []);
+
+        if(empty($defaultPropertyList)) {
+            $options->set('propertyList', $filterPropertyList);
+            return;
+        }
+
+        $list = $this->buildPropertyList($filterPropertyList, $defaultPropertyList);
+
+        $options->set('propertyList', $list);
+        $options->set('propertyListMerged', true);
+    }
+
+    /**
+     * buildPropertyList
+     *
+     * @param       $defaultPropertyList
+     * @param       $filterPropertyList
+     * @param array $list
+     *
+     * @return array
+     */
+    protected function buildPropertyList(
+        $defaultPropertyList,
+        $filterPropertyList,
+        &$list = []
+    ) {
+        foreach ($filterPropertyList as $filterProperty => $value) {
+
+            // If it is not set in default, we ignore
+            if (!array_key_exists($filterProperty, $defaultPropertyList)) {
+                continue;
+            }
+
+            // If it is set false in default, we ignore
+            if($defaultPropertyList[$filterProperty] === false) {
+                continue;
+            }
+
+            // We can turn them off if they are disabled
+            if($defaultPropertyList[$filterProperty] === true) {
+                $defaultPropertyList[$filterProperty] = (bool) $filterPropertyList[$filterProperty];
+                continue;
+            }
+
+            // If they are arrays, then we check sub values
+            if (is_array($defaultPropertyList[$filterProperty]) && is_array($value)) {
+                $this->buildPropertyList(
+                    $defaultPropertyList[$filterProperty],
+                    $filterPropertyList[$filterProperty],
+                    $list
+                );
+                continue;
+            }
+        }
+
+        return $list;
+    }
+
+    /**
      * getExtractor
      *
      * @return \Reliv\PipeRat\Extractor\PropertyGetterExtractor
      */
     abstract public function getExtractor();
-    
+
     /**
      * __invoke
      *
