@@ -69,11 +69,16 @@ abstract class AbstractExtractor extends AbstractMiddleware
         $propertyListMerged = $options->get('propertyListMerged', false);
         
         // Nothing to be done
-        if ($filterPropertyList === null || $propertyListMerged) {
+        if ($filterPropertyList === null && $propertyListMerged) {
             return;
         }
 
         $defaultPropertyList = $options->get('propertyList', []);
+
+        if(empty($defaultPropertyList)) {
+            $options->set('propertyList', $filterPropertyList);
+            return;
+        }
 
         $list = $this->buildPropertyList($filterPropertyList, $defaultPropertyList);
 

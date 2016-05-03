@@ -38,9 +38,11 @@ class WhereFilterParamRequestFormat extends AbstractRequestFormat implements Mid
 
         $param = [];
 
-        if (array_key_exists('where', $params)) {
-            $param = json_decode($params['where'], true);
+        if (!array_key_exists('where', $params)) {
+            return $out($request, $response);
         }
+
+        $param = json_decode($params['where'], true);
 
         $request = $request->withAttribute('whereFilterParam', $param);
 

@@ -38,9 +38,11 @@ class PropertyFilterParamRequestFormat extends AbstractRequestFormat implements 
 
         $param = [];
 
-        if (array_key_exists('properties', $params)) {
-            $param = json_decode($params['properties'], true);
+        if (!array_key_exists('properties', $params)) {
+            return $out($request, $response);
         }
+
+        $param = json_decode($params['properties'], true);
 
         $request = $request->withAttribute('propertyFilterParam', $param);
 

@@ -39,10 +39,11 @@ class OrderByFilterParamRequestFormat extends AbstractRequestFormat implements M
 
         $param = [];
 
-        //
-        if (array_key_exists('orderby', $params)) {
-            $param = json_decode($params['orderby'], true);
+        if (!array_key_exists('orderby', $params)) {
+            return $out($request, $response);
         }
+
+        $param = json_decode($params['orderby'], true);
 
         $request = $request->withAttribute('orderByFilterParam', $param);
 
