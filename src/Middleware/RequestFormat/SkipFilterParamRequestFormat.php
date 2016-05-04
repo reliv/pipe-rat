@@ -8,7 +8,7 @@ use Reliv\PipeRat\Exception\InvalidWhereException;
 use Reliv\PipeRat\Middleware\Middleware;
 
 /**
- * Class PropertyFilterParamRequestFormat
+ * Class SkipFilterParamRequestFormat
  *
  * PHP version 5
  *
@@ -18,12 +18,13 @@ use Reliv\PipeRat\Middleware\Middleware;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-class PropertyFilterParamRequestFormat extends AbstractRequestFormat implements Middleware
+class SkipFilterParamRequestFormat extends AbstractRequestFormat implements Middleware
 {
     /**
-     * Get the where param form the URL.
+     * Get the order param from the url to find out how the response
+     * should be ordered.
      *
-     * Looks like:{"country":true} or {"country":{"name":true}}
+     * Looks like {"name":"ASC"} or {"name":"DESC"} in URL
      *
      * @param Request       $request
      * @param Response      $response
@@ -35,14 +36,14 @@ class PropertyFilterParamRequestFormat extends AbstractRequestFormat implements 
     public function __invoke(Request $request, Response $response, callable $out = null)
     {
         $params = $request->getQueryParams();
-
-        if (!array_key_exists('properties', $params)) {
+        
+        if (!array_key_exists('skip', $params)) {
             return $out($request, $response);
         }
 
-        $param = json_decode($params['properties'], true);
+        $param = (int)$params['skip'];
 
-        $request = $request->withAttribute('propertyFilterParam', $param);
+        $request = $request->withAttribute('skipFilterParam', $param);
 
         return $out($request, $response);
     }

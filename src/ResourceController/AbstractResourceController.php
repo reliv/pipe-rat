@@ -76,6 +76,18 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
      */
     public function getOrder(Request $request)
     {
-        return $request->getAttribute('orderByFilterParam', []);;
+        return $request->getAttribute('orderByFilterParam', []);
+    }
+
+    /**
+     * Get the skip param from the url to find out the number of items to skip.
+     *
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public function getSkip(Request $request)
+    {
+        return $request->getAttribute('skipFilterParam', 0);
     }
 }

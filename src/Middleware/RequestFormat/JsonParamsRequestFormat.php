@@ -6,9 +6,10 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\InvalidWhereException;
 use Reliv\PipeRat\Middleware\Middleware;
+use Reliv\PipeRat\Options\GenericOptions;
 
 /**
- * Class PropertyFilterParamRequestFormat
+ * Class ParamRequestFormat
  *
  * PHP version 5
  *
@@ -18,12 +19,10 @@ use Reliv\PipeRat\Middleware\Middleware;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-class PropertyFilterParamRequestFormat extends AbstractRequestFormat implements Middleware
+class ParamRequestFormat extends AbstractRequestFormat implements Middleware
 {
     /**
-     * Get the where param form the URL.
-     *
-     * Looks like:{"country":true} or {"country":{"name":true}}
+     * __invoke
      *
      * @param Request       $request
      * @param Response      $response
@@ -36,13 +35,9 @@ class PropertyFilterParamRequestFormat extends AbstractRequestFormat implements 
     {
         $params = $request->getQueryParams();
 
-        if (!array_key_exists('properties', $params)) {
-            return $out($request, $response);
-        }
+        $paramsOptions = new GenericOptions(json_decode($params, true));
 
-        $param = json_decode($params['properties'], true);
-
-        $request = $request->withAttribute('propertyFilterParam', $param);
+        $request = $request->withAttribute('jsonParams', $paramsOptions);
 
         return $out($request, $response);
     }

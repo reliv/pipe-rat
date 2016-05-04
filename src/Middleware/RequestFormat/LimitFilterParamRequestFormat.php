@@ -34,8 +34,6 @@ class LimitFilterParamRequestFormat extends AbstractRequestFormat implements Mid
     {
         $params = $request->getQueryParams();
 
-        $param = [];
-
         if (!array_key_exists('limit', $params)) {
             return $out($request, $response);
         }
