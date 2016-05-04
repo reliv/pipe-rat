@@ -189,15 +189,15 @@ class ConfigResourceModelProvider extends ConfigAbstractResourceModelProvider im
         $path = $this->getResourceValue($resourceKey, 'path');
 
         $preServiceModel = $this->buildServiceModelCollection(
-            $this->buildMergeValue($resourceKey, 'preServiceNames', []),
-            $this->buildMergeValue($resourceKey, 'preServiceOptions', []),
-            $this->buildMergeValue($resourceKey, 'preServicePriority', [])
+            $this->buildMergeValue($resourceKey, 'preServiceNames'),
+            $this->buildMergeValue($resourceKey, 'preServiceOptions'),
+            $this->buildMergeValue($resourceKey, 'preServicePriority')
         );
 
         $postServiceModel = $this->buildServiceModelCollection(
-            $this->buildMergeValue($resourceKey, 'postServiceNames', []),
-            $this->buildMergeValue($resourceKey, 'postServiceOptions', []),
-            $this->buildMergeValue($resourceKey, 'postServicePriority', [])
+            $this->buildMergeValue($resourceKey, 'postServiceNames'),
+            $this->buildMergeValue($resourceKey, 'postServiceOptions'),
+            $this->buildMergeValue($resourceKey, 'postServicePriority')
         );
 
         $options = $this->buildOptions($resourceKey, 'options');

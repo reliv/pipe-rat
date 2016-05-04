@@ -185,6 +185,9 @@ return [
                     'preServiceNames' => [
                         'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\WhereFilterParamRequestFormat',
                         'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
+                        'OrderByFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\OrderByFilterParamRequestFormat',
+                        'SkipFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\SkipFilterParamRequestFormat',
+                        'LimitFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\LimitFilterParamRequestFormat',
                     ],
                     'preServiceOptions' => [
                         'WhereFilterParam' => [

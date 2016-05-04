@@ -103,15 +103,14 @@ abstract class ConfigAbstractResourceModelProvider
     }
 
     /**
-     * buildMergeValue
+     * buildMergeValue - Merge array values
      *
      * @param string $resourceKey
      * @param string $key
-     * @param array  $default
      *
-     * @return mixed
+     * @return array
      */
-    protected function buildMergeValue($resourceKey, $key, $default = [])
+    protected function buildMergeValue($resourceKey, $key)
     {
         $defaultValue = $this->getDefaultValue($resourceKey, $key, []);
 

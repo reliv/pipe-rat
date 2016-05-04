@@ -383,6 +383,14 @@ class DoctrineResourceController extends AbstractResourceController
         $entity->$setter($id);
     }
 
+    /**
+     * getEntityIdFieldName
+     *
+     * @param $entityName
+     *
+     * @return string
+     * @throws \Doctrine\ORM\Mapping\MappingException
+     */
     protected function getEntityIdFieldName($entityName)
     {
         $meta = $this->getEntityManager()->getClassMetadata($entityName);
