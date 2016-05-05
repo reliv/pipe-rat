@@ -6,6 +6,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Middleware\MiddlewarePipe;
 use Interop\Container\ContainerInterface;
+use Reliv\PipeRat\Options\GenericOptions;
+use Reliv\PipeRat\Options\Options;
 
 /**
  * Class BasicConfigMiddlewareProvider
@@ -60,9 +62,10 @@ class BasicConfigMiddlewareProvider implements MiddlewareProvider
      *
      * @return array|mixed
      */
-    protected function getResourceConfig() {
+    protected function getResourceConfig()
+    {
 
-        if(!empty($this->resourceConfig)) {
+        if (!empty($this->resourceConfig)) {
             return $this->resourceConfig;
         }
 
@@ -71,14 +74,16 @@ class BasicConfigMiddlewareProvider implements MiddlewareProvider
 
         foreach ($resourceConfig as $resourceKey => $resourceProperties) {
             $defaultResourcePropertyKey = 'default:empty';
-            if(array_key_exists('extendsConfig', $resourceProperties)) {
-                $defaultResourcePropertyKey =  $resourceProperties['extendsConfig'];
+            if (array_key_exists('extendsConfig', $resourceProperties)) {
+                $defaultResourcePropertyKey = $resourceProperties['extendsConfig'];
             }
 
-            $this->resourceConfig[$resourceKey] = array_merge_recursive(
+            $resourceConfig = array_merge_recursive(
                 $defaultConfig[$defaultResourcePropertyKey],
                 $resourceProperties
             );
+
+            $this->resourceConfig[$resourceKey] = new GenericOptions($resourceConfig);
         }
 
         return $this->resourceConfig;
@@ -106,15 +111,32 @@ class BasicConfigMiddlewareProvider implements MiddlewareProvider
      */
     public function getPaths()
     {
-
-        if(!empty($paths))
-        {
+        if (!empty($paths)) {
             return $this->paths;
         }
 
-        $this->paths;
+        $resourceConfig = $this->getResourceConfig();
 
+        /**
+         * @var         $resourceKey
+         * @var Options $resourceOptions
+         */
+        foreach ($resourceConfig as $resourceKey => $resourceOptions) {
+            $resourcePath = $resourceOptions->get('path', '/' . $resourceKey);
+            foreach ($resourceOptions->get('methods', []) as $methodName => $methodProperties) {
+                $methodOptions = new GenericOptions($methodProperties);
 
+                $resourcePath .= $methodOptions->get('path', '/' . $methodName);
+
+                if (!array_key_exists($resourcePath, $this->paths)) {
+                    $this->paths[$resourcePath] = [];
+                }
+
+                $this->paths[$resourcePath][$methodOptions->get('httpVerb'] = $resourceKey . ':' . $methodName;
+            }
+        }
+
+        return $this->paths;
 
         return [
             '/{path}' => [

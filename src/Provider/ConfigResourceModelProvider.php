@@ -2,7 +2,6 @@
 
 namespace Reliv\PipeRat\Provider;
 
-use Reliv\PipeRat\Exception\ControllerServiceNotFoundException;
 use Reliv\PipeRat\Exception\ResourceControllerServiceNotDefinedInConfigException;
 use Reliv\PipeRat\Options\GenericOptions;
 use Reliv\PipeRat\ServiceModel\BaseControllerModel;
