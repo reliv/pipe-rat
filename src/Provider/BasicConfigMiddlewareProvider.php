@@ -64,7 +64,6 @@ class BasicConfigMiddlewareProvider implements MiddlewareProvider
      */
     protected function getResourceConfig()
     {
-
         if (!empty($this->resourceConfig)) {
             return $this->resourceConfig;
         }
@@ -132,16 +131,10 @@ class BasicConfigMiddlewareProvider implements MiddlewareProvider
                     $this->paths[$resourcePath] = [];
                 }
 
-                $this->paths[$resourcePath][$methodOptions->get('httpVerb'] = $resourceKey . ':' . $methodName;
+                $this->paths[$resourcePath][$methodOptions->get('httpVerb', 'GET')] = $resourceKey . ':' . $methodName;
             }
         }
 
         return $this->paths;
-
-        return [
-            '/{path}' => [
-                '{verb}' => 'resourceId'
-            ],
-        ];
     }
 }

@@ -6,7 +6,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 use Reliv\PipeRat\Middleware\MiddlewarePipe;
-use Reliv\PipeRat\ServiceModel\ServiceModels;
 
 /**
  * Class MiddlewareProvider
@@ -38,7 +37,7 @@ interface MiddlewareProvider
     /**
      * getResources
      *
-     * @return array
+     * @return array ['/{path}' => ['{verb}' => 'resourceId']]
      */
     public function getPaths();
 }
