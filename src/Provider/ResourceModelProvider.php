@@ -5,6 +5,7 @@ namespace Reliv\PipeRat\Provider;
 use Reliv\PipeRat\ServiceModel\ResourceModel;
 
 /**
+ * @deprecated
  * interface ResourceModelProvider
  *
  * @author    James Jervis <jjervis@relivinc.com>

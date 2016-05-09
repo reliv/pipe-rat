@@ -5,6 +5,7 @@ namespace Reliv\PipeRat\ServiceModel;
 use Reliv\PipeRat\Options\Options;
 
 /**
+ * @deprecated
  * class BaseMethodModel
  *
  * @author    James Jervis <jjervis@relivinc.com>

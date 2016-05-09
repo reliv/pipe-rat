@@ -61,7 +61,7 @@ abstract class AbstractMiddleware
     {
         /** @var Options $options */
         $options = $request->getAttribute(
-            OptionsMiddleware::REQUEST_ATTRIBUTE_OPTIONS,
+            OptionsMiddleware::getName(),
             new GenericOptions()
         );
 

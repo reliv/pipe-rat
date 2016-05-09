@@ -3,6 +3,7 @@
 namespace Reliv\PipeRat\ServiceModel;
 
 /**
+ * @deprecated
  * Class BaseErrorModel
  *
  * @author    James Jervis <jjervis@relivinc.com>

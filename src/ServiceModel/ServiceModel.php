@@ -6,6 +6,7 @@ use Reliv\PipeRat\Exception\ServiceMissingException;
 use Reliv\PipeRat\Options\Options;
 
 /**
+ * @deprecated
  * Class ServiceModel
  *
  * PHP version 5

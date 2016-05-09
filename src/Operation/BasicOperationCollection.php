@@ -1,10 +1,9 @@
 <?php
 
-namespace Reliv\PipeRat\ServiceModel;
+namespace Reliv\PipeRat\Operation;
 
 /**
- * @deprecated
- * interface ControllerModel
+ * Class OperationCollection
  *
  * PHP version 5
  *
@@ -16,7 +15,6 @@ namespace Reliv\PipeRat\ServiceModel;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-interface ControllerModel extends ServiceModel
+class BasicOperationCollection extends AbstractOperationCollection implements OperationCollection
 {
-
 }

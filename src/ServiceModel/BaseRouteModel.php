@@ -3,6 +3,7 @@
 namespace Reliv\PipeRat\ServiceModel;
 
 /**
+ * @deprecated
  * Class BaseRouteModel
  *
  * @author    James Jervis <jjervis@relivinc.com>

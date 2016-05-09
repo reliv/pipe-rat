@@ -5,7 +5,7 @@ namespace Reliv\PipeRat\Operation;
 use Reliv\PipeRat\Exception\ServiceMissingException;
 
 /**
- * Class OperationCollection
+ * Class AbstractOperationCollection
  *
  * PHP version 5
  *
@@ -17,8 +17,13 @@ use Reliv\PipeRat\Exception\ServiceMissingException;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-interface OperationCollection
+abstract class AbstractOperationCollection
 {
+    /**
+     * @var array
+     */
+    protected $operations = [];
+
     /**
      * getServiceModels
      *
@@ -27,7 +32,10 @@ interface OperationCollection
      * @return array ['{alias}' => {ServiceModel}]
      * @throws ServiceMissingException
      */
-    public function getOperations();
+    public function getOperations()
+    {
+        return $this->operations;
+    }
 
     /**
      * addOperation
@@ -36,15 +44,25 @@ interface OperationCollection
      *
      * @return mixed
      */
-    public function addOperation(Operation $operation);
+    public function addOperation(Operation $operation)
+    {
+        $this->operations[$operation->getName()] = $operation;
+    }
 
     /**
      * getOperation
      *
-     * @param string     $alias
-     * @param null|mixed $default
+     * @param      $alias
+     * @param null $default
      *
      * @return mixed|null
      */
-    public function getOperation($alias, $default = null);
+    public function getOperation($alias, $default = null)
+    {
+        if (array_key_exists($alias, $this->operations)) {
+            return $this->operations[$alias];
+        }
+        
+        return $default;
+    }
 }

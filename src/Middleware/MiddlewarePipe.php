@@ -2,6 +2,8 @@
 
 namespace Reliv\PipeRat\Middleware;
 
+use Reliv\PipeRat\Operation\Operation;
+use Reliv\PipeRat\Operation\OperationCollection;
 use Reliv\PipeRat\ServiceModel\ServiceModelCollection;
 use Reliv\PipeRat\Options\Options;
 
@@ -16,6 +18,45 @@ use Reliv\PipeRat\Options\Options;
 class MiddlewarePipe extends \Zend\Stratigility\MiddlewarePipe
 {
     /**
+     * pipeOperations
+     *
+     * @param OperationCollection $operationCollection
+     *
+     * @return void
+     */
+    public function pipeOperations(
+        OperationCollection $operationCollection
+    ) {
+        $operations = $operationCollection->getOperations();
+        /**
+         * @var string    $name
+         * @var Operation $operation
+         */
+        foreach ($operations as $name => $operation) {
+            $this->pipeOperation(
+                $operation
+            );
+        }
+    }
+
+    /**
+     * pipeOperation
+     *
+     * @param Operation $operation
+     *
+     * @return void
+     */
+    public function pipeOperation(
+        Operation $operation
+    ) {
+        $options = $operation->getOptions();
+        $middlewareOptions = new OptionsMiddleware($options);
+        $this->pipe($middlewareOptions);
+        $this->pipe($operation->getMiddleware());
+    }
+
+    /**
+     * @deprecated
      * pipeServices
      *
      * @param ServiceModelCollection $model
@@ -40,6 +81,7 @@ class MiddlewarePipe extends \Zend\Stratigility\MiddlewarePipe
     }
 
     /**
+     * @deprecated
      * pipeService
      *
      * @param callable $service

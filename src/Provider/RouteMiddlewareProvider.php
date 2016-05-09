@@ -6,6 +6,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 use Reliv\PipeRat\Middleware\MiddlewarePipe;
+use Reliv\PipeRat\RequestAttribute\Paths;
+use Reliv\PipeRat\RequestAttribute\RequestAttribute;
 
 /**
  * Class MiddlewareProvider
@@ -19,18 +21,16 @@ use Reliv\PipeRat\Middleware\MiddlewarePipe;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-interface MiddlewareProvider
+interface RouteMiddlewareProvider extends MiddlewareProvider
 {
     /**
-     * buildPipe
+     * withPaths
+     * 
+     * set Reliv\PipeRat\RequestAttribute\Paths attribute = array ['/{path}' => ['{verb}' => 'resourceId']]
      *
-     * @param MiddlewarePipe $middlewarePipe
-     * @param Request        $request
+     * @param Request $request
      *
-     * @return MiddlewarePipe
+     * @return Request
      */
-    public function buildPipe(
-        MiddlewarePipe $middlewarePipe,
-        Request $request
-    );
+    public function withPaths(Request $request);
 }

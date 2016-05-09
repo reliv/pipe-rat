@@ -4,7 +4,7 @@ namespace Reliv\PipeRat\ServiceModel;
 
 /**
  * @deprecated
- * interface ControllerModel
+ * Class BasicServiceModel
  *
  * PHP version 5
  *
@@ -16,7 +16,6 @@ namespace Reliv\PipeRat\ServiceModel;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-interface ControllerModel extends ServiceModel
+class BasicServiceModel extends AbstractServiceModel implements ServiceModel
 {
-
 }

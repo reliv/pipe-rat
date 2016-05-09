@@ -2,10 +2,8 @@
 
 namespace Reliv\PipeRat\Provider;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\PipeRat\Middleware\MiddlewarePipe;
-use Interop\Container\ContainerInterface;
+use Reliv\PipeRat\Exception\ResourceException;
+use Reliv\PipeRat\Operation\BasicOperationCollection;
 use Reliv\PipeRat\Options\GenericOptions;
 use Reliv\PipeRat\Options\Options;
 
@@ -21,41 +19,17 @@ use Reliv\PipeRat\Options\Options;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-class BasicConfigMiddlewareProvider implements MiddlewareProvider
+class BasicConfigMiddlewareProvider extends AbstractBasicConfigMiddlewareProvider implements MiddlewareProvider
 {
-    /**
-     * @var array
-     */
-    protected $config;
-
     /**
      * @var array
      */
     protected $resourceConfig;
 
     /**
-     * @var ContainerInterface
-     */
-    protected $serviceManager;
-
-    /**
      * @var array
      */
-    protected $paths = [];
-
-    /**
-     * BasicConfigMiddlewareProvider constructor.
-     *
-     * @param array              $config
-     * @param ContainerInterface $serviceManager
-     */
-    public function __construct(
-        $config,
-        $serviceManager
-    ) {
-        $this->serviceManager = $serviceManager;
-        $this->config = $config['Reliv\\PipeRat'];
-    }
+    protected $operations = [];
 
     /**
      * getResourceConfig
@@ -71,7 +45,7 @@ class BasicConfigMiddlewareProvider implements MiddlewareProvider
         $resourceConfig = $this->config['resources'];
         $defaultConfig = $this->config['defaultResourceConfig'];
 
-        foreach ($resourceConfig as $resourceKey => $resourceProperties) {
+        foreach ($resourceConfig as $resourceName => $resourceProperties) {
             $defaultResourcePropertyKey = 'default:empty';
             if (array_key_exists('extendsConfig', $resourceProperties)) {
                 $defaultResourcePropertyKey = $resourceProperties['extendsConfig'];
@@ -82,59 +56,94 @@ class BasicConfigMiddlewareProvider implements MiddlewareProvider
                 $resourceProperties
             );
 
-            $this->resourceConfig[$resourceKey] = new GenericOptions($resourceConfig);
+            $this->resourceConfig[$resourceName] = new GenericOptions($resourceConfig);
         }
-
+        
         return $this->resourceConfig;
     }
 
     /**
-     * buildPipe
+     * buildResourceOperationCollection
      *
-     * @param MiddlewarePipe $middlewarePipe
-     * @param Request        $request
+     * @param string $resourceKey
      *
-     * @return MiddlewarePipe
+     * @return BasicOperationCollection
+     * @throws ResourceException
      */
-    public function buildPipe(
-        MiddlewarePipe $middlewarePipe,
-        Request $request
-    ) {
-
-    }
-
-    /**
-     * getResources
-     *
-     * @return array
-     */
-    public function getPaths()
+    protected function buildResourceOperationCollection($resourceKey)
     {
-        if (!empty($paths)) {
-            return $this->paths;
-        }
-
         $resourceConfig = $this->getResourceConfig();
 
-        /**
-         * @var         $resourceKey
-         * @var Options $resourceOptions
-         */
-        foreach ($resourceConfig as $resourceKey => $resourceOptions) {
-            $resourcePath = $resourceOptions->get('path', '/' . $resourceKey);
-            foreach ($resourceOptions->get('methods', []) as $methodName => $methodProperties) {
-                $methodOptions = new GenericOptions($methodProperties);
+        $resourceKeys = explode(':', $resourceKey);
+        $resourceName = $resourceKeys[0];
+        $methodName = $resourceKeys[1];
 
-                $resourcePath .= $methodOptions->get('path', '/' . $methodName);
-
-                if (!array_key_exists($resourcePath, $this->paths)) {
-                    $this->paths[$resourcePath] = [];
-                }
-
-                $this->paths[$resourcePath][$methodOptions->get('httpVerb', 'GET')] = $resourceKey . ':' . $methodName;
-            }
+        if (!array_key_exists($resourceName, $resourceConfig)) {
+            throw new ResourceException('Resource config missing for ' . $resourceName);
         }
 
-        return $this->paths;
+        if (array_key_exists($resourceKey, $this->operations)) {
+            return $this->operations[$resourceKey];
+        }
+
+        /** @var Options $resourceOptions */
+        $resourceOptions = $resourceConfig[$resourceName];
+        $methods = $resourceOptions->get('methods', []);
+
+        if (!array_key_exists($methodName, $methods)) {
+            throw new ResourceException('Resource method config missing for ' . $methodName);
+        }
+
+        $operations = new BasicOperationCollection();
+
+        $methodOptions = new GenericOptions($methods[$methodName]);
+
+        // Controller Pre
+        $this->buildOperations(
+            $operations,
+            $resourceOptions->get('preServiceNames', []),
+            $resourceOptions->getOptions('preServiceOptions'),
+            $resourceOptions->getOptions('preServicePriority')
+        );
+
+        // Method Pre
+        $this->buildOperations(
+            $operations,
+            $methodOptions->get('preServiceNames', []),
+            $methodOptions->getOptions('preServiceOptions'),
+            $methodOptions->getOptions('preServicePriority')
+        );
+
+        // ControllerMethod
+        $controllerOptions = $resourceOptions->getOptions('controllerServiceOptions');
+        $controllerOptions->set('method', $methodName);
+        $operations->addOperation(
+            $this->buildOperation(
+                $resourceOptions->get('controllerServiceName'),
+                $this->serviceManager->get($resourceOptions->get('controllerServiceName')),
+                $controllerOptions,
+                1000
+            )
+        );
+
+        // Method Post
+        $this->buildOperations(
+            $operations,
+            $methodOptions->get('postServiceNames', []),
+            $methodOptions->getOptions('postServiceOptions'),
+            $methodOptions->getOptions('postServicePriority')
+        );
+
+        // Controller Post
+        $this->buildOperations(
+            $operations,
+            $resourceOptions->get('postServiceNames', []),
+            $resourceOptions->getOptions('postServiceOptions'),
+            $resourceOptions->getOptions('postServicePriority')
+        );
+
+        $this->operations[$resourceKey] = $operations;
+
+        return $this->operations[$resourceKey];
     }
 }

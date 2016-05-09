@@ -1,16 +1,16 @@
 <?php
 
-namespace Reliv\PipeRat\ServiceModel;
+namespace Reliv\PipeRat\Exception;
 
 /**
- * @deprecated
- * Interface ErrorModel
+ * Class ConfigException
  *
  * @author    James Jervis <jjervis@relivinc.com>
  * @copyright 2016 Reliv International
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-interface ErrorModel extends ServiceModelCollection
+class ConfigException extends \Exception
 {
+
 }
