@@ -52,6 +52,6 @@ class CollectionPropertyGetterExtractor extends PropertyGetterExtractor implemen
             break;
         }
 
-        return $this->getPropertyListByMethods($dataModel);
+        return $this->getPropertyListFromProperties($dataModel);
     }
 }

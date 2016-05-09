@@ -39,7 +39,7 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
 
         // If no properties are set, we get them all if we can
         if (!is_array($properties)) {
-            $properties = $this->getPropertyListByMethods($dataModel);
+            $properties = $this->getPropertyListFromProperties($dataModel);
         }
 
         $depthLimit = $this->getPropertyDepthLimit($options, 1);
@@ -211,6 +211,28 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
     protected function isTraversable($dataModel)
     {
         return (is_array($dataModel) || $dataModel instanceOf \Traversable);
+    }
+
+    /**
+     * getPropertyListProperties
+     *
+     * @param $dataModel
+     *
+     * @return array
+     */
+    protected function getPropertyListFromProperties($dataModel) {
+
+        if (is_object($dataModel)) {
+            return $this->getPropertyListByMethods($dataModel);
+        }
+
+        $properties = [];
+
+        foreach ($dataModel as $property => $value) {
+            $properties[$property] = true;
+        }
+
+        return $properties;
     }
 
     /**

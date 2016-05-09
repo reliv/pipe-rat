@@ -43,10 +43,6 @@ class BasicConfigErrorMiddlewareProvider extends AbstractBasicConfigMiddlewarePr
 
         $operationServiceNames = $configOptions->get('errorServiceNames', []);
 
-        if (empty($operationServiceNames)) {
-            throw new ConfigException('errorServiceNames missing in config');
-        }
-
         $this->operationCollection = new BasicOperationCollection();
         $operationOptions = $configOptions->getOptions('errorServiceOptions');
         $operationPriorities = $configOptions->getOptions('errorServicePriority');
