@@ -30,7 +30,7 @@ abstract class AbstractOperationCollection
      * In priority order
      *
      * @return array ['{alias}' => {ServiceModel}]
-     * @throws ServiceMissingException
+     * @throws \Exception
      */
     public function getOperations()
     {
@@ -59,10 +59,11 @@ abstract class AbstractOperationCollection
      */
     public function getOperation($alias, $default = null)
     {
+        $alias = (string)$alias;
         if (array_key_exists($alias, $this->operations)) {
             return $this->operations[$alias];
         }
-        
+
         return $default;
     }
 }

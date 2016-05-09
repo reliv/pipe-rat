@@ -2,10 +2,10 @@
 
 namespace Reliv\PipeRat\Middleware;
 
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Options\Options;
-use Reliv\PipeRat\RequestAttribute\RequestAttribute;
+use Reliv\PipeRat\RequestAttribute\MiddlewareOptions;
 
 /**
  * Class OptionsMiddleware
@@ -15,23 +15,8 @@ use Reliv\PipeRat\RequestAttribute\RequestAttribute;
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class OptionsMiddleware implements Middleware, RequestAttribute
+class OptionsMiddleware implements Middleware
 {
-    /**
-     * Request Attribute Id
-     */
-    const ATTRIBUTE_NAME = 'pipe-rat-middleware-options';
-
-    /**
-     * getName
-     *
-     * @return string
-     */
-    public static function getName()
-    {
-        return self::ATTRIBUTE_NAME;
-    }
-
     /**
      * @var Options
      */
@@ -49,16 +34,6 @@ class OptionsMiddleware implements Middleware, RequestAttribute
     }
 
     /**
-     * getName
-     *
-     * @return string
-     */
-    public function getAttributeName()
-    {
-        return self::getName();
-    }
-
-    /**
      * __invoke
      *
      * @param Request       $request
@@ -69,7 +44,7 @@ class OptionsMiddleware implements Middleware, RequestAttribute
      */
     public function __invoke(Request $request, Response $response, callable $out = null)
     {
-        $request = $request->withAttribute(self::getName(), $this->options);
+        $request = $request->withAttribute(MiddlewareOptions::getName(), $this->options);
 
         return $out($request, $response);
     }

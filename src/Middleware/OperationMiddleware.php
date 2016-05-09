@@ -5,9 +5,6 @@ namespace Reliv\PipeRat\Middleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\RouteException;
-use Reliv\PipeRat\Middleware\Error\ErrorHandler;
-use Reliv\PipeRat\ServiceModel\ControllerModel;
-use Reliv\PipeRat\ServiceModel\ServiceModelCollection;
 
 /**
  * Class OperationMiddleware

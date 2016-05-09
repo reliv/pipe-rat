@@ -4,6 +4,7 @@ namespace Reliv\PipeRat\Middleware\Extractor;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Reliv\PipeRat\Extractor\Extractor;
 use Reliv\PipeRat\Http\DataResponse;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\Options\Options;
@@ -22,7 +23,7 @@ use Reliv\PipeRat\Options\Options;
 abstract class AbstractExtractor extends AbstractMiddleware
 {
     /**
-     * @var
+     * @var Extractor
      */
     protected $extractor;
 

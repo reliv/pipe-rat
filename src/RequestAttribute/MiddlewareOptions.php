@@ -3,19 +3,19 @@
 namespace Reliv\PipeRat\RequestAttribute;
 
 /**
- * Class ResourceKey
+ * Class MiddlewareOptions
  *
  * @author    James Jervis <jjervis@relivinc.com>
  * @copyright 2016 Reliv International
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class ResourceKey implements RequestAttribute
+class MiddlewareOptions implements RequestAttribute
 {
     /**
-     * Request Attribute Name
+     * Request Attribute Id
      */
-    const ATTRIBUTE_NAME = 'pipe-rat-resource-key';
+    const ATTRIBUTE_NAME = 'pipe-rat-middleware-options';
 
     /**
      * getName

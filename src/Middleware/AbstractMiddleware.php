@@ -8,6 +8,8 @@ use Reliv\PipeRat\Http\BasicDataResponse;
 use Reliv\PipeRat\Http\DataResponse;
 use Reliv\PipeRat\Options\GenericOptions;
 use Reliv\PipeRat\Options\Options;
+use Reliv\PipeRat\RequestAttribute\MiddlewareOptions;
+use Reliv\PipeRat\RequestAttribute\ResourceKey;
 
 /**
  * Class AbstractMiddleware
@@ -34,20 +36,7 @@ abstract class AbstractMiddleware
      */
     protected function getResourceKey(Request $request, $default = null)
     {
-        return $request->getAttribute(Middleware::REQUEST_ATTRIBUTE_RESOURCE_KEY, $default);
-    }
-
-    /**
-     * getMethodKey
-     *
-     * @param Request $request
-     * @param null    $default
-     *
-     * @return mixed
-     */
-    protected function getMethodKey(Request $request, $default = null)
-    {
-        return $request->getAttribute(Middleware::REQUEST_ATTRIBUTE_RESOURCE_METHOD_KEY, $default);
+        return $request->getAttribute(ResourceKey::getName(), $default);
     }
 
     /**
@@ -61,7 +50,7 @@ abstract class AbstractMiddleware
     {
         /** @var Options $options */
         $options = $request->getAttribute(
-            OptionsMiddleware::getName(),
+            MiddlewareOptions::getName(),
             new GenericOptions()
         );
 
