@@ -51,6 +51,7 @@ class CurlyBraceVarRouter extends AbstractModelMiddleware implements Middleware
         /** @var MethodModel $availablePath */
         foreach ($request->getAttribute(Paths::ATTRIBUTE_NAME) as $availablePath => $availableVerbs) {
             $regex = '/^' . str_replace(['{', '}', '/'], ['(?<', '>[^/]+)', '\/'], $availablePath) . '$/';
+
             if (preg_match($regex, $request->getUri(), $captures)) {
                 $aPathMatched = true;
 
@@ -73,11 +74,11 @@ class CurlyBraceVarRouter extends AbstractModelMiddleware implements Middleware
         }
 
         if ($aPathMatched) {
-            //If a path matched but an http verb did not, return 405 method not allowed
+            //A path matched but a verb did not so return "Method not allowed"
             return $response->withStatus(405);
         }
 
-        //Route is not for us so leave
+        //No paths matched so do nothing and allow other middleware to handle this request.
         return $out($request, $response);
     }
 
