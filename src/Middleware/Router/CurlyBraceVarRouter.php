@@ -82,7 +82,7 @@ class CurlyBraceVarRouter extends AbstractModelMiddleware implements Middleware
     }
 
     /**
-     * Filters the junk numericly keyed captures out of a preg_match captures array
+     * Filters the junk numerically keyed captures out of a preg_match captures array
      * leaving us with only the juicy named captures.
      *
      * @param $captures
