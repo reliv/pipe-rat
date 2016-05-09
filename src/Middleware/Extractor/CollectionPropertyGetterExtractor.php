@@ -4,6 +4,7 @@ namespace Reliv\PipeRat\Middleware\Extractor;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Reliv\PipeRat\Extractor\Extractor;
 use Reliv\PipeRat\Http\DataResponse;
 use Reliv\PipeRat\Middleware\Middleware;
 
@@ -21,7 +22,7 @@ use Reliv\PipeRat\Middleware\Middleware;
 class CollectionPropertyGetterExtractor extends AbstractExtractor implements Middleware
 {
     /**
-     * @var
+     * @var Extractor
      */
     protected $extractor;
 

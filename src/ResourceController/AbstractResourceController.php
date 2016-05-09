@@ -7,7 +7,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\InvalidWhereException;
 use Reliv\PipeRat\Exception\MethodException;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
-use Reliv\PipeRat\ServiceModel\RouteModel;
+use Reliv\PipeRat\Options\GenericOptions;
+use Reliv\PipeRat\Options\Options;
+use Reliv\PipeRat\RequestAttribute\RouteParams;
 
 /**
  * Class AbstractResourceController
@@ -56,13 +58,13 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
      */
     protected function getRouteParam(Request $request, $key, $default = null)
     {
-        /** @var RouteModel $routeModel */
-        $routeModel = $request->getAttribute(
-            RouteModel::REQUEST_ATTRIBUTE_MODEL_ROUTE,
-            []
+        /** @var Options $routeParams */
+        $routeParams = $request->getAttribute(
+            RouteParams::getName(),
+            new GenericOptions()
         );
 
-        return $routeModel->getRouteParam($key, $default);
+        $routeParams->get($key, $default);
     }
 
     /**

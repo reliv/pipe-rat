@@ -5,9 +5,7 @@ namespace Reliv\PipeRat\Middleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\RouteException;
-use Reliv\PipeRat\Middleware\Error\ErrorHandler;
-use Reliv\PipeRat\ServiceModel\ControllerModel;
-use Reliv\PipeRat\ServiceModel\ServiceModelCollection;
+use Reliv\PipeRat\RequestAttribute\ResourceKey;
 
 /**
  * Class OperationMiddleware
@@ -36,7 +34,6 @@ class OperationMiddleware extends AbstractOperationMiddleware implements Middlew
     ) {
         $routeMiddlewareProvider = $this->getRouteMiddlewareProvider();
         $errorMiddlewareProvider = $this->getErrorMiddlewareProvider();
-        $middlewareProvider = $this->getMiddlewareProvider();
 
         // ROUTE
         $routePipe = new MiddlewarePipe();
@@ -46,6 +43,40 @@ class OperationMiddleware extends AbstractOperationMiddleware implements Middlew
             $request
         );
 
+        $routePipe->pipe([$this, 'mainPipe']);
+
+        $request = $errorMiddlewareProvider->buildPipe(
+            $routePipe,
+            $request
+        );
+
+        return $routePipe(
+            $request,
+            $response,
+            $out
+        );
+    }
+
+    /**
+     * mainPipe
+     *
+     * @param Request       $request
+     * @param Response      $response
+     * @param callable|null $out
+     *
+     * @return mixed
+     */
+    public function mainPipe(
+        Request $request,
+        Response $response,
+        callable $out = null
+    ) {
+        if (empty($request->getAttribute(ResourceKey::getName()))) {
+            return $out($request, $response);
+        }
+
+        $middlewareProvider = $this->getMiddlewareProvider();
+
         $mainPipe = new MiddlewarePipe();
 
         $request = $middlewareProvider->buildPipe(
@@ -53,19 +84,6 @@ class OperationMiddleware extends AbstractOperationMiddleware implements Middlew
             $request
         );
 
-        $routePipe->pipe($mainPipe);
-
-        $request = $errorMiddlewareProvider->buildPipe(
-            $routePipe,
-            $request
-        );
-
-        $result = $routePipe(
-            $request,
-            $response,
-            $out
-        );
-
-        return $result;
+        return $mainPipe($request,$response, $out);
     }
 }

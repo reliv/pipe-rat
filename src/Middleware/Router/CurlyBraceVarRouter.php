@@ -4,16 +4,12 @@ namespace Reliv\PipeRat\Middleware\Router;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\PipeRat\Exception\ConfigException;
 use Reliv\PipeRat\Exception\RouteException;
-use Reliv\PipeRat\Middleware\AbstractModelMiddleware;
+use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
 use Reliv\PipeRat\RequestAttribute\Paths;
 use Reliv\PipeRat\RequestAttribute\ResourceKey;
 use Reliv\PipeRat\RequestAttribute\RouteParams;
-use Reliv\PipeRat\ServiceModel\MethodModel;
-use Reliv\PipeRat\ServiceModel\ResourceModel;
-use Reliv\PipeRat\ServiceModel\RouteModel;
 
 /**
  * Class CurlyBraceVarRouter This is a router that allows paths like /fun/{id}
@@ -28,7 +24,7 @@ use Reliv\PipeRat\ServiceModel\RouteModel;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-class CurlyBraceVarRouter extends AbstractModelMiddleware implements Middleware
+class CurlyBraceVarRouter extends AbstractMiddleware implements Middleware
 {
     /**
      * Our job as a pipe rat router is to set the "ResourceKey" route param to the
@@ -48,15 +44,19 @@ class CurlyBraceVarRouter extends AbstractModelMiddleware implements Middleware
     ) {
         $aPathMatched = false;
 
-        /** @var MethodModel $availablePath */
-        foreach ($request->getAttribute(Paths::ATTRIBUTE_NAME) as $availablePath => $availableVerbs) {
+        $paths = $request->getAttribute(Paths::ATTRIBUTE_NAME);
+
+        /**
+         *
+         */
+        foreach ($paths as $availablePath => $availableVerbs) {
             $regex = '/^' . str_replace(['{', '}', '/'], ['(?<', '>[^/]+)', '\/'], $availablePath) . '$/';
 
-            if (preg_match($regex, $request->getUri(), $captures)) {
+            if (preg_match($regex, $request->getUri()->getPath(), $captures)) {
                 $aPathMatched = true;
 
                 foreach ($availableVerbs as $availableVerb => $routeData) {
-                    if (strcasecmp($availableVerb, $request->getMethod())) {
+                    if (strcasecmp($availableVerb, $request->getMethod()) === 0) {
                         return $out(
                             $request->withAttribute(
                                 ResourceKey::ATTRIBUTE_NAME,

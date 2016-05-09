@@ -125,7 +125,7 @@ return [
                     'httpVerb' => 'GET',
                     'name' => 'exists',
                     'options' => [],
-                    'path' => '{id}/exists',
+                    'path' => '/{id}/exists',
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
@@ -138,7 +138,7 @@ return [
                     'httpVerb' => 'GET',
                     'name' => 'count',
                     'options' => [],
-                    'path' => 'count',
+                    'path' => '/count',
                     'preServiceNames' => [
                         'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\WhereFilterParamRequestFormat',
                     ],
@@ -158,7 +158,7 @@ return [
                     'httpVerb' => 'GET',
                     'name' => 'findOne',
                     'options' => [],
-                    'path' => 'findOne',
+                    'path' => '/findOne',
                     'preServiceNames' => [
                         'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\WhereFilterParamRequestFormat',
                         'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
@@ -207,7 +207,7 @@ return [
                     'httpVerb' => 'DELETE',
                     'name' => 'deleteById',
                     'options' => [],
-                    'path' => '{id}',
+                    'path' => '/{id}',
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
@@ -220,7 +220,7 @@ return [
                     'httpVerb' => 'PUT',
                     'name' => 'updateProperties',
                     'options' => [],
-                    'path' => '{id}',
+                    'path' => '/{id}',
                     'preServiceNames' => [
                         'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
                     ],
@@ -237,7 +237,7 @@ return [
                     'httpVerb' => 'GET',
                     'name' => 'findById',
                     'options' => [],
-                    'path' => '{id}',
+                    'path' => '/{id}',
                     'preServiceNames' => [
                         'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
                     ],
@@ -303,7 +303,7 @@ return [
      * === Error Handlers ===
      */
     'errorServiceNames' => [
-        'errorHandler' => 'Reliv\PipeRat\Middleware\Error\TriggerErrorHandler',
+        //'errorHandler' => 'Reliv\PipeRat\Middleware\Error\TriggerErrorHandler',
     ],
     // '{serviceAlias}' => {priority}
     'errorServicePriority' => [],

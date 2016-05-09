@@ -2,15 +2,8 @@
 
 namespace Reliv\PipeRat\Middleware;
 
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Provider\MiddlewareProvider;
 use Reliv\PipeRat\Provider\RouteMiddlewareProvider;
-use Reliv\PipeRat\ServiceModel\ErrorModel;
-use Reliv\PipeRat\ServiceModel\MethodModel;
-use Reliv\PipeRat\ServiceModel\ResourceModel;
-use Reliv\PipeRat\ServiceModel\RouteModel;
-use Reliv\PipeRat\Provider\ModelProvider;
-use Reliv\PipeRat\Provider\ResourceModelProvider;
 
 /**
  * Class AbstractOperationMiddleware

@@ -70,6 +70,10 @@ abstract class AbstractMiddlewareProvider
         }
 
         foreach ($queue as $name) {
+            // Allows over-riding
+            if (empty($operationServiceNames[$name])) {
+                continue;
+            }
             $operationCollection->addOperation(
                 $this->buildOperation(
                     $name,

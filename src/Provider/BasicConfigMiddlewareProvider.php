@@ -55,7 +55,7 @@ class BasicConfigMiddlewareProvider extends AbstractBasicConfigMiddlewareProvide
                 $defaultResourcePropertyKey = $resourceProperties['extendsConfig'];
             }
 
-            $resourceConfig = array_merge_recursive(
+            $resourceConfig = array_replace_recursive(
                 $defaultConfig[$defaultResourcePropertyKey],
                 $resourceProperties
             );
@@ -173,5 +173,7 @@ class BasicConfigMiddlewareProvider extends AbstractBasicConfigMiddlewareProvide
         $middlewarePipe->pipeOperations(
             $this->buildResourceOperationCollection($resourceKey)
         );
+
+        return $request;
     }
 }

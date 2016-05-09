@@ -2,6 +2,7 @@
 
 namespace Reliv\PipeRat\Operation;
 
+use Reliv\PipeRat\Exception\MiddlewareMissingException;
 use Reliv\PipeRat\Middleware\Middleware;
 use Reliv\PipeRat\Options\Options;
 
@@ -53,10 +54,10 @@ abstract class AbstractOperation
         Options $options,
         $priority = 0
     ) {
-        $this->name = $name;
+        $this->name = (string) $name;
         $this->middleware = $middleware;
         $this->options = $options;
-        $this->priority = $priority;
+        $this->priority = (int) $priority;
     }
 
     /**
