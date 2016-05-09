@@ -26,7 +26,7 @@ interface RouteMiddlewareProvider extends MiddlewareProvider
     /**
      * withPaths
      * 
-     * set Reliv\PipeRat\RequestAttribute\Paths attribute = array ['/{path}' => ['{verb}' => 'resourceId']]
+     * set Reliv\PipeRat\RequestAttribute\Paths attribute = array ['/{path}' => ['{verb}' => 'resourceKey']]
      *
      * @param Request $request
      *

@@ -72,7 +72,7 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
     /**
      * withPaths
      *
-     * set Reliv\PipeRat\RequestAttribute\Paths attribute = array ['/{path}' => ['{verb}' => 'resourceId']]
+     * set Reliv\PipeRat\RequestAttribute\Paths attribute = array ['/{path}' => ['{verb}' => 'resourceKey']]
      *
      * @param Request $request
      *
