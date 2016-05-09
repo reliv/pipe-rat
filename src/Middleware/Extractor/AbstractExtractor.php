@@ -82,7 +82,7 @@ abstract class AbstractExtractor extends AbstractMiddleware
             return;
         }
 
-        $list = $this->buildPropertyList($filterPropertyList, $defaultPropertyList);
+        $list = $this->buildPropertyList($defaultPropertyList, $filterPropertyList);
 
         $options->set('propertyList', $list);
         $options->set('propertyListMerged', true);
@@ -102,12 +102,11 @@ abstract class AbstractExtractor extends AbstractMiddleware
         $filterPropertyList,
         &$list = []
     ) {
+        if ($filterPropertyList == null) {
+            $filterPropertyList = $defaultPropertyList;
+        }
+
         foreach ($filterPropertyList as $filterProperty => $value) {
-
-//            if (empty($defaultPropertyList)) {
-//                continue;
-//            }
-
             // If it is not set in default, we ignore
             if (!array_key_exists($filterProperty, $defaultPropertyList)) {
                 continue;
@@ -120,7 +119,7 @@ abstract class AbstractExtractor extends AbstractMiddleware
 
             // We can turn them off if they are disabled
             if ($defaultPropertyList[$filterProperty] === true) {
-                $defaultPropertyList[$filterProperty] = (bool)$filterPropertyList[$filterProperty];
+                $list[$filterProperty] = (bool)$filterPropertyList[$filterProperty];
                 continue;
             }
 
