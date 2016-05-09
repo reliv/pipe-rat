@@ -24,8 +24,8 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
     /**
      * __invoke
      *
-     * @param Request       $request
-     * @param Response      $response
+     * @param Request $request
+     * @param Response $response
      * @param callable|null $out
      *
      * @return mixed
@@ -51,8 +51,8 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
      * getUrlParam
      *
      * @param Request $request
-     * @param string  $key
-     * @param null    $default
+     * @param string $key
+     * @param null $default
      *
      * @return null
      */
@@ -64,7 +64,7 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
             new GenericOptions()
         );
 
-        $routeParams->get($key, $default);
+        return $routeParams->get($key, $default);
     }
 
     /**
