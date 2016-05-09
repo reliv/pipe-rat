@@ -6,17 +6,14 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\ConfigException;
 use Reliv\PipeRat\Exception\RouteException;
-use Reliv\PipeRat\Middleware\AbstractOperationMiddleware;
+use Reliv\PipeRat\Middleware\AbstractModelMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
-use Reliv\PipeRat\RequestAttribute\Paths;
-use Reliv\PipeRat\RequestAttribute\ResourceKey;
-use Reliv\PipeRat\RequestAttribute\RouteParams;
 use Reliv\PipeRat\ServiceModel\MethodModel;
 use Reliv\PipeRat\ServiceModel\ResourceModel;
 use Reliv\PipeRat\ServiceModel\RouteModel;
 
 /**
- * Class CurlyBraceVarRouter This is a router that allows paths like /fun/{id}
+ * Class CurlyBraceVarRouterOld This is a router that allows paths like /fun/{id}
  *
  * PHP version 5
  *
@@ -28,7 +25,7 @@ use Reliv\PipeRat\ServiceModel\RouteModel;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-class BasicRouter extends AbstractOperationMiddleware implements Middleware
+class CurlyBraceVarRouterOld extends AbstractModelMiddleware implements Middleware
 {
     /**
      * __invoke
@@ -45,15 +42,14 @@ class BasicRouter extends AbstractOperationMiddleware implements Middleware
         Response $response,
         callable $out = null
     ) {
+        $routeModel = $this->getRouteModel($request);
+
+        //It is every router's job to add the RouteModel attribute to the request
         /** @var Request $request */
         $request = $request->withAttribute(
-            RouteParams::getName(),
-            new RouteParams()
+            RouteModel::REQUEST_ATTRIBUTE_MODEL_ROUTE,
+            $routeModel
         );
-
-        $paths = $request->getAttribute(Paths::getName());
-
-
 
         $uriParts = explode('/', $request->getUri()->getPath());
 
@@ -68,7 +64,7 @@ class BasicRouter extends AbstractOperationMiddleware implements Middleware
         $resourceKey = $uriParts[0];
 
         $request = $request->withAttribute(
-            ResourceKey::getName(),
+            self::REQUEST_ATTRIBUTE_RESOURCE_KEY,
             $resourceKey
         );
 
