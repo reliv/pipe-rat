@@ -8,6 +8,7 @@ use Reliv\PipeRat\Exception\ConfigException;
 use Reliv\PipeRat\Exception\RouteException;
 use Reliv\PipeRat\Middleware\AbstractOperationMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
+use Reliv\PipeRat\RequestAttribute\Paths;
 use Reliv\PipeRat\RequestAttribute\ResourceKey;
 use Reliv\PipeRat\RequestAttribute\RouteParams;
 use Reliv\PipeRat\ServiceModel\MethodModel;
@@ -49,6 +50,10 @@ class BasicRouter extends AbstractOperationMiddleware implements Middleware
             RouteParams::getName(),
             new RouteParams()
         );
+
+        $paths = $request->getAttribute(Paths::getName());
+
+
 
         $uriParts = explode('/', $request->getUri()->getPath());
 

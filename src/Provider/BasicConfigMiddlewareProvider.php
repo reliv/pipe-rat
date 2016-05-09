@@ -2,10 +2,14 @@
 
 namespace Reliv\PipeRat\Provider;
 
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\ResourceException;
+use Reliv\PipeRat\Middleware\MiddlewarePipe;
 use Reliv\PipeRat\Operation\BasicOperationCollection;
+use Reliv\PipeRat\Operation\OperationCollection;
 use Reliv\PipeRat\Options\GenericOptions;
 use Reliv\PipeRat\Options\Options;
+use Reliv\PipeRat\RequestAttribute\ResourceKey;
 
 /**
  * Class BasicConfigMiddlewareProvider
@@ -58,7 +62,7 @@ class BasicConfigMiddlewareProvider extends AbstractBasicConfigMiddlewareProvide
 
             $this->resourceConfig[$resourceName] = new GenericOptions($resourceConfig);
         }
-        
+
         return $this->resourceConfig;
     }
 
@@ -67,14 +71,14 @@ class BasicConfigMiddlewareProvider extends AbstractBasicConfigMiddlewareProvide
      *
      * @param string $resourceKey
      *
-     * @return BasicOperationCollection
+     * @return OperationCollection
      * @throws ResourceException
      */
     protected function buildResourceOperationCollection($resourceKey)
     {
         $resourceConfig = $this->getResourceConfig();
 
-        $resourceKeys = explode(':', $resourceKey);
+        $resourceKeys = explode('::', $resourceKey);
         $resourceName = $resourceKeys[0];
         $methodName = $resourceKeys[1];
 
@@ -145,5 +149,29 @@ class BasicConfigMiddlewareProvider extends AbstractBasicConfigMiddlewareProvide
         $this->operations[$resourceKey] = $operations;
 
         return $this->operations[$resourceKey];
+    }
+
+    /**
+     * buildPipe
+     *
+     * @param MiddlewarePipe $middlewarePipe
+     * @param Request        $request
+     *
+     * @return MiddlewarePipe
+     * @throws ResourceException
+     */
+    public function buildPipe(
+        MiddlewarePipe $middlewarePipe,
+        Request $request
+    ) {
+        $resourceKey = $request->getAttribute(ResourceKey::getName());
+
+        if ($resourceKey === null) {
+            throw new ResourceException('ResourceKey not set: ' . $resourceKey);
+        }
+
+        $middlewarePipe->pipeOperations(
+            $this->buildResourceOperationCollection($resourceKey)
+        );
     }
 }

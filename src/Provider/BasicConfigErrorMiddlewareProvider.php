@@ -2,8 +2,11 @@
 
 namespace Reliv\PipeRat\Provider;
 
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\ConfigException;
+use Reliv\PipeRat\Middleware\MiddlewarePipe;
 use Reliv\PipeRat\Operation\BasicOperationCollection;
+use Reliv\PipeRat\Operation\OperationCollection;
 
 /**
  * Class BasicConfigErrorMiddlewareProvider
@@ -20,15 +23,22 @@ use Reliv\PipeRat\Operation\BasicOperationCollection;
 class BasicConfigErrorMiddlewareProvider extends AbstractBasicConfigMiddlewareProvider implements MiddlewareProvider
 {
     /**
-     * buildResourceOperationCollection
+     * @var OperationCollection
+     */
+    protected $operationCollection;
+
+    /**
+     * buildOperationCollection
      *
-     * @param string $resourceKey
-     *
-     * @return BasicOperationCollection
+     * @return OperationCollection
      * @throws \Exception
      */
-    protected function buildResourceOperationCollection($resourceKey)
+    protected function buildOperationCollection()
     {
+        if (!empty($this->operationCollection)) {
+            return $this->operationCollection;
+        }
+
         $configOptions = $this->getConfigOptions();
 
         $operationServiceNames = $configOptions->get('errorServiceNames', []);
@@ -37,15 +47,37 @@ class BasicConfigErrorMiddlewareProvider extends AbstractBasicConfigMiddlewarePr
             throw new ConfigException('errorServiceNames missing in config');
         }
 
-        $operations = new BasicOperationCollection();
+        $this->operationCollection = new BasicOperationCollection();
         $operationOptions = $configOptions->getOptions('errorServiceOptions');
         $operationPriorities = $configOptions->getOptions('errorServicePriority');
 
         $this->buildOperations(
-            $operations,
+            $this->operationCollection,
             $operationServiceNames,
             $operationOptions,
             $operationPriorities
         );
+
+        return $this->operationCollection;
+    }
+
+    /**
+     * buildPipe
+     *
+     * @param MiddlewarePipe $middlewarePipe
+     * @param Request        $request
+     *
+     * @return Request
+     * @throws \Exception
+     */
+    public function buildPipe(
+        MiddlewarePipe $middlewarePipe,
+        Request $request
+    ) {
+        $middlewarePipe->pipeOperations(
+            $this->buildOperationCollection()
+        );
+
+        return $request;
     }
 }

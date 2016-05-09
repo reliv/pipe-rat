@@ -8,7 +8,6 @@ use Reliv\PipeRat\Exception\ResourceException;
 use Reliv\PipeRat\Middleware\MiddlewarePipe;
 use Reliv\PipeRat\Operation\BasicOperation;
 use Reliv\PipeRat\Operation\BasicOperationCollection;
-use Reliv\PipeRat\Options\GenericOptions;
 use Reliv\PipeRat\Options\Options;
 use Reliv\PipeRat\RequestAttribute\ResourceKey;
 
@@ -44,23 +43,6 @@ abstract class AbstractMiddlewareProvider
     ) {
         $this->serviceManager = $serviceManager;
     }
-
-    /**
-     * buildResourceOperationCollection
-     *
-     * @param string $resourceKey
-     *
-     * @return BasicOperationCollection
-     * @throws ResourceException
-     */
-    abstract protected function buildResourceOperationCollection($resourceKey);
-
-    /**
-     * getConfigOptions
-     *
-     * @return Options
-     */
-    abstract protected function getConfigOptions();
 
     /**
      * buildOperations
@@ -116,30 +98,6 @@ abstract class AbstractMiddlewareProvider
             $middleware,
             $options,
             $priority
-        );
-    }
-
-    /**
-     * buildPipe
-     *
-     * @param MiddlewarePipe $middlewarePipe
-     * @param Request        $request
-     *
-     * @return MiddlewarePipe
-     * @throws ResourceException
-     */
-    public function buildPipe(
-        MiddlewarePipe $middlewarePipe,
-        Request $request
-    ) {
-        $resourceKey = $request->getAttribute(ResourceKey::getName());
-
-        if ($resourceKey === null) {
-            throw new ResourceException('ResourceKey not set: ' . $resourceKey);
-        }
-
-        $middlewarePipe->pipeOperations(
-            $this->buildResourceOperationCollection($resourceKey)
         );
     }
 }

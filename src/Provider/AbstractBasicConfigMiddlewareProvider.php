@@ -3,14 +3,8 @@
 namespace Reliv\PipeRat\Provider;
 
 use Interop\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\PipeRat\Exception\ResourceException;
-use Reliv\PipeRat\Middleware\MiddlewarePipe;
-use Reliv\PipeRat\Operation\BasicOperation;
-use Reliv\PipeRat\Operation\BasicOperationCollection;
 use Reliv\PipeRat\Options\GenericOptions;
 use Reliv\PipeRat\Options\Options;
-use Reliv\PipeRat\RequestAttribute\ResourceKey;
 
 /**
  * Class AbstractConfigMiddlewareProvider
@@ -32,14 +26,14 @@ abstract class AbstractBasicConfigMiddlewareProvider extends AbstractMiddlewareP
     protected $config;
 
     /**
-     * @var
+     * @var Options
      */
     protected $configOptions;
 
     /**
-     * BasicConfigMiddlewareProvider constructor.
+     * AbstractBasicConfigMiddlewareProvider constructor.
      *
-     * @param array              $config
+     * @param array $config
      * @param ContainerInterface $serviceManager
      */
     public function __construct(
@@ -53,7 +47,7 @@ abstract class AbstractBasicConfigMiddlewareProvider extends AbstractMiddlewareP
     /**
      * getConfigOptions
      *
-     * @return GenericOptions
+     * @return Options
      */
     protected function getConfigOptions()
     {

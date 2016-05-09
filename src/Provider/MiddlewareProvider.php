@@ -27,7 +27,7 @@ interface MiddlewareProvider
      * @param MiddlewarePipe $middlewarePipe
      * @param Request        $request
      *
-     * @return MiddlewarePipe
+     * @return Request
      */
     public function buildPipe(
         MiddlewarePipe $middlewarePipe,

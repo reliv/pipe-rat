@@ -4,7 +4,9 @@ namespace Reliv\PipeRat\Provider;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\ConfigException;
+use Reliv\PipeRat\Middleware\MiddlewarePipe;
 use Reliv\PipeRat\Operation\BasicOperationCollection;
+use Reliv\PipeRat\Operation\OperationCollection;
 use Reliv\PipeRat\Options\GenericOptions;
 use Reliv\PipeRat\Options\Options;
 use Reliv\PipeRat\RequestAttribute\Paths;
@@ -24,20 +26,27 @@ use Reliv\PipeRat\RequestAttribute\Paths;
 class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider implements RouteMiddlewareProvider
 {
     /**
+     * @var OperationCollection
+     */
+    protected $operationCollection;
+    
+    /**
      * @var array
      */
     protected $paths = [];
 
     /**
-     * buildResourceOperationCollection
+     * buildOperationCollection
      *
-     * @param string $resourceKey
-     *
-     * @return BasicOperationCollection
+     * @return OperationCollection
      * @throws \Exception
      */
-    protected function buildResourceOperationCollection($resourceKey)
+    protected function buildOperationCollection()
     {
+        if (!empty($this->operationCollection)) {
+            return $this->operationCollection;
+        }
+        
         $configOptions = $this->getConfigOptions();
 
         $operationServiceNames = $configOptions->get('routeServiceNames', []);
@@ -46,16 +55,18 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
             throw new ConfigException('routeServiceNames missing in config');
         }
 
-        $operations = new BasicOperationCollection();
+        $this->operationCollection = new BasicOperationCollection();
         $operationOptions = $configOptions->getOptions('routeServiceOptions');
         $operationPriorities = $configOptions->getOptions('routeServicePriority');
 
         $this->buildOperations(
-            $operations,
+            $this->operationCollection,
             $operationServiceNames,
             $operationOptions,
             $operationPriorities
         );
+        
+        return $this->operationCollection;
     }
 
     /**
@@ -77,11 +88,11 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
         $resourceConfig = $this->getResourceConfig();
 
         /**
-         * @var string  $resourceKey
+         * @var string  $resourceName
          * @var Options $resourceOptions
          */
-        foreach ($resourceConfig as $resourceKey => $resourceOptions) {
-            $resourcePath = $resourceOptions->get('path', '/' . $resourceKey);
+        foreach ($resourceConfig as $resourceName => $resourceOptions) {
+            $resourcePath = $resourceOptions->get('path', '/' . $resourceName);
 
             $methodsAllowed = $resourceOptions->get('methodsAllowed', []);
             foreach ($resourceOptions->get('methods', []) as $methodName => $methodProperties) {
@@ -96,7 +107,7 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
                     $this->paths[$resourcePath] = [];
                 }
 
-                $this->paths[$resourcePath][$methodOptions->get('httpVerb', 'GET')] = $resourceKey . ':' . $methodName;
+                $this->paths[$resourcePath][$methodOptions->get('httpVerb', 'GET')] = $resourceName . '::' . $methodName;
             }
         }
 
@@ -104,5 +115,27 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
         $this->paths = array_reverse($this->paths, true);
 
         return $request->withAttribute(Paths::getName(), $this->paths);
+    }
+
+    /**
+     * buildPipe
+     *
+     * @param MiddlewarePipe $middlewarePipe
+     * @param Request        $request
+     *
+     * @return Request
+     * @throws \Exception
+     */
+    public function buildPipe(
+        MiddlewarePipe $middlewarePipe,
+        Request $request
+    ) {
+        $request = $this->withPaths($request);
+
+        $middlewarePipe->pipeOperations(
+            $this->buildOperationCollection()
+        );
+
+        return $request;
     }
 }

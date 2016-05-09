@@ -5,6 +5,7 @@ namespace Reliv\PipeRat\ResourceController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\InvalidWhereException;
+use Reliv\PipeRat\Exception\MethodException;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\ServiceModel\RouteModel;
 
@@ -26,6 +27,7 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
      * @param callable|null $out
      *
      * @return mixed
+     * @throws MethodException
      */
     public function __invoke(Request $request, Response $response, callable $out = null)
     {
@@ -33,11 +35,11 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
 
         // method option not defined
         if ($method === null) {
-            return $response->withStatus(404);
+            throw new MethodException('Method options not defined');
         }
 
         if (!method_exists($this, $method)) {
-            return $response->withStatus(405);
+            throw new MethodException('Method does not exists');
         }
 
         return $this->$method($request, $response, $out);
