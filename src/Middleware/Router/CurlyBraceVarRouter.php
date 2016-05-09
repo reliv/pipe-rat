@@ -8,6 +8,9 @@ use Reliv\PipeRat\Exception\ConfigException;
 use Reliv\PipeRat\Exception\RouteException;
 use Reliv\PipeRat\Middleware\AbstractModelMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
+use Reliv\PipeRat\RequestAttribute\Paths;
+use Reliv\PipeRat\RequestAttribute\ResourceKey;
+use Reliv\PipeRat\RequestAttribute\RouteParams;
 use Reliv\PipeRat\ServiceModel\MethodModel;
 use Reliv\PipeRat\ServiceModel\ResourceModel;
 use Reliv\PipeRat\ServiceModel\RouteModel;
@@ -28,7 +31,8 @@ use Reliv\PipeRat\ServiceModel\RouteModel;
 class CurlyBraceVarRouter extends AbstractModelMiddleware implements Middleware
 {
     /**
-     * __invoke
+     * Our job as a pipe rat router is to set the "ResourceKey" route param to the
+     * data that we are given for the matched route.
      *
      * @param Request $request
      * @param Response $response
@@ -42,101 +46,58 @@ class CurlyBraceVarRouter extends AbstractModelMiddleware implements Middleware
         Response $response,
         callable $out = null
     ) {
-        $routeModel = $this->getRouteModel($request);
-
-        //It is every router's job to add the RouteModel attribute to the request
-        /** @var Request $request */
-        $request = $request->withAttribute(
-            RouteModel::REQUEST_ATTRIBUTE_MODEL_ROUTE,
-            $routeModel
-        );
-
-        $uriParts = explode('/', $request->getUri()->getPath());
-
-        //Cut off the first /
-        array_shift($uriParts);
-
-        if (count($uriParts) == 0 || empty($uriParts[0])) {
-            //Route is not for us so leave
-            return $out($request, $response);
-        }
-
-        $resourceKey = $uriParts[0];
-
-        $request = $request->withAttribute(
-            self::REQUEST_ATTRIBUTE_RESOURCE_KEY,
-            $resourceKey
-        );
-
-        //Cut the resource key off the path. We don't need it anymore
-        array_shift($uriParts);
-        $uri = implode('/', $uriParts);
-
-        /** @var ResourceModel $resourceModel */
-        try {
-            $resourceModel = $this->getResourceModel($request);
-        } catch (ConfigException $e) {
-            //Route is not for us so leave
-            return $out($request, $response);
-        }
-        
-        /** @var MethodModel $methodModel */
-        $methodModel = null;
-
-        $availableMethods = $resourceModel->getAvailableMethodModels();
-
         $aPathMatched = false;
 
-        /** @var MethodModel $availableMethod */
-        foreach ($availableMethods as $availableMethod) {
-            /** @var RouteModel $routeModel */
-            $routeModel = $request->getAttribute(RouteModel::REQUEST_ATTRIBUTE_MODEL_ROUTE);
+        /** @var MethodModel $availablePath */
+        foreach ($request->getAttribute(Paths::ATTRIBUTE_NAME) as $availablePath => $availableVerbs) {
+            $regex = '/^' . str_replace(['{', '}', '/'], ['(?<', '>[^/]+)', '\/'], $availablePath) . '$/';
 
-            $path = $availableMethod->getPath();
-            $httpVerb = $availableMethod->getHttpVerb();
-
-            $regex = '/^' . str_replace(['{', '}', '/'], ['(?<', '>[^/]+)', '\/'], $path) . '$/';
-
-
-            $pathMatched = preg_match($regex, $uri, $captures);
-
-            if ($pathMatched) {
+            if (preg_match($regex, $request->getUri(), $captures)) {
                 $aPathMatched = true;
-            }
 
-            if (!(empty($httpVerb) || $request->getMethod() === $httpVerb)
-                || !$pathMatched
-            ) {//Route did not match, try next one.
-                continue;
-            }
-
-            $methodModel = $availableMethod;
-
-            //Put the route params in the request
-            foreach ($captures as $key => $val) {
-                if (!is_numeric($key)) {
-                    $routeModel->setRouteParam($key, $val);
+                foreach ($availableVerbs as $availableVerb => $routeData) {
+                    if (strcasecmp($availableVerb, $request->getMethod())) {
+                        return $out(
+                            $request->withAttribute(
+                                ResourceKey::ATTRIBUTE_NAME,
+                                $routeData
+                            )->withAttribute(
+                                RouteParams::ATTRIBUTE_NAME,
+                                new RouteParams($this->parseNamedCaptures($captures))
+                            ),
+                            $response
+                        );
+                    }
                 }
+                break;
             }
-
-            break;
         }
 
-        if (empty($methodModel)) {
-            if ($aPathMatched) {
-                //If a Path matched but an http verb did not, return 405 Method not allowed
-                return $response->withStatus(405);
-            }
-
-            //Route is not for us so leave
-            return $out($request, $response);
+        if ($aPathMatched) {
+            //A path matched but a verb did not so return "Method not allowed"
+            return $response->withStatus(405);
         }
 
-        $request = $request->withAttribute(
-            self::REQUEST_ATTRIBUTE_RESOURCE_METHOD_KEY,
-            $methodModel->getName()
-        );
-
+        //No paths matched so do nothing and allow other middleware to handle this request.
         return $out($request, $response);
+    }
+
+    /**
+     * Filters the junk numerically keyed captures out of a preg_match captures array
+     * leaving us with only the juicy named captures.
+     *
+     * @param $captures
+     * @return array
+     */
+    protected function parseNamedCaptures($captures)
+    {
+        $filteredCaptures = [];
+        foreach ($captures as $key => $val) {
+            if (!is_numeric($key)) {
+                $filteredCaptures[$key] = $val;
+            }
+        }
+
+        return $filteredCaptures;
     }
 }
