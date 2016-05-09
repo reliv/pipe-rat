@@ -31,7 +31,8 @@ use Reliv\PipeRat\ServiceModel\RouteModel;
 class CurlyBraceVarRouter extends AbstractModelMiddleware implements Middleware
 {
     /**
-     * __invoke
+     * Our job as a pipe rat router is to set the "ResourceKey" route param to the
+     * data that we are given for the matched route.
      *
      * @param Request $request
      * @param Response $response
@@ -55,17 +56,14 @@ class CurlyBraceVarRouter extends AbstractModelMiddleware implements Middleware
 
                 foreach ($availableVerbs as $availableVerb => $routeData) {
                     if (strcasecmp($availableVerb, $request->getMethod())) {
-                        //Put the route params in the request
-                        $routeParams = [];
-                        foreach ($captures as $key => $val) {
-                            if (!is_numeric($key)) {
-                                $routeParams[$key] = $val;
-                            }
-                        }
-
                         return $out(
-                            $request->withAttribute(ResourceKey::ATTRIBUTE_NAME, $routeData)
-                                ->withAttribute(RouteParams::ATTRIBUTE_NAME, new RouteParams($routeParams)),
+                            $request->withAttribute(
+                                ResourceKey::ATTRIBUTE_NAME,
+                                $routeData
+                            )->withAttribute(
+                                RouteParams::ATTRIBUTE_NAME,
+                                new RouteParams($this->parseNamedCaptures($captures))
+                            ),
                             $response
                         );
                     }
@@ -75,11 +73,30 @@ class CurlyBraceVarRouter extends AbstractModelMiddleware implements Middleware
         }
 
         if ($aPathMatched) {
-            //If a Path matched but an http verb did not, return 405 Method not allowed
+            //If a path matched but an http verb did not, return 405 method not allowed
             return $response->withStatus(405);
         }
 
         //Route is not for us so leave
         return $out($request, $response);
+    }
+
+    /**
+     * Filters the junk numericly keyed captures out of a preg_match captures array
+     * leaving us with only the juicy named captures.
+     *
+     * @param $captures
+     * @return array
+     */
+    protected function parseNamedCaptures($captures)
+    {
+        $filteredCaptures = [];
+        foreach ($captures as $key => $val) {
+            if (!is_numeric($key)) {
+                $filteredCaptures[$key] = $val;
+            }
+        }
+
+        return $filteredCaptures;
     }
 }
