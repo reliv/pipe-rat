@@ -3,6 +3,7 @@
 namespace Reliv\PipeRat\ServiceModel;
 
 /**
+ * @deprecated
  * interface MethodModel
  *
  * @author    James Jervis <jjervis@relivinc.com>

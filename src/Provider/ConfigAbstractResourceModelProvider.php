@@ -7,6 +7,8 @@ use Reliv\PipeRat\Options\GenericOptions;
 use Reliv\PipeRat\Options\Options;
 
 /**
+ * @deprecated
+ * 
  * Class ConfigAbstractResourceModelProvider
  *
  * @author    James Jervis <jjervis@relivinc.com>

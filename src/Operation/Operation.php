@@ -1,13 +1,13 @@
 <?php
 
-namespace Reliv\PipeRat\ServiceModel;
+namespace Reliv\PipeRat\Operation;
 
 use Reliv\PipeRat\Exception\ServiceMissingException;
+use Reliv\PipeRat\Middleware\Middleware;
 use Reliv\PipeRat\Options\Options;
 
 /**
- * @deprecated
- * Class ServiceModel
+ * Class Operation
  *
  * PHP version 5
  *
@@ -19,22 +19,21 @@ use Reliv\PipeRat\Options\Options;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-interface ServiceModel extends OptionsModel
+interface Operation
 {
     /**
-     * getAlias
+     * getName
      *
      * @return string
      */
-    public function getAlias();
+    public function getName();
     
     /**
-     * getService
+     * getMiddleware
      *
-     * @return object  Middleware compatible
-     * @throws ServiceMissingException
+     * @return null|callable|object|Middleware compatible
      */
-    public function getService();
+    public function getMiddleware();
 
     /**
      * getOptions

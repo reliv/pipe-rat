@@ -97,7 +97,7 @@ class MainMiddleware extends AbstractModelMiddleware implements Middleware
         $method = $methodModel->getName();
 
         $request = $request->withAttribute(
-            OptionsMiddleware::REQUEST_ATTRIBUTE_OPTIONS,
+            OptionsMiddleware::getName(),
             $controllerOptions
         );
 

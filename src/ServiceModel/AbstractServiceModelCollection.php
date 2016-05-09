@@ -8,6 +8,7 @@ use Reliv\PipeRat\Options\GenericOptions;
 use Reliv\PipeRat\Options\Options;
 
 /**
+ * @deprecated
  * Class AbstractServiceModelCollection
  *
  * PHP version 5

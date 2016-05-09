@@ -3,6 +3,7 @@
 namespace Reliv\PipeRat\ServiceModel;
 
 /**
+ * @deprecated
  * Interface ErrorModel
  *
  * @author    James Jervis <jjervis@relivinc.com>

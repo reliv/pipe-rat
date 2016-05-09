@@ -5,6 +5,8 @@ namespace Reliv\PipeRat\Provider;
 use Reliv\PipeRat\ServiceModel\ServiceModelCollection;
 
 /**
+ * @deprecated 
+ * 
  * interface ModelProvider
  *
  * @author    James Jervis <jjervis@relivinc.com>

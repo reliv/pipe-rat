@@ -2,8 +2,10 @@
 
 namespace Reliv\PipeRat\ResourceController;
 
+use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\InvalidWhereException;
+use Reliv\PipeRat\Exception\MethodException;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\ServiceModel\RouteModel;
 
@@ -18,11 +20,37 @@ use Reliv\PipeRat\ServiceModel\RouteModel;
 abstract class AbstractResourceController extends AbstractMiddleware implements ResourceController
 {
     /**
+     * __invoke
+     *
+     * @param Request       $request
+     * @param Response      $response
+     * @param callable|null $out
+     *
+     * @return mixed
+     * @throws MethodException
+     */
+    public function __invoke(Request $request, Response $response, callable $out = null)
+    {
+        $method = $this->getOption($request, 'method', null);
+
+        // method option not defined
+        if ($method === null) {
+            throw new MethodException('Method options not defined');
+        }
+
+        if (!method_exists($this, $method)) {
+            throw new MethodException('Method does not exists');
+        }
+
+        return $this->$method($request, $response, $out);
+    }
+
+    /**
      * getUrlParam
      *
      * @param Request $request
-     * @param string $key
-     * @param null $default
+     * @param string  $key
+     * @param null    $default
      *
      * @return null
      */
@@ -43,6 +71,7 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
      * Looks like:{"country":"CAN"} or {"country":{"name":"United States"}}
      *
      * @param Request $request
+     *
      * @return array|mixed
      * @throws InvalidWhereException
      */
@@ -72,6 +101,7 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
      * Looks like {"name":"ASC"} or {"name":"DESC"} in URL
      *
      * @param Request $request
+     *
      * @return array|mixed
      */
     public function getOrder(Request $request)

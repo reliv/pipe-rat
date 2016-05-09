@@ -7,6 +7,7 @@ use Reliv\PipeRat\Middleware\Middleware;
 use Reliv\PipeRat\Options\Options;
 
 /**
+ * @deprecated
  * Class ServiceModelCollection
  *
  * PHP version 5

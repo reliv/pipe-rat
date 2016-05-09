@@ -32,6 +32,9 @@
   },
   "require-dev": {
   },
+  "require-maybe": {
+    "zircote/swagger-php": "^2.0"
+  },
   "autoload": {
     "psr-4": {
       "Reliv\\PipeRat\\": "src/"

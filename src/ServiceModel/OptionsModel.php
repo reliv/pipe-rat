@@ -5,6 +5,7 @@ namespace Reliv\PipeRat\ServiceModel;
 use Reliv\PipeRat\Options\Options;
 
 /**
+ * @deprecated
  * Class OptionsModel
  *
  * PHP version 5

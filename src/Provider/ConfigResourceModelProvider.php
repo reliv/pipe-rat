@@ -2,16 +2,15 @@
 
 namespace Reliv\PipeRat\Provider;
 
-use Reliv\PipeRat\Exception\ControllerServiceNotFoundException;
-use Reliv\PipeRat\Exception\ResourceControllerServiceNotDefinedInConfigException;
+use Reliv\PipeRat\Exception\ConfigException;
 use Reliv\PipeRat\Options\GenericOptions;
 use Reliv\PipeRat\ServiceModel\BaseControllerModel;
 use Reliv\PipeRat\ServiceModel\BaseMethodModel;
 use Reliv\PipeRat\ServiceModel\BaseResourceModel;
 use Reliv\PipeRat\ServiceModel\BaseServiceModelCollection;
-use Reliv\PipeRat\ServiceModel\ResourceModel;
 
 /**
+ * @deprecated
  * Class ConfigResourceModelProvider
  *
  * @author    James Jervis <jjervis@relivinc.com>
@@ -164,7 +163,7 @@ class ConfigResourceModelProvider extends ConfigAbstractResourceModelProvider im
         );
 
         if (empty($controllerServiceAlias)) {
-            throw new ResourceControllerServiceNotDefinedInConfigException;
+            throw new ConfigException('Resource Controller Service Not Defined In Config');
         }
 
         $controllerService = $this->serviceManager->get(
