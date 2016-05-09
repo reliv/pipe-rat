@@ -29,7 +29,7 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
      * @var OperationCollection
      */
     protected $operationCollection;
-    
+
     /**
      * @var array
      */
@@ -46,7 +46,7 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
         if (!empty($this->operationCollection)) {
             return $this->operationCollection;
         }
-        
+
         $configOptions = $this->getConfigOptions();
 
         $operationServiceNames = $configOptions->get('routeServiceNames', []);
@@ -65,7 +65,7 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
             $operationOptions,
             $operationPriorities
         );
-        
+
         return $this->operationCollection;
     }
 
@@ -101,13 +101,13 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
                 }
                 $methodOptions = new GenericOptions($methodProperties);
 
-                $resourcePath .= $methodOptions->get('path', '/' . $methodName);
+                $fullPath = $resourcePath. $methodOptions->get('path', '/' . $methodName);
 
                 if (!array_key_exists($resourcePath, $this->paths)) {
                     $this->paths[$resourcePath] = [];
                 }
 
-                $this->paths[$resourcePath][$methodOptions->get('httpVerb', 'GET')] = $resourceName . '::' . $methodName;
+                $this->paths[$fullPath][$methodOptions->get('httpVerb', 'GET')] = $resourceName . '::' . $methodName;
             }
         }
 

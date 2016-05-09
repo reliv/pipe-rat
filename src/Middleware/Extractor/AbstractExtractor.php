@@ -47,7 +47,7 @@ abstract class AbstractExtractor extends AbstractMiddleware
      * getFilterPropertyList
      *
      * @param Request $request
-     * @param array   $default
+     * @param array $default
      *
      * @return array|mixed
      */
@@ -68,7 +68,7 @@ abstract class AbstractExtractor extends AbstractMiddleware
     {
         $filterPropertyList = $this->getFilterPropertyList($request, null);
         $propertyListMerged = $options->get('propertyListMerged', false);
-        
+
         // Nothing to be done
         if ($filterPropertyList === null && $propertyListMerged) {
             return;
@@ -76,12 +76,13 @@ abstract class AbstractExtractor extends AbstractMiddleware
 
         $defaultPropertyList = $options->get('propertyList', []);
 
-        if(empty($defaultPropertyList)) {
+        if (empty($defaultPropertyList)) {
             $options->set('propertyList', $filterPropertyList);
+
             return;
         }
 
-        $list = $this->buildPropertyList($filterPropertyList, $defaultPropertyList);
+        $list = $this->buildPropertyList($defaultPropertyList, $filterPropertyList);
 
         $options->set('propertyList', $list);
         $options->set('propertyListMerged', true);
@@ -101,21 +102,24 @@ abstract class AbstractExtractor extends AbstractMiddleware
         $filterPropertyList,
         &$list = []
     ) {
-        foreach ($filterPropertyList as $filterProperty => $value) {
+        if ($filterPropertyList == null) {
+            $filterPropertyList = $defaultPropertyList;
+        }
 
+        foreach ($filterPropertyList as $filterProperty => $value) {
             // If it is not set in default, we ignore
             if (!array_key_exists($filterProperty, $defaultPropertyList)) {
                 continue;
             }
 
             // If it is set false in default, we ignore
-            if($defaultPropertyList[$filterProperty] === false) {
+            if ($defaultPropertyList[$filterProperty] === false) {
                 continue;
             }
 
             // We can turn them off if they are disabled
-            if($defaultPropertyList[$filterProperty] === true) {
-                $defaultPropertyList[$filterProperty] = (bool) $filterPropertyList[$filterProperty];
+            if ($defaultPropertyList[$filterProperty] === true) {
+                $list[$filterProperty] = (bool)$filterPropertyList[$filterProperty];
                 continue;
             }
 
@@ -144,8 +148,8 @@ abstract class AbstractExtractor extends AbstractMiddleware
      * __invoke
      *
      * @param Request|DataResponse $request
-     * @param Response             $response
-     * @param callable|null        $out
+     * @param Response $response
+     * @param callable|null $out
      *
      * @return static
      */
