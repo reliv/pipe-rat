@@ -86,10 +86,28 @@ return [
                 'entity' => null,
             ],
             'methods' => [
+                'findById' => [
+                    'description' => 'Find resource by ID',
+                    'httpVerb' => 'GET',
+                    'name' => 'findById',
+                    'options' => [],
+                    'path' => '/{id}',
+                    'preServiceNames' => [
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                    ],
+                    'preServiceOptions' => [],
+                    'preServicePriority' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                    ],
+                    'postServiceOptions' => [],
+                    'postServicePriority' => [],
+                ],
                 'create' => [
                     'description' => 'Create new resource',
                     'httpVerb' => 'POST',
                     'name' => 'create',
+                    'options' => [],
                     'path' => '',
                     'preServiceNames' => [
                         'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
@@ -106,6 +124,7 @@ return [
                     'description' => 'Update or create a resource',
                     'httpVerb' => 'PUT',
                     'name' => 'upsert',
+                    'options' => [],
                     'path' => '',
                     'preServiceNames' => [
                         'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
@@ -122,6 +141,7 @@ return [
                     'description' => 'Check if a resource exists',
                     'httpVerb' => 'GET',
                     'name' => 'exists',
+                    'options' => [],
                     'path' => '/{id}/exists',
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
@@ -134,6 +154,7 @@ return [
                     'description' => 'Return number of resources',
                     'httpVerb' => 'GET',
                     'name' => 'count',
+                    'options' => [],
                     'path' => '/count',
                     'preServiceNames' => [
                         'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
@@ -153,10 +174,11 @@ return [
                     'description' => 'Find resources',
                     'httpVerb' => 'GET',
                     'name' => 'findOne',
+                    'options' => [],
                     'path' => '/findOne',
                     'preServiceNames' => [
                         'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
                     ],
                     'preServiceOptions' => [
                         'WhereFilterParam' => [
@@ -175,6 +197,7 @@ return [
                     'description' => 'Find resources',
                     'httpVerb' => 'GET',
                     'name' => 'find',
+                    'options' => [],
                     'path' => '',
                     'preServiceNames' => [
                         'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
@@ -200,6 +223,7 @@ return [
                     'description' => 'Delete resource by ID',
                     'httpVerb' => 'DELETE',
                     'name' => 'deleteById',
+                    'options' => [],
                     'path' => '/{id}',
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
@@ -212,22 +236,7 @@ return [
                     'description' => 'Update resource properties by ID',
                     'httpVerb' => 'PUT',
                     'name' => 'updateProperties',
-                    'path' => '/{id}',
-                    'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
-                    ],
-                    'preServiceOptions' => [],
-                    'preServicePriority' => [],
-                    'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-                    ],
-                    'postServiceOptions' => [],
-                    'postServicePriority' => [],
-                ],
-                'findById' => [
-                    'description' => 'Find resource by ID',
-                    'httpVerb' => 'GET',
-                    'name' => 'findById',
+                    'options' => [],
                     'path' => '/{id}',
                     'preServiceNames' => [
                         'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
@@ -243,6 +252,7 @@ return [
             ],
             'methodPriority' => [
             ],
+            'options' => [],
             'preServiceNames' => [
 //                'JsonRequestFormat' => 'Reliv\PipeRat\Middleware\RequestFormat\JsonRequestFormat',
             ],
