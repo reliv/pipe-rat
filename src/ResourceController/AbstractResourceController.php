@@ -112,6 +112,18 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
     }
 
     /**
+     * Get the limit param from the URL
+     *
+     * @param Request $request
+     *
+     * @return int
+     */
+    public function getLimit(Request $request)
+    {
+        return $request->getAttribute('limitFilterParam', null);
+    }
+
+    /**
      * Get the skip param from the url to find out the number of items to skip.
      *
      * @param Request $request

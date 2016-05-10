@@ -230,7 +230,12 @@ class DoctrineResourceController extends AbstractResourceController
         }
 
         try {
-            $results = $repo->findBy($where, $this->getOrder($request));
+            $results = $repo->findBy(
+                $where,
+                $this->getOrder($request),
+                $this->getLimit($request),
+                $this->getSkip($request)
+            );
         } catch (ORMException $e) {
             return $response->withStatus(400);
         }

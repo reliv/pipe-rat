@@ -82,7 +82,7 @@
              * '{serviceAlias}' => {priority},
              */
             'preServicePriority' => [
-                'JsonRequestFormat' => 1000,
+//                'JsonRequestFormat' => 1000,
             ],
             'postServiceNames' => [
                 //@TODO should these be here if they are already in the methods? -Rod
