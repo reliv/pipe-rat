@@ -1,6 +1,6 @@
 <?php
 
-namespace Reliv\PipeRat\Middleware\RequestFormat;
+namespace Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -8,7 +8,7 @@ use Reliv\PipeRat\Exception\InvalidWhereException;
 use Reliv\PipeRat\Middleware\Middleware;
 
 /**
- * Class WhereFilterParamRequestFormat
+ * Class Properties
  *
  * PHP version 5
  *
@@ -18,12 +18,12 @@ use Reliv\PipeRat\Middleware\Middleware;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-class WhereFilterParamRequestFormat extends AbstractRequestFormat implements Middleware
+class Properties implements Middleware
 {
     /**
      * Get the where param form the URL.
      *
-     * Looks like:{"country":"CAN"} or {"country":{"name":"United States"}}
+     * Looks like:{"country":true} or {"country":{"name":true}}
      *
      * @param Request       $request
      * @param Response      $response
@@ -36,25 +36,13 @@ class WhereFilterParamRequestFormat extends AbstractRequestFormat implements Mid
     {
         $params = $request->getQueryParams();
 
-        if (!array_key_exists('where', $params)) {
+        if (!array_key_exists('properties', $params)) {
             return $out($request, $response);
         }
 
-        $param = json_decode($params['where'], true);
+        $param = json_decode($params['properties'], true);
 
-        $request = $request->withAttribute('whereFilterParam', $param);
-
-        $allowDeepWheres = $this->getOption($request, 'allowDeepWheres', false);
-
-        if ($allowDeepWheres) {
-            return $out($request, $response);
-        }
-
-        foreach ($param as $whereChunk) {
-            if (is_array($whereChunk)) {
-                throw new InvalidWhereException();
-            }
-        }
+        $request = $request->withAttribute('propertyFilterParam', $param);
 
         return $out($request, $response);
     }

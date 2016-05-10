@@ -21,7 +21,10 @@ use Reliv\PipeRat\Middleware\RequestFormat\AbstractRequestFormat;
  */
 class Skip extends AbstractUrlEncodedCombinedFilter implements Middleware
 {
-    const URL_KEY = 'skip';//Is used by parent getValue() function
+    /**
+     * Is used by parent getValue() function
+     */
+    const URL_KEY = 'skip';
 
     /**
      * Get the param from the URL
@@ -38,7 +41,8 @@ class Skip extends AbstractUrlEncodedCombinedFilter implements Middleware
         $value = $this->getValue($request);
 
         if ($value !== null && $value != (int)$value) {
-            throw new InvalidWhereException(); //Shouldn't this be 400'ing instead of throwing?
+            //Should this be 400'ing instead of throwing?
+            throw new InvalidWhereException(); 
         }
 
         return $out($request->withAttribute('skipFilterParam', $value), $response);

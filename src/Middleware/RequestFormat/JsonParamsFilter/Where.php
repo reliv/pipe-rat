@@ -1,14 +1,15 @@
 <?php
 
-namespace Reliv\PipeRat\Middleware\RequestFormat;
+namespace Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\InvalidWhereException;
 use Reliv\PipeRat\Middleware\Middleware;
+use Reliv\PipeRat\Middleware\RequestFormat\AbstractRequestFormat;
 
 /**
- * Class SkipFilterParamRequestFormat
+ * Class Where
  *
  * PHP version 5
  *
@@ -18,13 +19,12 @@ use Reliv\PipeRat\Middleware\Middleware;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-class SkipFilterParamRequestFormat extends AbstractRequestFormat implements Middleware
+class Where extends AbstractRequestFormat implements Middleware
 {
     /**
-     * Get the order param from the url to find out how the response
-     * should be ordered.
+     * Get the where param form the URL.
      *
-     * Looks like {"name":"ASC"} or {"name":"DESC"} in URL
+     * Looks like:{"country":"CAN"} or {"country":{"name":"United States"}}
      *
      * @param Request       $request
      * @param Response      $response
@@ -36,14 +36,26 @@ class SkipFilterParamRequestFormat extends AbstractRequestFormat implements Midd
     public function __invoke(Request $request, Response $response, callable $out = null)
     {
         $params = $request->getQueryParams();
-        
-        if (!array_key_exists('skip', $params)) {
+
+        if (!array_key_exists('where', $params)) {
             return $out($request, $response);
         }
 
-        $param = (int)$params['skip'];
+        $param = json_decode($params['where'], true);
 
-        $request = $request->withAttribute('skipFilterParam', $param);
+        $request = $request->withAttribute('whereFilterParam', $param);
+
+        $allowDeepWheres = $this->getOption($request, 'allowDeepWheres', false);
+
+        if ($allowDeepWheres) {
+            return $out($request, $response);
+        }
+
+        foreach ($param as $whereChunk) {
+            if (is_array($whereChunk)) {
+                throw new InvalidWhereException();
+            }
+        }
 
         return $out($request, $response);
     }

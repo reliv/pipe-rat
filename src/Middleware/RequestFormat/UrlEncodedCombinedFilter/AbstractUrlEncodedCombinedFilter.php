@@ -6,8 +6,18 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class AbstractUrlEncodedCombinedFilter
 {
+    /**
+     * Over-ride me
+     */
     const URL_KEY = 'Put something here in child';
 
+    /**
+     * getValue
+     *
+     * @param Request $request
+     *
+     * @return null|mixed
+     */
     protected function getValue(Request $request)
     {
         $params = $request->getQueryParams();

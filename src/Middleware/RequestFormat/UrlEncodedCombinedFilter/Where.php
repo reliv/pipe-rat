@@ -21,7 +21,10 @@ use Reliv\PipeRat\Middleware\RequestFormat\AbstractRequestFormat;
  */
 class Where extends AbstractUrlEncodedCombinedFilter implements Middleware
 {
-    const URL_KEY = 'where';//Is used by parent getValue() function
+    /**
+     * Is used by parent getValue() function
+     */
+    const URL_KEY = 'where';
 
     /**
      * Get the where param form the URL.
@@ -46,7 +49,8 @@ class Where extends AbstractUrlEncodedCombinedFilter implements Middleware
 
         foreach ($where as $whereChunk) {
             if (is_array($whereChunk)) {
-                throw new InvalidWhereException(); //Shouldn't this be 400'ing instead of throwing?
+                //Should this be 400'ing instead of throwing?
+                throw new InvalidWhereException();
             }
         }
 

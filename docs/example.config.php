@@ -67,6 +67,8 @@
                 'RcmUserAcl' => [
                     'resourceId' => '{resourceId}',
                     'privilege' => null,
+                    'notAllowedStatus' => 401, // optional
+                    'notAllowedReason' => 'Access Denied' // optional
                 ],
                 'ZfInputFilterClass' => [
                     'class' => '',
