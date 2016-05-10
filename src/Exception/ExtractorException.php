@@ -1,6 +1,6 @@
 <?php
 
-namespace Reliv\PipeRat\Extractor\Exception;
+namespace Reliv\PipeRat\Exception;
 
 /**
  * Class ExtractorException

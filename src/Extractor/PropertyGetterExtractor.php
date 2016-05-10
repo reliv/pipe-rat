@@ -2,7 +2,7 @@
 
 namespace Reliv\PipeRat\Extractor;
 
-use Reliv\PipeRat\Extractor\Exception\ExtractorException;
+use Reliv\PipeRat\Exception\ExtractorException;
 use Reliv\PipeRat\Options\Options;
 
 /**

@@ -100,32 +100,19 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
             $methods = $resourceOptions->get('methods', []);
             $methodPriority = $resourceOptions->get('methodPriority', []);
 
-            foreach ($methods as $methodName => $methodProperties) {
-                if (!in_array($methodName, $methodsAllowed)) {
-                    continue;
-                }
-                $methodOptions = new GenericOptions($methodProperties);
-
-                $fullPath = $resourcePath . $methodOptions->get('path', '/' . $methodName);
-
-                if (!array_key_exists($resourcePath, $this->paths)) {
-                    $this->paths[$resourcePath] = [];
-                }
-
-                $this->paths[$fullPath][$methodOptions->get('httpVerb', 'GET')] = $resourceName . '::' . $methodName;
-            }
+            $this->buildMethods(
+                $resourceName,
+                $resourcePath,
+                $methodsAllowed,
+                $methods,
+                $methodPriority
+            );
         }
-
-        // Reverse to priority
-        $this->paths = array_reverse($this->paths, true);
-
-        var_dump($this->paths); die;
 
         return $request->withAttribute(Paths::getName(), $this->paths);
     }
 
     /**
-     * @todo Implement ME
      * buildMethods
      *
      * @param string $resourceName
@@ -144,38 +131,79 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
         array $methods,
         array $methodPriority
     ) {
+        if(empty($methodPriority)) {
+            $this->buildSimpleMethods(
+                $resourceName,
+                $resourcePath,
+                $methodsAllowed,
+                $methods
+            );
+            return;
+        }
+
         $queue = new \SplPriorityQueue();
 
-        $defaultPriority = 0;
+        $defaultPriority = 1;
 
-        foreach ($methods as $methodName) {
+        foreach ($methods as $methodName => $methodProperties) {
             if (!in_array($methodName, $methodsAllowed)) {
                 continue;
             }
-
-            if (!array_key_exists($methodName, $methodPriority)) {
+            if (array_key_exists($methodName, $methodPriority)) {
                 $priority = $methodPriority[$methodName];
             } else {
                 $priority = $defaultPriority;
                 $defaultPriority++;
             }
-
+            if($resourceName == "it-pws-profile") {
+                var_dump($methodName, $priority);
+            }
             $queue->insert($methodName, $priority);
         }
 
-        $reversedOrder = [];
         foreach ($queue as $methodName) {
-            array_unshift($reversedOrder, $methodName);
-        }
-
-        foreach ($reversedOrder as $methodName) {
             $methodProperties = $methods[$methodName];
             $methodOptions = new GenericOptions($methodProperties);
 
             $fullPath = $resourcePath . $methodOptions->get('path', '/' . $methodName);
 
-            if (!array_key_exists($resourcePath, $this->paths)) {
-                $this->paths[$resourcePath] = [];
+            if (!array_key_exists($fullPath, $this->paths)) {
+                $this->paths[$fullPath] = [];
+            }
+
+            $this->paths[$fullPath][$methodOptions->get('httpVerb', 'GET')] = $resourceName . '::' . $methodName;
+        }
+    }
+
+
+    /**
+     * buildSimpleMethods
+     *
+     * @param       $resourceName
+     * @param       $resourcePath
+     * @param array $methodsAllowed
+     * @param array $methods
+     *
+     * @return void
+     */
+    protected function buildSimpleMethods(
+        $resourceName,
+        $resourcePath,
+        array $methodsAllowed,
+        array $methods
+    ) {
+        $methods = array_reverse($methods, true);
+
+        foreach ($methods as $methodName => $methodProperties) {
+            if (!in_array($methodName, $methodsAllowed)) {
+                continue;
+            }
+            $methodOptions = new GenericOptions($methodProperties);
+
+            $fullPath = $resourcePath . $methodOptions->get('path', '/' . $methodName);
+
+            if (!array_key_exists($fullPath, $this->paths)) {
+                $this->paths[$fullPath] = [];
             }
 
             $this->paths[$fullPath][$methodOptions->get('httpVerb', 'GET')] = $resourceName . '::' . $methodName;
