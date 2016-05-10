@@ -86,6 +86,23 @@ return [
                 'entity' => null,
             ],
             'methods' => [
+                'findById' => [
+                    'description' => 'Find resource by ID',
+                    'httpVerb' => 'GET',
+                    'name' => 'findById',
+                    'options' => [],
+                    'path' => '/{id}',
+                    'preServiceNames' => [
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                    ],
+                    'preServiceOptions' => [],
+                    'preServicePriority' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                    ],
+                    'postServiceOptions' => [],
+                    'postServicePriority' => [],
+                ],
                 'create' => [
                     'description' => 'Create new resource',
                     'httpVerb' => 'POST',
@@ -219,23 +236,6 @@ return [
                     'description' => 'Update resource properties by ID',
                     'httpVerb' => 'PUT',
                     'name' => 'updateProperties',
-                    'options' => [],
-                    'path' => '/{id}',
-                    'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
-                    ],
-                    'preServiceOptions' => [],
-                    'preServicePriority' => [],
-                    'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-                    ],
-                    'postServiceOptions' => [],
-                    'postServicePriority' => [],
-                ],
-                'findById' => [
-                    'description' => 'Find resource by ID',
-                    'httpVerb' => 'GET',
-                    'name' => 'findById',
                     'options' => [],
                     'path' => '/{id}',
                     'preServiceNames' => [
