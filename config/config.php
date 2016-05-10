@@ -93,7 +93,7 @@ return [
                     'options' => [],
                     'path' => '',
                     'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
                     ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
@@ -110,7 +110,7 @@ return [
                     'options' => [],
                     'path' => '',
                     'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
                     ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
@@ -140,7 +140,7 @@ return [
                     'options' => [],
                     'path' => '/count',
                     'preServiceNames' => [
-                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\WhereFilterParamRequestFormat',
+                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
                     ],
                     'preServiceOptions' => [
                         'WhereFilterParam' => [
@@ -160,7 +160,7 @@ return [
                     'options' => [],
                     'path' => '/findOne',
                     'preServiceNames' => [
-                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\WhereFilterParamRequestFormat',
+                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
                         'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
                     ],
                     'preServiceOptions' => [
@@ -183,11 +183,11 @@ return [
                     'options' => [],
                     'path' => '',
                     'preServiceNames' => [
-                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\WhereFilterParamRequestFormat',
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
-                        'OrderByFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\OrderByFilterParamRequestFormat',
-                        'SkipFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\SkipFilterParamRequestFormat',
-                        'LimitFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\LimitFilterParamRequestFormat',
+                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'OrderByFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Order',
+                        'SkipFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Skip',
+                        'LimitFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Limit',
                     ],
                     'preServiceOptions' => [
                         'WhereFilterParam' => [
@@ -222,7 +222,7 @@ return [
                     'options' => [],
                     'path' => '/{id}',
                     'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
                     ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
@@ -239,7 +239,7 @@ return [
                     'options' => [],
                     'path' => '/{id}',
                     'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\PropertyFilterParamRequestFormat',
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
                     ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
@@ -254,12 +254,12 @@ return [
             ],
             'options' => [],
             'preServiceNames' => [
-                'JsonRequestFormat' => 'Reliv\PipeRat\Middleware\RequestFormat\JsonRequestFormat',
+//                'JsonRequestFormat' => 'Reliv\PipeRat\Middleware\RequestFormat\JsonRequestFormat',
             ],
             'preServiceOptions' => [
             ],
             'preServicePriority' => [
-                'JsonRequestFormat' => 1000,
+//                'JsonRequestFormat' => 1000,
             ],
             'postServiceNames' => [
                 'JsonResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
@@ -274,7 +274,7 @@ return [
                 ],
             ],
             'postServicePriority' => [
-                'JsonRequestFormat' => 1000,
+//                'JsonRequestFormat' => 1000,
                 'XmlResponseFormat' => 900,
                 'DefaultResponseFormat' => 800
             ],
