@@ -58,13 +58,13 @@ abstract class AbstractMiddleware
     }
 
     /**
-     * getControllerOption
+     * getOption
      *
-     * @param Request $request
-     * @param string  $key
-     * @param null    $default
+     * @param Request    $request
+     * @param string     $key
+     * @param null|mixed $default
      *
-     * @return Options
+     * @return mixed
      */
     protected function getOption(Request $request, $key, $default = null)
     {
@@ -72,6 +72,26 @@ abstract class AbstractMiddleware
         $options = $this->getOptions($request);
 
         return $options->get($key, $default);
+    }
+
+    /**
+     * getOption
+     *
+     * @param Request    $request
+     * @param string     $key
+     *
+     * @return mixed
+     */
+    protected function getOptionAsOptions(Request $request, $key)
+    {
+        /** @var Options $options */
+        $options = $this->getOptions($request);
+
+        if(!$options->has($key)) {
+            return new GenericOptions();
+        }
+
+        return $options->getOptions($key);
     }
 
     /**
