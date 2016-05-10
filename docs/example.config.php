@@ -22,7 +22,80 @@
             // '{serviceName}'
             'extendsConfig' => 'default:doctrineApi',
 
-            'methods' => [],
+            /**
+             * === DEFAULT: Resource Controller Method Definitions ===
+             *
+             * NOTE: Default priority is LAST wins
+             */
+            'methods' => [
+                'exampleFindOne' => [
+                    'description' => 'Example find resources',
+                    'httpVerb' => 'GET',
+                    'name' => 'exampleFindOne',
+                    'path' => '/exampleFindOne',
+                    'preServiceNames' => [
+                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                    ],
+                    'preServiceOptions' => [
+                        'WhereFilterParam' => [
+                            // Security is best when 'allowDeepWheres' is false
+                            'allowDeepWheres' => false,
+                        ]
+                    ],
+                    'preServicePriority' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                    ],
+                    'postServiceOptions' => [
+                        'extractor' => [
+                            'propertyList' => [
+                                'exampleProperty' => true,
+                                'exampleCollectionProperty' => ['exampleSubProperty' => true],
+                                'exmpleBlacklistProperty' => false,
+                            ],
+                            // Security is best when 'deepPropertyLimit' is 1
+                            'propertyDepthLimit' => 1,
+                        ],
+                    ],
+                    'postServicePriority' => [],
+                ],
+                'exampleFind' => [
+                    'description' => 'Find resources',
+                    'httpVerb' => 'GET',
+                    'name' => 'exampleFind',
+                    'path' => '/exampleFind',
+                    'preServiceNames' => [
+                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'OrderByFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Order',
+                        'SkipFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Skip',
+                        'LimitFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Limit',
+                    ],
+                    'preServiceOptions' => [
+                        'WhereFilterParam' => [
+                            // Security is best when 'allowDeepWheres' is false
+                            'allowDeepWheres' => false,
+                        ]
+                    ],
+                    'preServicePriority' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor',
+                    ],
+                    'postServiceOptions' => [
+                        'extractor' => [
+                            'propertyList' => [
+                                'exampleProperty' => true,
+                                'exampleCollectionProperty' => ['exampleSubProperty' => true],
+                                'exmpleBlacklistProperty' => false,
+                            ],
+                            // Security is best when 'deepPropertyLimit' is 1
+                            'propertyDepthLimit' => 1,
+                        ],
+                    ],
+                    'postServicePriority' => [],
+                ],
+            ],
             /* Methods White-list */
             'methodsAllowed' => [
                 //Reads
@@ -36,7 +109,7 @@
                 'create',
                 'deleteById',
                 'updateProperties',
-                
+                'example',
             ],
             'methodPriority' => [
                 //Reads
@@ -50,10 +123,8 @@
                 'create' => 400,
                 'deleteById' => 300,
                 'updateProperties' => 200,
+                'example'
             ],
-
-            /* Resource Options */
-            'options' => [],
             /* Path */
             'path' => 'example-path',
             /* Pre Controller Middleware */
@@ -84,12 +155,9 @@
              * '{serviceAlias}' => {priority},
              */
             'preServicePriority' => [
-//                'JsonRequestFormat' => 1000,
+                'JsonRequestFormat' => 1000,
             ],
             'postServiceNames' => [
-                //@TODO should these be here if they are already in the methods? -Rod
-//                'PropertyExtractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-//                'CollectionPropertyExtractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyExtractor',
                 'JsonResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
                 'XmlResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat',
                 'DefaultResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
@@ -98,20 +166,6 @@
              * '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ],
              */
             'postServiceOptions' => [
-                'PropertyExtractor' => [
-                    'propertyList' => [
-                        // 'propertyName' => {bool|array}
-                    ],
-                    // Security is best when 'deepPropertyLimit' is 0
-                    'propertyDepthLimit' => 0,
-                ],
-                'CollectionPropertyExtractor' => [
-                    'propertyList' => [
-                        // 'propertyName' => {bool|array}
-                    ],
-                    // Security is best when 'deepPropertyLimit' is 0
-                    'propertyDepthLimit' => 0,
-                ],
                 'JsonResponseFormat' => [
                     'accepts' => [
                         'application/json'

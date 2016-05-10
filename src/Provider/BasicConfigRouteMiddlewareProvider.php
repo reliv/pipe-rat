@@ -4,6 +4,7 @@ namespace Reliv\PipeRat\Provider;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\ConfigException;
+use Reliv\PipeRat\Exception\MethodException;
 use Reliv\PipeRat\Middleware\MiddlewarePipe;
 use Reliv\PipeRat\Operation\BasicOperationCollection;
 use Reliv\PipeRat\Operation\OperationCollection;
@@ -82,6 +83,7 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
     {
         if (!empty($this->paths)) {
             $request->withAttribute(Paths::getName(), $this->paths);
+
             return $request;
         }
 
@@ -95,13 +97,16 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
             $resourcePath = $resourceOptions->get('path', '/' . $resourceName);
 
             $methodsAllowed = $resourceOptions->get('methodsAllowed', []);
-            foreach ($resourceOptions->get('methods', []) as $methodName => $methodProperties) {
+            $methods = $resourceOptions->get('methods', []);
+            $methodPriority = $resourceOptions->get('methodPriority', []);
+
+            foreach ($methods as $methodName => $methodProperties) {
                 if (!in_array($methodName, $methodsAllowed)) {
                     continue;
                 }
                 $methodOptions = new GenericOptions($methodProperties);
 
-                $fullPath = $resourcePath. $methodOptions->get('path', '/' . $methodName);
+                $fullPath = $resourcePath . $methodOptions->get('path', '/' . $methodName);
 
                 if (!array_key_exists($resourcePath, $this->paths)) {
                     $this->paths[$resourcePath] = [];
@@ -114,7 +119,67 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
         // Reverse to priority
         $this->paths = array_reverse($this->paths, true);
 
+        var_dump($this->paths); die;
+
         return $request->withAttribute(Paths::getName(), $this->paths);
+    }
+
+    /**
+     * @todo Implement ME
+     * buildMethods
+     *
+     * @param string $resourceName
+     * @param string $resourcePath
+     * @param array  $methodsAllowed
+     * @param array  $methods
+     * @param array  $methodPriority
+     *
+     * @return void
+     * @throws MethodException
+     */
+    protected function buildMethods(
+        $resourceName,
+        $resourcePath,
+        array $methodsAllowed,
+        array $methods,
+        array $methodPriority
+    ) {
+        $queue = new \SplPriorityQueue();
+
+        $defaultPriority = 0;
+
+        foreach ($methods as $methodName) {
+            if (!in_array($methodName, $methodsAllowed)) {
+                continue;
+            }
+
+            if (!array_key_exists($methodName, $methodPriority)) {
+                $priority = $methodPriority[$methodName];
+            } else {
+                $priority = $defaultPriority;
+                $defaultPriority++;
+            }
+
+            $queue->insert($methodName, $priority);
+        }
+
+        $reversedOrder = [];
+        foreach ($queue as $methodName) {
+            array_unshift($reversedOrder, $methodName);
+        }
+
+        foreach ($reversedOrder as $methodName) {
+            $methodProperties = $methods[$methodName];
+            $methodOptions = new GenericOptions($methodProperties);
+
+            $fullPath = $resourcePath . $methodOptions->get('path', '/' . $methodName);
+
+            if (!array_key_exists($resourcePath, $this->paths)) {
+                $this->paths[$resourcePath] = [];
+            }
+
+            $this->paths[$fullPath][$methodOptions->get('httpVerb', 'GET')] = $resourceName . '::' . $methodName;
+        }
     }
 
     /**
