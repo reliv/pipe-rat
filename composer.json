@@ -31,8 +31,8 @@
     "reliv/zf-config-factories": "3.*"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.8.*",
-    "squizlabs/php_codesniffer": "2.6.0",
+    "phpunit/phpunit": "4.*",
+    "squizlabs/php_codesniffer": "2.*",
     "jervdesign/php-unit-mock": "0.*"
   },
   "require-maybe": {
