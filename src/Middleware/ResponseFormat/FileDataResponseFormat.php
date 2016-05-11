@@ -169,11 +169,9 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
 
         $contentType = $this->getContentType($request, $properties);
 
-        $response = $response->withBody($body)->withHeader(
+        return $response->withBody($body)->withHeader(
             'Content-Type',
             $contentType
         );
-
-        return parent::__invoke($request, $response, $next);
     }
 }

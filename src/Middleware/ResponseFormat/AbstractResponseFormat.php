@@ -49,46 +49,4 @@ abstract class AbstractResponseFormat extends AbstractMiddleware
 
         return false;
     }
-
-    /**
-     * withOptionHeaders
-     *
-     * @param Request  $request
-     * @param Response $response
-     *
-     * @return Response
-     */
-    public function withOptionHeaders(Request $request, Response $response) {
-
-        $options = $this->getOptions($request);
-
-        $headers = $options->get('forceHeaders', []);
-        
-        if(empty($headers)) {
-            return $response;
-        }
-
-        foreach ($headers as $headerName => $values) {
-            $response = $response->withHeader($headerName, $values);
-        }
-        
-        return $response;
-    }
-
-    /**
-     * __invoke
-     *
-     * @param Request       $request
-     * @param Response      $response
-     * @param callable|null $next
-     *
-     * @return Response
-     */
-    public function __invoke(
-        Request $request,
-        Response $response,
-        callable $next = null
-    ) {
-        return $this->withOptionHeaders($request, $response);
-    }
 }
