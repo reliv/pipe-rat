@@ -154,10 +154,10 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
         if (!$this->isValidAcceptType($request)) {
             return $next($request, $response);
         }
-        
+
         $body = $response->getBody();
 
-        $properties = $this->getProperties($request, $response))
+        $properties = $this->getProperties($request, $response);
 
         $body->write($properties['file']);
 
