@@ -4,9 +4,7 @@ namespace Reliv\PipeRat\Middleware\Acl;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use RcmUser\Service\RcmUserService;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
-use Reliv\PipeRat\Middleware\Middleware;
 
 /**
  * Class AbstractAcl
