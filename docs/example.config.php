@@ -178,6 +178,7 @@
                             'headerValue1',
                             'headerValue2',
                         ],
+                        'Access-Control-Allow-Origin' => ['*'],
                     ],
                 ],
             ],
