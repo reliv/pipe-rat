@@ -8,7 +8,7 @@ use Reliv\PipeRat\Exception\InvalidWhereException;
 use Reliv\PipeRat\Middleware\Middleware;
 
 /**
- * Class Properties
+ * Class Fields
  *
  * PHP version 5
  *
@@ -18,7 +18,7 @@ use Reliv\PipeRat\Middleware\Middleware;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-class Properties implements Middleware
+class Fields implements Middleware
 {
     /**
      * Get the where param form the URL.
@@ -36,7 +36,7 @@ class Properties implements Middleware
     {
         $params = $request->getQueryParams();
 
-        if (!array_key_exists('properties', $params)) {
+        if (!array_key_exists('fields', $params)) {
             return $out($request, $response);
         }
 

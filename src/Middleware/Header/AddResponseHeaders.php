@@ -18,14 +18,14 @@ use Reliv\PipeRat\Middleware\Middleware;
 class AddResponseHeaders extends AbstractMiddleware implements Middleware
 {
     /**
-     * withAddedHeaders
+     * getResponseWithOptionHeaders
      *
      * @param Request  $request
      * @param Response $response
      *
      * @return Response
      */
-    public function withAddedHeaders(Request $request, Response $response)
+    public function getResponseWithOptionHeaders(Request $request, Response $response)
     {
         $options = $this->getOptions($request);
 
@@ -56,7 +56,7 @@ class AddResponseHeaders extends AbstractMiddleware implements Middleware
         Response $response,
         callable $next = null
     ) {
-        $response = $this->withAddedHeaders($request, $response);
+        $response = $this->getResponseWithOptionHeaders($request, $response);
 
         return $next($request, $response);
     }

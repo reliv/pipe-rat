@@ -8,7 +8,7 @@ use Reliv\PipeRat\Exception\ResponseFormatException;
 use Reliv\PipeRat\Extractor\Extractor;
 use Reliv\PipeRat\Extractor\PropertyGetterExtractor;
 use Reliv\PipeRat\Middleware\Middleware;
-use Reliv\PipeRat\Options\GenericOptions;
+use Reliv\PipeRat\Options\BasicOptions;
 
 /**
  * Class FileDataResponseFormat
@@ -46,13 +46,15 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
     protected $defaultAcceptTypes = [];
 
     /**
-     * getContentTypeOption
+     * withContentType
      *
-     * @param Request $request
+     * @param Request  $request
+     * @param Response $response
+     * @param array    $properties
      *
      * @return mixed|string
      */
-    protected function getContentType(Request $request, array $properties)
+    protected function getResponseWithContentType(Request $request, Response $response, array $properties)
     {
         $options = $this->getOptions($request);
 
@@ -69,14 +71,19 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
             $fileName = $options->get('fileName', $properties['fileName']);
 
             if (!empty($fileName)) {
-                //$response = $response->->withHeader(
-                //    'Content-Disposition',
-                //    ['attachment', 'filename="' . $fileName . '"']
-                //);
+                $response = $response->withHeader(
+                    'Content-Disposition',
+                    'attachment; filename="' . $fileName . '"'
+                );
             }
         }
 
-        return $contentType;
+        $response = $response->withHeader(
+            'Content-Type',
+            $contentType
+        );
+
+        return $response;
     }
 
     /**
@@ -116,7 +123,7 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
             $propertyList[$fileNameProperty] = true;
         }
 
-        $extractorOptions = new GenericOptions(['propertyList' => $propertyList]);
+        $extractorOptions = new BasicOptions(['propertyList' => $propertyList]);
 
         $properties = $this->extractor->extract($dataModel, $extractorOptions);
 
@@ -167,11 +174,10 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
 
         $body->write($properties['file']);
 
-        $contentType = $this->getContentType($request, $properties);
+        $response = $response->withBody($body);
 
-        return $response->withBody($body)->withHeader(
-            'Content-Type',
-            $contentType
-        );
+        $response = $this->getResponseWithContentType($request, $response, $properties);
+
+        return $response;
     }
 }

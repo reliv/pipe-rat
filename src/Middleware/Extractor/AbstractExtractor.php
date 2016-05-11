@@ -163,7 +163,7 @@ abstract class AbstractExtractor extends AbstractMiddleware
 
         $dataArray = $extractor->extract($dataModel, $options);
 
-        $response = $this->withDataResponse($response, $dataArray);
+        $response = $this->getResponseWithDataBody($response, $dataArray);
 
         return $out($request, $response);
     }

@@ -8,7 +8,7 @@ use Reliv\PipeRat\Exception\MethodException;
 use Reliv\PipeRat\Middleware\MiddlewarePipe;
 use Reliv\PipeRat\Operation\BasicOperationCollection;
 use Reliv\PipeRat\Operation\OperationCollection;
-use Reliv\PipeRat\Options\GenericOptions;
+use Reliv\PipeRat\Options\BasicOptions;
 use Reliv\PipeRat\Options\Options;
 use Reliv\PipeRat\RequestAttribute\Paths;
 
@@ -162,7 +162,7 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
 
         foreach ($queue as $methodName) {
             $methodProperties = $methods[$methodName];
-            $methodOptions = new GenericOptions($methodProperties);
+            $methodOptions = new BasicOptions($methodProperties);
 
             $fullPath = $resourcePath . $methodOptions->get('path', '/' . $methodName);
             $controllerMethod = $methodOptions->get('controllerMethod', $methodName);
@@ -194,7 +194,7 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
             if (!in_array($methodName, $methodsAllowed)) {
                 continue;
             }
-            $methodOptions = new GenericOptions($methodProperties);
+            $methodOptions = new BasicOptions($methodProperties);
 
             $fullPath = $resourcePath . $methodOptions->get('path', '/' . $methodName);
 

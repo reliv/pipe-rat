@@ -8,7 +8,7 @@ use Reliv\PipeRat\Exception\ResponseFormatException;
 use Reliv\PipeRat\Extractor\Extractor;
 use Reliv\PipeRat\Extractor\PropertyGetterExtractor;
 use Reliv\PipeRat\Middleware\Middleware;
-use Reliv\PipeRat\Options\GenericOptions;
+use Reliv\PipeRat\Options\BasicOptions;
 
 /**
  * Class HtmlResponseFormat
@@ -113,7 +113,7 @@ class HtmlResponseFormat extends AbstractResponseFormat implements Middleware
      */
     protected function buildMarkup($properties, $templateConfig, $containerTag, $containerAttributes)
     {
-        $templateConfigOptions = new GenericOptions($templateConfig);
+        $templateConfigOptions = new BasicOptions($templateConfig);
 
         $markup = '';
 
@@ -182,7 +182,7 @@ class HtmlResponseFormat extends AbstractResponseFormat implements Middleware
 
         $propertyList = $this->getFormatProperties($templateConfig);
 
-        $extractorOptions = new GenericOptions(['propertyList' => $propertyList]);
+        $extractorOptions = new BasicOptions(['propertyList' => $propertyList]);
 
         $properties = $this->extractor->extract($dataModel, $extractorOptions);
 

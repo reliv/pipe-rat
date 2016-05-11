@@ -74,7 +74,7 @@ return [
          * === Example of a Default Doctrine API ==
          */
         'doctrine-api' => [
-            'controllerServiceName' => 'Reliv\PipeRat\ResourceController\DoctrineResourceController',
+            'controllerServiceName' => 'Reliv\PipeRat\Middleware\ResourceController\DoctrineResourceController',
             'controllerServiceOptions' => [
                 'entity' => null,
             ],

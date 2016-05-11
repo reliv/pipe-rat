@@ -16,7 +16,7 @@ use Reliv\PipeRat\Middleware\Middleware;
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class RcmUserAcl extends AbstractMiddleware implements Middleware
+class RcmUserAcl extends AbstractAcl implements Middleware
 {
     /**
      * @var RcmUserService
@@ -55,9 +55,6 @@ class RcmUserAcl extends AbstractMiddleware implements Middleware
             return $out($request, $response);
         }
 
-        return $response->withStatus(
-            (int)$this->getOption($request, 'notAllowedStatus', 401),
-            $this->getOption($request, 'notAllowedReason', '')
-        );
+        return $this->getResponseWithAclFailStatus($request, $response);
     }
 }

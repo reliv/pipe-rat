@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\InvalidWhereException;
 use Reliv\PipeRat\Exception\RequestFormatException;
 use Reliv\PipeRat\Middleware\Middleware;
-use Reliv\PipeRat\Options\GenericOptions;
+use Reliv\PipeRat\Options\BasicOptions;
 
 /**
  * Class JsonParamsRequestFormat
@@ -42,7 +42,7 @@ class JsonParamsRequestFormat implements Middleware
             $jsonParams[$key] = $this->getJsonValue($value);
         }
 
-        $paramsOptions = new GenericOptions($jsonParams);
+        $paramsOptions = new BasicOptions($jsonParams);
 
         $request = $request->withAttribute('jsonParams', $paramsOptions);
 

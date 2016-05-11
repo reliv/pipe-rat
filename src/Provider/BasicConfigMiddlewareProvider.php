@@ -7,7 +7,7 @@ use Reliv\PipeRat\Exception\ResourceException;
 use Reliv\PipeRat\Middleware\MiddlewarePipe;
 use Reliv\PipeRat\Operation\BasicOperationCollection;
 use Reliv\PipeRat\Operation\OperationCollection;
-use Reliv\PipeRat\Options\GenericOptions;
+use Reliv\PipeRat\Options\BasicOptions;
 use Reliv\PipeRat\Options\Options;
 use Reliv\PipeRat\RequestAttribute\ResourceKey;
 
@@ -60,7 +60,7 @@ class BasicConfigMiddlewareProvider extends AbstractBasicConfigMiddlewareProvide
                 $resourceProperties
             );
 
-            $this->resourceConfig[$resourceName] = new GenericOptions($resourceConfig);
+            $this->resourceConfig[$resourceName] = new BasicOptions($resourceConfig);
         }
 
         return $this->resourceConfig;
@@ -101,7 +101,7 @@ class BasicConfigMiddlewareProvider extends AbstractBasicConfigMiddlewareProvide
 
         $operations = new BasicOperationCollection();
 
-        $methodOptions = new GenericOptions($methods[$methodName]);
+        $methodOptions = new BasicOptions($methods[$methodName]);
 
         // Controller Pre
         $this->buildOperations(

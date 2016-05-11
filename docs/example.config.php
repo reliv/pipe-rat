@@ -9,7 +9,7 @@
              * === Resource Controller ===
              */
             // '{serviceName}'
-            'controllerServiceName' => 'Reliv\PipeRat\ResourceController\DoctrineResourceController',
+            'controllerServiceName' => 'Reliv\PipeRat\Middleware\ResourceController\DoctrineResourceController',
             // '{optionKey}' => '{optionValue}'
             'controllerServiceOptions' => [
                 'entity' => null,

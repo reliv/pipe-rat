@@ -18,7 +18,7 @@ abstract class AbstractOptions
     protected $options = [];
 
     /**
-     * GenericOptions constructor.
+     * BasicOptions constructor.
      *
      * @param array $options
      */
@@ -115,7 +115,7 @@ abstract class AbstractOptions
             $options[$key] = $options;
         }
 
-        return new GenericOptions($options);
+        return new BasicOptions($options);
     }
 
     /**

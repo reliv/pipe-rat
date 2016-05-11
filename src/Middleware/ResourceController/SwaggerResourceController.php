@@ -1,6 +1,6 @@
 <?php
 
-namespace Reliv\PipeRat\ResourceController;
+namespace Reliv\PipeRat\Middleware\ResourceController;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
