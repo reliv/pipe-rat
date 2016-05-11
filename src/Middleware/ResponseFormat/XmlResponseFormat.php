@@ -86,9 +86,11 @@ class XmlResponseFormat extends AbstractResponseFormat implements Middleware
 
         $body->write($content);
 
-        return $response->withBody($body)->withHeader(
+        $response = $response->withBody($body)->withHeader(
             'Content-Type',
             'application/xml'
         );
+
+        return parent::__invoke($request, $response, $next);
     }
 }

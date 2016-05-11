@@ -196,9 +196,11 @@ class HtmlResponseFormat extends AbstractResponseFormat implements Middleware
 
         $body->write($content);
 
-        return $response->withBody($body)->withHeader(
+        $response = $response->withBody($body)->withHeader(
             'Content-Type',
             'text/html'
         );
+
+        return parent::__invoke($request, $response, $next);
     }
 }

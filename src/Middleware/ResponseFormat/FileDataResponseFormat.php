@@ -9,7 +9,6 @@ use Reliv\PipeRat\Extractor\Extractor;
 use Reliv\PipeRat\Extractor\PropertyGetterExtractor;
 use Reliv\PipeRat\Middleware\Middleware;
 use Reliv\PipeRat\Options\GenericOptions;
-use Reliv\PipeRat\Options\Options;
 
 /**
  * Class FileDataResponseFormat
@@ -21,6 +20,11 @@ use Reliv\PipeRat\Options\Options;
  */
 class FileDataResponseFormat extends AbstractResponseFormat implements Middleware
 {
+    /**
+     *
+     */
+    const DOWNLOAD_HEADER = 'application/octet-stream';
+
     /**
      * @var PropertyGetterExtractor
      */
@@ -58,8 +62,10 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
 
         $contentType = $options->get('contentType', $properties['contentType']);
 
+        $isDownload = ($isDownload || $contentType === self::DOWNLOAD_HEADER);
+
         if ($isDownload) {
-            $contentType = 'application/octet-stream';
+            $contentType = self::DOWNLOAD_HEADER;
             $fileName = $options->get('fileName', $properties['fileName']);
 
             if (!empty($fileName)) {
@@ -88,14 +94,14 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
 
         $dataModel = $this->getDataModel($response);
 
-        $base64FileProperty = $options->get('base64FileProperty');
+        $fileBase64Property = $options->get('fileBase64Property');
 
-        if (empty($base64FileProperty)) {
-            throw new ResponseFormatException('FileDataResponseFormat requires base64FileProperty option to be set');
+        if (empty($fileBase64Property)) {
+            throw new ResponseFormatException('FileDataResponseFormat requires fileBase64Property option to be set');
         }
 
         $propertyList = [
-            $base64FileProperty => true,
+            $fileBase64Property => true,
         ];
 
         $fileContentTypeProperty = $options->get('fileContentTypeProperty');
@@ -115,8 +121,8 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
         $properties = $this->extractor->extract($dataModel, $extractorOptions);
 
         return [
-            'file' => base64_decode($this->getProperty($properties, $base64FileProperty)),
-            'contentType' => $this->getProperty($properties, $fileContentTypeProperty, 'application/octet-stream'),
+            'file' => base64_decode($this->getProperty($properties, $fileBase64Property)),
+            'contentType' => $this->getProperty($properties, $fileContentTypeProperty, self::DOWNLOAD_HEADER),
             'fileName' => $this->getProperty($properties, $fileNameProperty),
         ];
     }
@@ -168,6 +174,6 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
             $contentType
         );
 
-        return $this->withOptionHeaders($request, $response);
+        return parent::__invoke($request, $response, $next);
     }
 }

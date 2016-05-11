@@ -74,4 +74,21 @@ abstract class AbstractResponseFormat extends AbstractMiddleware
         
         return $response;
     }
+
+    /**
+     * __invoke
+     *
+     * @param Request       $request
+     * @param Response      $response
+     * @param callable|null $next
+     *
+     * @return Response
+     */
+    public function __invoke(
+        Request $request,
+        Response $response,
+        callable $next = null
+    ) {
+        return $this->withOptionHeaders($request, $response);
+    }
 }

@@ -42,9 +42,11 @@ class FileResponseFormat extends AbstractResponseFormat implements Middleware
         $options = $this->getOptions($request);
         $contentType = $options->get('contentType', 'application/octet-stream');
 
-        return $response->withHeader(
+        $response = $response->withHeader(
             'Content-Type',
             $contentType
         );
+        
+        return parent::__invoke($request, $response, $next);
     }
 }
