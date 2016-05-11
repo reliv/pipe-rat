@@ -50,6 +50,7 @@ class HtmlResponseFormat extends AbstractResponseFormat implements Middleware
      *  '{property}' => [
      *     'tag' => '{tag}',
      *     'attributes' => ['{name}' => '{value}'],
+     *     'content' => '',
      *     'properties' => [
      *       // sub-properties in they exist
      *     ]
@@ -63,6 +64,18 @@ class HtmlResponseFormat extends AbstractResponseFormat implements Middleware
     protected function getTemplateConfig(Request $request)
     {
         return $this->getOption($request, 'htmlTemplate', []);
+    }
+
+    /**
+     * getTemplateData
+     *
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    protected function getTemplateData(array $templateConfig, array $dataArray)
+    {
+
     }
 
     /**
