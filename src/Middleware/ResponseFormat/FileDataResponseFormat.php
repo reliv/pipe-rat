@@ -60,7 +60,7 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
 
         $isDownload = (bool)$this->getQueryParam($request, $downloadQueryParam, false);
 
-        $contentType = $options->get('contentType', $properties['contentType']);
+        $contentType = $options->get('forceContentType', $properties['contentType']);
 
         $isDownload = ($isDownload || $contentType === self::DOWNLOAD_HEADER);
 

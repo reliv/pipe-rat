@@ -62,7 +62,7 @@ abstract class AbstractResponseFormat extends AbstractMiddleware
 
         $options = $this->getOptions($request);
 
-        $headers = $options->get('headers', []);
+        $headers = $options->get('forceHeaders', []);
         
         if(empty($headers)) {
             return $response;
