@@ -13,14 +13,13 @@
             // '{optionKey}' => '{optionValue}'
             'controllerServiceOptions' => [
                 'entity' => null,
-                // Security is best when 'allowDeepWheres' is false
-                'allowDeepWheres' => false,
             ],
             /**
              * === Extend an existing config ===
              */
-            // '{serviceName}'
-            'extendsConfig' => 'default:doctrineApi',
+            // OPTIONAL
+            // '{defaultResourceConfigKey}'
+            'extendsConfig' => 'doctrineApi',
 
             /**
              * === DEFAULT: Resource Controller Method Definitions ===
@@ -112,10 +111,19 @@
                     'postServiceOptions' => [
                         'fileDataResponseFormat' => [
                             'accepts' => ['*/*'],
-                            'base64FileProperty' => 'file',
+                            'fileBase64Property' => 'file',
+                            // OPTIONAL
+                            'fileContentTypeProperty' => 'fileType',
+                            // OPTIONAL
+                            'fileNameProperty' => 'fileName',
+                            // OPTIONAL
                             'fileName' => 'id-image',
-                            'contentType' => 'application/octet-stream',
-                            //'contentType' => 'application/pdf',
+                            // OPTIONAL
+                            'downloadQueryParam' => 'download',
+                            // OPTIONAL
+                            'forceContentType' => 'image/jpg',
+                            // OPTIONAL
+                            'forceHeaders' => ['{headerName}' => ['headerValue1', 'headerValue2']]
                         ],
                     ],
                     'postServicePriority' => [],
@@ -137,18 +145,8 @@
                 'example',
             ],
             'methodPriority' => [
-                //Reads
-                'count' => 1000,
-                'exists' => 900,
-                'findById' => 800,
-                'findOne'=> 700,
-                'find' => 600,
-                //Writes
-                'upsert' => 500,
-                'create' => 400,
-                'deleteById' => 300,
-                'updateProperties' => 200,
-                'example'
+                // OPTIONAL
+                // 'count' => 1000,
             ],
             /* Path */
             'path' => 'example-path',
@@ -180,7 +178,7 @@
              * '{serviceAlias}' => {priority},
              */
             'preServicePriority' => [
-                'JsonRequestFormat' => 1000,
+                // OPTIONAL
             ],
             'postServiceNames' => [
                 'JsonResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
@@ -195,17 +193,31 @@
                     'accepts' => [
                         'application/json'
                     ],
+                    // OPTIONAL
+                    'forceHeaders' => ['{headerName}' => ['headerValue1', 'headerValue2']]
                 ],
                 'XmlResponseFormat' => [
                     'accepts' => [
                         'application/xml'
                     ],
+                    // OPTIONAL
+                    'forceHeaders' => ['{headerName}' => ['headerValue1', 'headerValue2']]
                 ],
                 'DefaultResponseFormat' => [
                     'accepts' => [
                         '*/*'
                     ],
+                    // OPTIONAL
+                    'forceHeaders' => ['{headerName}' => ['headerValue1', 'headerValue2']]
                 ],
+            ],
+            'postServicePriority' => [
+                // OPTIONAL
+                'JsonRequestFormat' => 1000,
+                // OPTIONAL
+                'XmlResponseFormat' => 900,
+                // OPTIONAL
+                'DefaultResponseFormat' => 800
             ],
         ],
     ]
