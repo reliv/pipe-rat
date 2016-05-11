@@ -1,13 +1,13 @@
 <?php
 
-namespace Reliv\PipeRat\ResourceController;
+namespace Reliv\PipeRat\Middleware\ResourceController;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\InvalidWhereException;
 use Reliv\PipeRat\Exception\MethodException;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
-use Reliv\PipeRat\Options\GenericOptions;
+use Reliv\PipeRat\Options\BasicOptions;
 use Reliv\PipeRat\Options\Options;
 use Reliv\PipeRat\RequestAttribute\RouteParams;
 
@@ -19,7 +19,7 @@ use Reliv\PipeRat\RequestAttribute\RouteParams;
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-abstract class AbstractResourceController extends AbstractMiddleware implements ResourceController
+abstract class AbstractResourceController extends AbstractMiddleware
 {
     /**
      * __invoke
@@ -41,7 +41,7 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
         }
 
         if (!method_exists($this, $method)) {
-            throw new MethodException('Method does not exists');
+            throw new MethodException('Method does not exists: ' . $method);
         }
 
         return $this->$method($request, $response, $out);
@@ -61,7 +61,7 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
         /** @var Options $routeParams */
         $routeParams = $request->getAttribute(
             RouteParams::getName(),
-            new GenericOptions()
+            new BasicOptions()
         );
 
         return $routeParams->get($key, $default);

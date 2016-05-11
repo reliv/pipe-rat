@@ -4,10 +4,11 @@ namespace Reliv\PipeRat\Provider;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\ConfigException;
+use Reliv\PipeRat\Exception\MethodException;
 use Reliv\PipeRat\Middleware\MiddlewarePipe;
 use Reliv\PipeRat\Operation\BasicOperationCollection;
 use Reliv\PipeRat\Operation\OperationCollection;
-use Reliv\PipeRat\Options\GenericOptions;
+use Reliv\PipeRat\Options\BasicOptions;
 use Reliv\PipeRat\Options\Options;
 use Reliv\PipeRat\RequestAttribute\Paths;
 
@@ -82,6 +83,7 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
     {
         if (!empty($this->paths)) {
             $request->withAttribute(Paths::getName(), $this->paths);
+
             return $request;
         }
 
@@ -95,26 +97,146 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
             $resourcePath = $resourceOptions->get('path', '/' . $resourceName);
 
             $methodsAllowed = $resourceOptions->get('methodsAllowed', []);
-            foreach ($resourceOptions->get('methods', []) as $methodName => $methodProperties) {
-                if (!in_array($methodName, $methodsAllowed)) {
-                    continue;
-                }
-                $methodOptions = new GenericOptions($methodProperties);
+            $methods = $resourceOptions->get('methods', []);
+            $methodPriority = $resourceOptions->get('methodPriority', []);
 
-                $fullPath = $resourcePath. $methodOptions->get('path', '/' . $methodName);
-
-                if (!array_key_exists($resourcePath, $this->paths)) {
-                    $this->paths[$resourcePath] = [];
-                }
-
-                $this->paths[$fullPath][$methodOptions->get('httpVerb', 'GET')] = $resourceName . '::' . $methodName;
-            }
+            $this->buildMethods(
+                $resourceName,
+                $resourcePath,
+                $methodsAllowed,
+                $methods,
+                $methodPriority
+            );
         }
 
-        // Reverse to priority
-        $this->paths = array_reverse($this->paths, true);
-
         return $request->withAttribute(Paths::getName(), $this->paths);
+    }
+
+    /**
+     * buildMethods
+     *
+     * @param string $resourceName
+     * @param string $resourcePath
+     * @param array  $methodsAllowed
+     * @param array  $methods
+     * @param array  $methodPriority
+     *
+     * @return void
+     * @throws MethodException
+     */
+    protected function buildMethods(
+        $resourceName,
+        $resourcePath,
+        array $methodsAllowed,
+        array $methods,
+        array $methodPriority
+    ) {
+        if (empty($methodPriority)) {
+            $this->buildSimpleMethods(
+                $resourceName,
+                $resourcePath,
+                $methodsAllowed,
+                $methods
+            );
+
+            return;
+        }
+
+        $queue = new \SplPriorityQueue();
+
+        $defaultPriority = 1;
+
+        foreach ($methods as $methodName => $methodProperties) {
+            if (!in_array($methodName, $methodsAllowed)) {
+                continue;
+            }
+
+            if (array_key_exists($methodName, $methodPriority)) {
+                $priority = $methodPriority[$methodName];
+            } else {
+                $priority = $defaultPriority;
+                $defaultPriority++;
+            }
+            $queue->insert($methodName, $priority);
+        }
+
+        foreach ($queue as $methodName) {
+            $methodProperties = $methods[$methodName];
+            $methodOptions = new BasicOptions($methodProperties);
+
+            $fullPath = $resourcePath . $methodOptions->get('path', '/' . $methodName);
+            $controllerMethod = $methodOptions->get('controllerMethod', $methodName);
+            $resourceKey = $this->getResourceKey($resourceName, $methodName, $controllerMethod);
+
+            $this->addPath($fullPath, $methodOptions->get('httpVerb', 'GET'), $resourceKey);
+        }
+    }
+
+    /**
+     * buildSimpleMethods
+     *
+     * @param       $resourceName
+     * @param       $resourcePath
+     * @param array $methodsAllowed
+     * @param array $methods
+     *
+     * @return void
+     */
+    protected function buildSimpleMethods(
+        $resourceName,
+        $resourcePath,
+        array $methodsAllowed,
+        array $methods
+    ) {
+        $methods = array_reverse($methods, true);
+
+        foreach ($methods as $methodName => $methodProperties) {
+            if (!in_array($methodName, $methodsAllowed)) {
+                continue;
+            }
+            $methodOptions = new BasicOptions($methodProperties);
+
+            $fullPath = $resourcePath . $methodOptions->get('path', '/' . $methodName);
+
+            $controllerMethod = $methodOptions->get('controllerMethod', $methodName);
+            $resourceKey = $this->getResourceKey($resourceName, $methodName, $controllerMethod);
+            
+            $this->addPath($fullPath, $methodOptions->get('httpVerb', 'GET'), $resourceKey);
+        }
+    }
+
+    /**
+     * getResourceKey
+     *
+     * @param string $resourceName
+     * @param string $methodName
+     * @param string $controllerMethod
+     *
+     * @return string
+     */
+    protected function getResourceKey($resourceName, $methodName, $controllerMethod)
+    {
+        return $resourceName . '::' . $methodName . '::' . $controllerMethod;
+    }
+
+    /**
+     * addPath
+     *
+     * @param string $path
+     * @param string $httpVerb
+     * @param string $resourceKey
+     *
+     * @return void
+     */
+    protected function addPath($path, $httpVerb, $resourceKey)
+    {
+        $httpVerb = strtoupper($httpVerb);
+
+        if (!array_key_exists($path, $this->paths)) {
+            $this->paths[$path] = [];
+        }
+
+        $this->paths[$path][$httpVerb] = $resourceKey;
     }
 
     /**

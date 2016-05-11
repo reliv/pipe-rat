@@ -1,14 +1,15 @@
 <?php
 
-namespace Reliv\PipeRat\Middleware\RequestFormat;
+namespace Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\InvalidWhereException;
 use Reliv\PipeRat\Middleware\Middleware;
+use Reliv\PipeRat\Middleware\RequestFormat\AbstractRequestFormat;
 
 /**
- * Class WhereFilterParamRequestFormat
+ * Class Where
  *
  * PHP version 5
  *
@@ -18,7 +19,7 @@ use Reliv\PipeRat\Middleware\Middleware;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-class WhereFilterParamRequestFormat extends AbstractRequestFormat implements Middleware
+class Where extends AbstractRequestFormat implements Middleware
 {
     /**
      * Get the where param form the URL.

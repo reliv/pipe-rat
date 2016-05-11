@@ -1,6 +1,6 @@
 <?php
 
-namespace Reliv\PipeRat\Middleware\RequestFormat;
+namespace Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -8,7 +8,7 @@ use Reliv\PipeRat\Exception\InvalidWhereException;
 use Reliv\PipeRat\Middleware\Middleware;
 
 /**
- * Class LimitFilterParamRequestFormat
+ * Class Order
  *
  * PHP version 5
  *
@@ -18,10 +18,13 @@ use Reliv\PipeRat\Middleware\Middleware;
  * @version   Release: <package_version>
  * @link      https://github.com/reliv
  */
-class LimitFilterParamRequestFormat extends AbstractRequestFormat implements Middleware
+class Order implements Middleware
 {
     /**
-     * __invoke
+     * Get the order param from the url to find out how the response
+     * should be ordered.
+     *
+     * Looks like {"name":"ASC"} or {"name":"DESC"} in URL
      *
      * @param Request       $request
      * @param Response      $response
@@ -34,13 +37,13 @@ class LimitFilterParamRequestFormat extends AbstractRequestFormat implements Mid
     {
         $params = $request->getQueryParams();
 
-        if (!array_key_exists('limit', $params)) {
+        if (!array_key_exists('order', $params)) {
             return $out($request, $response);
         }
-        
-        $param = (int)$params['limit'];
 
-        $request = $request->withAttribute('limitFilterParam', $param);
+        $param = json_decode($params['order'], true);
+
+        $request = $request->withAttribute('orderByFilterParam', $param);
 
         return $out($request, $response);
     }

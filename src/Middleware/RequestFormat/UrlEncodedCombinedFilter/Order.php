@@ -21,7 +21,10 @@ use Reliv\PipeRat\Middleware\RequestFormat\AbstractRequestFormat;
  */
 class Order extends AbstractUrlEncodedCombinedFilter implements Middleware
 {
-    const URL_KEY = 'order';//Is used by parent getValue() function
+    /**
+     * Is used by parent getValue() function
+     */
+    const URL_KEY = 'order';
 
     /**
      * Get the param from the URL

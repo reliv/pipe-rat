@@ -9,20 +9,124 @@
              * === Resource Controller ===
              */
             // '{serviceName}'
-            'controllerServiceName' => 'Reliv\PipeRat\ResourceController\DoctrineResourceController',
+            'controllerServiceName' => 'Reliv\PipeRat\Middleware\ResourceController\DoctrineResourceController',
             // '{optionKey}' => '{optionValue}'
             'controllerServiceOptions' => [
                 'entity' => null,
-                // Security is best when 'allowDeepWheres' is false
-                'allowDeepWheres' => false,
             ],
             /**
              * === Extend an existing config ===
              */
-            // '{serviceName}'
-            'extendsConfig' => 'default:doctrineApi',
+            // OPTIONAL
+            // '{defaultResourceConfigKey}'
+            'extendsConfig' => 'doctrineApi',
 
-            'methods' => [],
+            /**
+             * === DEFAULT: Resource Controller Method Definitions ===
+             *
+             * NOTE: Default priority is LAST wins
+             */
+            'methods' => [
+                'exampleFindOne' => [
+                    'controllerMethod' => 'findOne',
+                    'description' => 'Example find resources',
+                    'httpVerb' => 'GET',
+                    'path' => '/exampleFindOne',
+                    'preServiceNames' => [
+                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                    ],
+                    'preServiceOptions' => [
+                        'WhereFilterParam' => [
+                            // Security is best when 'allowDeepWheres' is false
+                            'allowDeepWheres' => false,
+                        ]
+                    ],
+                    'preServicePriority' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                    ],
+                    'postServiceOptions' => [
+                        'extractor' => [
+                            'propertyList' => [
+                                'exampleProperty' => true,
+                                'exampleCollectionProperty' => ['exampleSubProperty' => true],
+                                'exmpleBlacklistProperty' => false,
+                            ],
+                            // Security is best when 'deepPropertyLimit' is 1
+                            'propertyDepthLimit' => 1,
+                        ],
+                    ],
+                    'postServicePriority' => [],
+                ],
+                'exampleFind' => [
+                    'controllerMethod' => 'find',
+                    'description' => 'Find resources',
+                    'httpVerb' => 'GET',
+                    'path' => '/exampleFind',
+                    'preServiceNames' => [
+                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'OrderByFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Order',
+                        'SkipFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Skip',
+                        'LimitFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Limit',
+                    ],
+                    'preServiceOptions' => [
+                        'WhereFilterParam' => [
+                            // Security is best when 'allowDeepWheres' is false
+                            'allowDeepWheres' => false,
+                        ]
+                    ],
+                    'preServicePriority' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor',
+                    ],
+                    'postServiceOptions' => [
+                        'extractor' => [
+                            'propertyList' => [
+                                'exampleProperty' => true,
+                                'exampleCollectionProperty' => ['exampleSubProperty' => true],
+                                'exmpleBlacklistProperty' => false,
+                            ],
+                            // Security is best when 'deepPropertyLimit' is 1
+                            'propertyDepthLimit' => 1,
+                        ],
+                    ],
+                    'postServicePriority' => [],
+                ],
+                'exampleDownload' => [
+                    'controllerMethod' => 'findById',
+                    'description' => 'Download resource by ID',
+                    'httpVerb' => 'GET',
+                    'path' => '/download/{id}',
+                    'preServiceNames' => [
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                    ],
+                    'preServiceOptions' => [],
+                    'preServicePriority' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                        'fileDataResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\FileDataResponseFormat',
+                    ],
+                    'postServiceOptions' => [
+                        'fileDataResponseFormat' => [
+                            'accepts' => ['*/*'],
+                            'fileBase64Property' => 'file',
+                            // OPTIONAL
+                            'fileContentTypeProperty' => 'fileType',
+                            // OPTIONAL
+                            'fileNameProperty' => 'fileName',
+                            // OPTIONAL
+                            'fileName' => 'id-image',
+                            // OPTIONAL
+                            'downloadQueryParam' => 'download',
+                            // OPTIONAL
+                            'forceContentType' => 'image/jpg',
+                        ],
+                    ],
+                    'postServicePriority' => [],
+                ],
+            ],
             /* Methods White-list */
             'methodsAllowed' => [
                 //Reads
@@ -36,24 +140,12 @@
                 'create',
                 'deleteById',
                 'updateProperties',
-                
+                'example',
             ],
             'methodPriority' => [
-                //Reads
-                'count' => 1000,
-                'exists' => 900,
-                'findById' => 800,
-                'findOne'=> 700,
-                'find' => 600,
-                //Writes
-                'upsert' => 500,
-                'create' => 400,
-                'deleteById' => 300,
-                'updateProperties' => 200,
+                // OPTIONAL
+                // 'count' => 1000,
             ],
-
-            /* Resource Options */
-            'options' => [],
             /* Path */
             'path' => 'example-path',
             /* Pre Controller Middleware */
@@ -62,11 +154,14 @@
                 'ZfInputFilterClass' => 'Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterClass',
                 'ZfInputFilterConfig' => 'Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterConfig',
                 'ZfInputFilterService' => 'Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterService',
+                'SomeCustomHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
             ],
             'preServiceOptions' => [
                 'RcmUserAcl' => [
                     'resourceId' => '{resourceId}',
                     'privilege' => null,
+                    'notAllowedStatus' => 401, // optional
+                    'notAllowedReason' => 'Access Denied' // optional
                 ],
                 'ZfInputFilterClass' => [
                     'class' => '',
@@ -77,17 +172,23 @@
                 'ZfInputFilterConfig' => [
                     'config' => [],
                 ],
+                'SomeCustomHeaders' => [
+                    'headers' => [
+                        '{headerName}' => [
+                            'headerValue1',
+                            'headerValue2',
+                        ],
+                        'Access-Control-Allow-Origin' => ['*'],
+                    ],
+                ],
             ],
             /**
              * '{serviceAlias}' => {priority},
              */
             'preServicePriority' => [
-//                'JsonRequestFormat' => 1000,
+                // OPTIONAL
             ],
             'postServiceNames' => [
-                //@TODO should these be here if they are already in the methods? -Rod
-//                'PropertyExtractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-//                'CollectionPropertyExtractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyExtractor',
                 'JsonResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
                 'XmlResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat',
                 'DefaultResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
@@ -96,20 +197,6 @@
              * '{serviceAlias}' => [ '{optionKey}' => '{optionValue}' ],
              */
             'postServiceOptions' => [
-                'PropertyExtractor' => [
-                    'propertyList' => [
-                        // 'propertyName' => {bool|array}
-                    ],
-                    // Security is best when 'deepPropertyLimit' is 0
-                    'propertyDepthLimit' => 0,
-                ],
-                'CollectionPropertyExtractor' => [
-                    'propertyList' => [
-                        // 'propertyName' => {bool|array}
-                    ],
-                    // Security is best when 'deepPropertyLimit' is 0
-                    'propertyDepthLimit' => 0,
-                ],
                 'JsonResponseFormat' => [
                     'accepts' => [
                         'application/json'
@@ -125,6 +212,14 @@
                         '*/*'
                     ],
                 ],
+            ],
+            'postServicePriority' => [
+                // OPTIONAL
+                'JsonRequestFormat' => 1000,
+                // OPTIONAL
+                'XmlResponseFormat' => 900,
+                // OPTIONAL
+                'DefaultResponseFormat' => 800
             ],
         ],
     ]

@@ -58,6 +58,6 @@ class ZfInputFilterService  extends AbstractMiddleware implements Middleware
             $this->getOption($request, 'messageParams', [])
         );
 
-        return $this->withDataResponse($response, $messages);
+        return $this->getResponseWithDataBody($response, $messages);
     }
 }

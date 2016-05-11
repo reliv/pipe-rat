@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Http\BasicDataResponse;
 use Reliv\PipeRat\Http\DataResponse;
-use Reliv\PipeRat\Options\GenericOptions;
+use Reliv\PipeRat\Options\BasicOptions;
 use Reliv\PipeRat\Options\Options;
 use Reliv\PipeRat\RequestAttribute\MiddlewareOptions;
 use Reliv\PipeRat\RequestAttribute\ResourceKey;
@@ -51,7 +51,7 @@ abstract class AbstractMiddleware
         /** @var Options $options */
         $options = $request->getAttribute(
             MiddlewareOptions::getName(),
-            new GenericOptions()
+            new BasicOptions()
         );
 
         return $options;
@@ -77,8 +77,8 @@ abstract class AbstractMiddleware
     /**
      * getOption
      *
-     * @param Request    $request
-     * @param string     $key
+     * @param Request $request
+     * @param string  $key
      *
      * @return mixed
      */
@@ -87,8 +87,8 @@ abstract class AbstractMiddleware
         /** @var Options $options */
         $options = $this->getOptions($request);
 
-        if(!$options->has($key)) {
-            return new GenericOptions();
+        if (!$options->has($key)) {
+            return new BasicOptions();
         }
 
         return $options->getOptions($key);
@@ -125,14 +125,34 @@ abstract class AbstractMiddleware
     }
 
     /**
-     * withDataResponse
+     * getQueryParam
+     *
+     * @param Request $request
+     * @param         $param
+     * @param null    $default
+     *
+     * @return null
+     */
+    public function getQueryParam(Request $request, $param, $default = null)
+    {
+        $params = $request->getQueryParams();
+
+        if (array_key_exists($param, $params)) {
+            return $params[$param];
+        }
+
+        return $default;
+    }
+
+    /**
+     * getResponseWithDataBody
      *
      * @param Response $response
-     * @param mixed    $dataModel
+     * @param          $dataModel
      *
-     * @return DataResponse
+     * @return \Psr\Http\Message\MessageInterface|Response
      */
-    protected function withDataResponse(Response $response, $dataModel)
+    protected function getResponseWithDataBody(Response $response, $dataModel)
     {
         if (!$response instanceof DataResponse) {
             $response = new BasicDataResponse($response);

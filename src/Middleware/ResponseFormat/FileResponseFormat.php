@@ -20,9 +20,8 @@ class FileResponseFormat extends AbstractResponseFormat implements Middleware
     /**
      * @var array
      */
-    protected $defaultAcceptTypes= [
-            'application/json'
-        ];
+    protected $defaultAcceptTypes
+        = [];
 
     /**
      * __invoke
@@ -39,13 +38,13 @@ class FileResponseFormat extends AbstractResponseFormat implements Middleware
         if (!$this->isValidAcceptType($request)) {
             return $next($request, $response);
         }
-        $dataModel = $this->getDataModel($response);
+        
+        $options = $this->getOptions($request);
+        $contentType = $options->get('contentType', 'application/octet-stream');
 
-        // @todo
-
-//        return $response->withBody($body)->withHeader(
-//            'Content-Type',
-//            'application/json'
-//        );
+        return $response->withHeader(
+            'Content-Type',
+            $contentType
+        );
     }
 }

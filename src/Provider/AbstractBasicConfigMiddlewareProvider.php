@@ -3,7 +3,7 @@
 namespace Reliv\PipeRat\Provider;
 
 use Interop\Container\ContainerInterface;
-use Reliv\PipeRat\Options\GenericOptions;
+use Reliv\PipeRat\Options\BasicOptions;
 use Reliv\PipeRat\Options\Options;
 
 /**
@@ -52,7 +52,7 @@ abstract class AbstractBasicConfigMiddlewareProvider extends AbstractMiddlewareP
     protected function getConfigOptions()
     {
         if(empty($this->configOptions)) {
-            $this->configOptions = new GenericOptions($this->config);
+            $this->configOptions = new BasicOptions($this->config);
         }
 
         return $this->configOptions;

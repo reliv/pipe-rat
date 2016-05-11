@@ -1,15 +1,16 @@
 <?php
 
-namespace Reliv\PipeRat\Options;
+namespace Reliv\PipeRat\Exception;
 
 /**
- * Class GenericOptions
+ * Class ExtractorException
  *
  * @author    James Jervis <jjervis@relivinc.com>
  * @copyright 2016 Reliv International
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-Class GenericOptions extends AbstractOptions implements Options
+class ExtractorException extends \Exception
 {
+
 }

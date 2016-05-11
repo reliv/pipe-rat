@@ -1,6 +1,6 @@
 <?php
 
-namespace Reliv\PipeRat\ResourceController;
+namespace Reliv\PipeRat\Middleware\ResourceController;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManager;
@@ -129,7 +129,7 @@ class DoctrineResourceController extends AbstractResourceController
             return $response->withStatus(409);
         }
 
-        return $out($request, $this->withDataResponse($response, $entity));
+        return $out($request, $this->getResponseWithDataBody($response, $entity));
     }
 
     /**
@@ -165,7 +165,7 @@ class DoctrineResourceController extends AbstractResourceController
 
         $this->getEntityManager()->flush($entity);
 
-        return $out($request, $this->withDataResponse($response, $entity));
+        return $out($request, $this->getResponseWithDataBody($response, $entity));
     }
 
     /**
@@ -181,10 +181,10 @@ class DoctrineResourceController extends AbstractResourceController
     public function exists(Request $request, Response $response, callable $out)
     {
         if (is_object($this->getEntityByRequestId($request))) {
-            return $out($request, $this->withDataResponse($response, true));
+            return $out($request, $this->getResponseWithDataBody($response, true));
         }
 
-        return $out($request, $this->withDataResponse($response->withStatus(404), false));
+        return $out($request, $this->getResponseWithDataBody($response->withStatus(404), false));
 
     }
 
@@ -206,7 +206,7 @@ class DoctrineResourceController extends AbstractResourceController
             return $out($request, $response->withStatus(404));
         }
 
-        return $out($request, $this->withDataResponse($response, $entity));
+        return $out($request, $this->getResponseWithDataBody($response, $entity));
     }
 
     /**
@@ -240,7 +240,7 @@ class DoctrineResourceController extends AbstractResourceController
             return $response->withStatus(400);
         }
 
-        return $out($request, $this->withDataResponse($response, $results));
+        return $out($request, $this->getResponseWithDataBody($response, $results));
     }
 
     /**
@@ -266,7 +266,7 @@ class DoctrineResourceController extends AbstractResourceController
             return $response->withStatus(400);
         }
 
-        return $out($request, $this->withDataResponse($response, $results));
+        return $out($request, $this->getResponseWithDataBody($response, $results));
     }
 
     /**
@@ -289,7 +289,7 @@ class DoctrineResourceController extends AbstractResourceController
         $this->getEntityManager()->remove($entity);
         $this->getEntityManager()->flush($entity);
 
-        return $out($request, $this->withDataResponse($response, $entity));
+        return $out($request, $this->getResponseWithDataBody($response, $entity));
     }
 
     /**
@@ -316,7 +316,7 @@ class DoctrineResourceController extends AbstractResourceController
                 ->createQuery('SELECT COUNT(e) FROM ' . $entityName . ' e')
                 ->getSingleScalarResult();
 
-            return $out($request, $this->withDataResponse($response, (int)$count));
+            return $out($request, $this->getResponseWithDataBody($response, (int)$count));
         }
 
         $repo = $this->getRepository($request);
@@ -327,7 +327,7 @@ class DoctrineResourceController extends AbstractResourceController
             return $response->withStatus(400);
         }
 
-        return $out($request, $this->withDataResponse($response, count($results)));
+        return $out($request, $this->getResponseWithDataBody($response, count($results)));
     }
 
     /**
@@ -355,7 +355,7 @@ class DoctrineResourceController extends AbstractResourceController
         $this->populateEntity($entity, $request);
         $this->getEntityManager()->flush($entity);
 
-        return $out($request, $this->withDataResponse($response, $entity));
+        return $out($request, $this->getResponseWithDataBody($response, $entity));
     }
 
     /**
