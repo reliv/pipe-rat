@@ -122,8 +122,6 @@
                             'downloadQueryParam' => 'download',
                             // OPTIONAL
                             'forceContentType' => 'image/jpg',
-                            // OPTIONAL
-                            'forceHeaders' => ['{headerName}' => ['headerValue1', 'headerValue2']]
                         ],
                     ],
                     'postServicePriority' => [],
@@ -156,6 +154,7 @@
                 'ZfInputFilterClass' => 'Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterClass',
                 'ZfInputFilterConfig' => 'Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterConfig',
                 'ZfInputFilterService' => 'Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterService',
+                'SomeCustomHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
             ],
             'preServiceOptions' => [
                 'RcmUserAcl' => [
@@ -172,6 +171,14 @@
                 ],
                 'ZfInputFilterConfig' => [
                     'config' => [],
+                ],
+                'SomeCustomHeaders' => [
+                    'headers' => [
+                        '{headerName}' => [
+                            'headerValue1',
+                            'headerValue2',
+                        ],
+                    ],
                 ],
             ],
             /**
@@ -193,22 +200,16 @@
                     'accepts' => [
                         'application/json'
                     ],
-                    // OPTIONAL
-                    'forceHeaders' => ['{headerName}' => ['headerValue1', 'headerValue2']]
                 ],
                 'XmlResponseFormat' => [
                     'accepts' => [
                         'application/xml'
                     ],
-                    // OPTIONAL
-                    'forceHeaders' => ['{headerName}' => ['headerValue1', 'headerValue2']]
                 ],
                 'DefaultResponseFormat' => [
                     'accepts' => [
                         '*/*'
                     ],
-                    // OPTIONAL
-                    'forceHeaders' => ['{headerName}' => ['headerValue1', 'headerValue2']]
                 ],
             ],
             'postServicePriority' => [
