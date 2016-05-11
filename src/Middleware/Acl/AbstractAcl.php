@@ -30,7 +30,7 @@ class AbstractAcl extends AbstractMiddleware
     {
         return $response->withStatus(
             (int)$this->getOption($request, 'notAllowedStatus', 401),
-            $this->getOption($request, 'notAllowedReason', '')
+            $this->getOption($request, 'notAllowedReason', 'Unauthorized')
         );
     }
 }
