@@ -131,13 +131,14 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
         array $methods,
         array $methodPriority
     ) {
-        if(empty($methodPriority)) {
+        if (empty($methodPriority)) {
             $this->buildSimpleMethods(
                 $resourceName,
                 $resourcePath,
                 $methodsAllowed,
                 $methods
             );
+
             return;
         }
 
@@ -149,14 +150,12 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
             if (!in_array($methodName, $methodsAllowed)) {
                 continue;
             }
+
             if (array_key_exists($methodName, $methodPriority)) {
                 $priority = $methodPriority[$methodName];
             } else {
                 $priority = $defaultPriority;
                 $defaultPriority++;
-            }
-            if($resourceName == "it-pws-profile") {
-                var_dump($methodName, $priority);
             }
             $queue->insert($methodName, $priority);
         }
@@ -166,15 +165,12 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
             $methodOptions = new GenericOptions($methodProperties);
 
             $fullPath = $resourcePath . $methodOptions->get('path', '/' . $methodName);
+            $controllerMethod = $methodOptions->get('controllerMethod', $methodName);
+            $resourceKey = $this->getResourceKey($resourceName, $methodName, $controllerMethod);
 
-            if (!array_key_exists($fullPath, $this->paths)) {
-                $this->paths[$fullPath] = [];
-            }
-
-            $this->paths[$fullPath][$methodOptions->get('httpVerb', 'GET')] = $resourceName . '::' . $methodName;
+            $this->addPath($fullPath, $methodOptions->get('httpVerb', 'GET'), $resourceKey);
         }
     }
-
 
     /**
      * buildSimpleMethods
@@ -202,12 +198,45 @@ class BasicConfigRouteMiddlewareProvider extends BasicConfigMiddlewareProvider i
 
             $fullPath = $resourcePath . $methodOptions->get('path', '/' . $methodName);
 
-            if (!array_key_exists($fullPath, $this->paths)) {
-                $this->paths[$fullPath] = [];
-            }
-
-            $this->paths[$fullPath][$methodOptions->get('httpVerb', 'GET')] = $resourceName . '::' . $methodName;
+            $controllerMethod = $methodOptions->get('controllerMethod', $methodName);
+            $resourceKey = $this->getResourceKey($resourceName, $methodName, $controllerMethod);
+            
+            $this->addPath($fullPath, $methodOptions->get('httpVerb', 'GET'), $resourceKey);
         }
+    }
+
+    /**
+     * getResourceKey
+     *
+     * @param string $resourceName
+     * @param string $methodName
+     * @param string $controllerMethod
+     *
+     * @return string
+     */
+    protected function getResourceKey($resourceName, $methodName, $controllerMethod)
+    {
+        return $resourceName . '::' . $methodName . '::' . $controllerMethod;
+    }
+
+    /**
+     * addPath
+     *
+     * @param string $path
+     * @param string $httpVerb
+     * @param string $resourceKey
+     *
+     * @return void
+     */
+    protected function addPath($path, $httpVerb, $resourceKey)
+    {
+        $httpVerb = strtoupper($httpVerb);
+
+        if (!array_key_exists($path, $this->paths)) {
+            $this->paths[$path] = [];
+        }
+
+        $this->paths[$path][$httpVerb] = $resourceKey;
     }
 
     /**

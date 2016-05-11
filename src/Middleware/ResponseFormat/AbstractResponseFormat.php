@@ -2,6 +2,7 @@
 
 namespace Reliv\PipeRat\Middleware\ResponseFormat;
 
+use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
 
@@ -47,5 +48,30 @@ abstract class AbstractResponseFormat extends AbstractMiddleware
         }
 
         return false;
+    }
+
+    /**
+     * withOptionHeaders
+     *
+     * @param Request  $request
+     * @param Response $response
+     *
+     * @return Response
+     */
+    public function withOptionHeaders(Request $request, Response $response) {
+
+        $options = $this->getOptions($request);
+
+        $headers = $options->get('headers', []);
+        
+        if(empty($headers)) {
+            return $response;
+        }
+
+        foreach ($headers as $headerName => $values) {
+            $response = $response->withHeader($headerName, $values);
+        }
+        
+        return $response;
     }
 }

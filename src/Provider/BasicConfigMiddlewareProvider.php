@@ -76,20 +76,21 @@ class BasicConfigMiddlewareProvider extends AbstractBasicConfigMiddlewareProvide
      */
     protected function buildResourceOperationCollection($resourceKey)
     {
+        if (array_key_exists($resourceKey, $this->operations)) {
+            return $this->operations[$resourceKey];
+        }
+
         $resourceConfig = $this->getResourceConfig();
 
         $resourceKeys = explode('::', $resourceKey);
         $resourceName = $resourceKeys[0];
         $methodName = $resourceKeys[1];
+        $controllerMethod = $resourceKeys[2];
 
         if (!array_key_exists($resourceName, $resourceConfig)) {
             throw new ResourceException('Resource config missing for ' . $resourceName);
         }
-
-        if (array_key_exists($resourceKey, $this->operations)) {
-            return $this->operations[$resourceKey];
-        }
-
+        
         /** @var Options $resourceOptions */
         $resourceOptions = $resourceConfig[$resourceName];
         $methods = $resourceOptions->get('methods', []);
@@ -120,7 +121,7 @@ class BasicConfigMiddlewareProvider extends AbstractBasicConfigMiddlewareProvide
 
         // ControllerMethod
         $controllerOptions = $resourceOptions->getOptions('controllerServiceOptions');
-        $controllerOptions->set('method', $methodName);
+        $controllerOptions->set('method', $controllerMethod);
         $operations->addOperation(
             $this->buildOperation(
                 $resourceOptions->get('controllerServiceName'),
@@ -170,8 +171,10 @@ class BasicConfigMiddlewareProvider extends AbstractBasicConfigMiddlewareProvide
             throw new ResourceException('ResourceKey not set: ' . $resourceKey);
         }
 
+        $operations = $this->buildResourceOperationCollection($resourceKey);
+
         $middlewarePipe->pipeOperations(
-            $this->buildResourceOperationCollection($resourceKey)
+            $operations
         );
 
         return $request;

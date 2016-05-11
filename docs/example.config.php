@@ -29,9 +29,9 @@
              */
             'methods' => [
                 'exampleFindOne' => [
+                    'controllerMethod' => 'findOne',
                     'description' => 'Example find resources',
                     'httpVerb' => 'GET',
-                    'name' => 'exampleFindOne',
                     'path' => '/exampleFindOne',
                     'preServiceNames' => [
                         'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
@@ -61,9 +61,9 @@
                     'postServicePriority' => [],
                 ],
                 'exampleFind' => [
+                    'controllerMethod' => 'find',
                     'description' => 'Find resources',
                     'httpVerb' => 'GET',
-                    'name' => 'exampleFind',
                     'path' => '/exampleFind',
                     'preServiceNames' => [
                         'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
@@ -91,6 +91,31 @@
                             ],
                             // Security is best when 'deepPropertyLimit' is 1
                             'propertyDepthLimit' => 1,
+                        ],
+                    ],
+                    'postServicePriority' => [],
+                ],
+                'exampleDownload' => [
+                    'controllerMethod' => 'findById',
+                    'description' => 'Download resource by ID',
+                    'httpVerb' => 'GET',
+                    'path' => '/download/{id}',
+                    'preServiceNames' => [
+                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                    ],
+                    'preServiceOptions' => [],
+                    'preServicePriority' => [],
+                    'postServiceNames' => [
+                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                        'fileDataResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\FileDataResponseFormat',
+                    ],
+                    'postServiceOptions' => [
+                        'fileDataResponseFormat' => [
+                            'accepts' => ['*/*'],
+                            'base64FileProperty' => 'file',
+                            'fileName' => 'id-image',
+                            'contentType' => 'application/octet-stream',
+                            //'contentType' => 'application/pdf',
                         ],
                     ],
                     'postServicePriority' => [],

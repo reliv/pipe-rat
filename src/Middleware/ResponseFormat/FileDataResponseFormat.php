@@ -9,6 +9,7 @@ use Reliv\PipeRat\Extractor\Extractor;
 use Reliv\PipeRat\Extractor\PropertyGetterExtractor;
 use Reliv\PipeRat\Middleware\Middleware;
 use Reliv\PipeRat\Options\GenericOptions;
+use Reliv\PipeRat\Options\Options;
 
 /**
  * Class FileDataResponseFormat
@@ -41,6 +42,104 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
     protected $defaultAcceptTypes = [];
 
     /**
+     * getContentTypeOption
+     *
+     * @param Request $request
+     *
+     * @return mixed|string
+     */
+    protected function getContentType(Request $request, array $properties)
+    {
+        $options = $this->getOptions($request);
+
+        $downloadQueryParam = $options->get('downloadQueryParam', 'download');
+
+        $isDownload = (bool)$this->getQueryParam($request, $downloadQueryParam, false);
+
+        $contentType = $options->get('contentType', $properties['contentType']);
+
+        if ($isDownload) {
+            $contentType = 'application/octet-stream';
+            $fileName = $options->get('fileName', $properties['fileName']);
+
+            if (!empty($fileName)) {
+                //$response = $response->->withHeader(
+                //    'Content-Disposition',
+                //    ['attachment', 'filename="' . $fileName . '"']
+                //);
+            }
+        }
+
+        return $contentType;
+    }
+
+    /**
+     * getProperties
+     *
+     * @param Request  $request
+     * @param Response $response
+     *
+     * @return array
+     * @throws ResponseFormatException
+     */
+    protected function getProperties(Request $request, Response $response)
+    {
+        $options = $this->getOptions($request);
+
+        $dataModel = $this->getDataModel($response);
+
+        $base64FileProperty = $options->get('base64FileProperty');
+
+        if (empty($base64FileProperty)) {
+            throw new ResponseFormatException('FileDataResponseFormat requires base64FileProperty option to be set');
+        }
+
+        $propertyList = [
+            $base64FileProperty => true,
+        ];
+
+        $fileContentTypeProperty = $options->get('fileContentTypeProperty');
+
+        if (!empty($fileContentTypeProperty)) {
+            $propertyList[$fileContentTypeProperty] = true;
+        }
+
+        $fileNameProperty = $options->get('fileNameProperty');
+
+        if (!empty($fileNameProperty)) {
+            $propertyList[$fileNameProperty] = true;
+        }
+
+        $extractorOptions = new GenericOptions(['propertyList' => $propertyList]);
+
+        $properties = $this->extractor->extract($dataModel, $extractorOptions);
+
+        return [
+            'file' => base64_decode($this->getProperty($properties, $base64FileProperty)),
+            'contentType' => $this->getProperty($properties, $fileContentTypeProperty, 'application/octet-stream'),
+            'fileName' => $this->getProperty($properties, $fileNameProperty),
+        ];
+    }
+
+    /**
+     * getProperty
+     *
+     * @param array  $list
+     * @param string $key
+     * @param null   $default
+     *
+     * @return null
+     */
+    protected function getProperty(array $list, $key, $default = null)
+    {
+        if (array_key_exists($key, $list)) {
+            return $list[$key];
+        }
+
+        return $default;
+    }
+
+    /**
      * __invoke
      *
      * @param Request       $request
@@ -55,40 +154,20 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
         if (!$this->isValidAcceptType($request)) {
             return $next($request, $response);
         }
-        $dataModel = $this->getDataModel($response);
-
-        $options = $this->getOptions($request);
-
-        $base64FileProperty = $options->get('base64FileProperty');
-
-        if (empty($base64FileProperty)) {
-            throw new ResponseFormatException('FileDataResponseFormat requires base64FileProperty option to be set');
-        }
-
-        $extractorOptions = new GenericOptions(['propertyList' => [$base64FileProperty => true]]);
-
-        $base64FileProperties = $this->extractor->extract($dataModel, $extractorOptions);
-
-        if (!array_key_exists($base64FileProperty, $base64FileProperties)) {
-            throw new ResponseFormatException('FileDataResponseFormat could not extract base64FileProperty');
-        }
-
-        $base64File = $base64FileProperties[$base64FileProperty];
-
-        $fileName = $options->get('fileName', 'file');
-
-        $contentType = $options->get('contentType', 'application/octet-stream');
-
+        
         $body = $response->getBody();
 
-        $body->write(base64_decode($base64File));
+        $properties = $this->getProperties($request, $response))
 
-        return $response->withBody($body)->withHeader(
+        $body->write($properties['file']);
+
+        $contentType = $this->getContentType($request, $properties);
+
+        $response = $response->withBody($body)->withHeader(
             'Content-Type',
             $contentType
-        )->withHeader(
-            'Content-Disposition',
-            ['attachment', 'filename="' . $fileName . '"']
         );
+
+        return $this->withOptionHeaders($request, $response);
     }
 }

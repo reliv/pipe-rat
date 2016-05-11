@@ -3,13 +3,9 @@
 namespace Reliv\PipeRat\Provider;
 
 use Interop\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\PipeRat\Exception\ResourceException;
-use Reliv\PipeRat\Middleware\MiddlewarePipe;
 use Reliv\PipeRat\Operation\BasicOperation;
 use Reliv\PipeRat\Operation\BasicOperationCollection;
 use Reliv\PipeRat\Options\Options;
-use Reliv\PipeRat\RequestAttribute\ResourceKey;
 
 /**
  * Class AbstractMiddlewareProvider
@@ -62,18 +58,28 @@ abstract class AbstractMiddlewareProvider
     ) {
         $queue = new \SplPriorityQueue();
 
+        $defaultPriority = count($operationServiceNames);
+
         foreach ($operationServiceNames as $name => $middlewareService) {
+            // Allows over-riding with nulls
+            if (empty($middlewareService)) {
+                continue;
+            }
+
+            $priority = $operationPriorities->get($name);
+
+            if (empty($priority)) {
+                $priority = $defaultPriority;
+                $defaultPriority--;
+            }
+
             $queue->insert(
                 $name,
-                $operationPriorities->get($name, 0)
+                $priority
             );
         }
 
         foreach ($queue as $name) {
-            // Allows over-riding
-            if (empty($operationServiceNames[$name])) {
-                continue;
-            }
             $operationCollection->addOperation(
                 $this->buildOperation(
                     $name,

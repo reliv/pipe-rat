@@ -77,8 +77,8 @@ abstract class AbstractMiddleware
     /**
      * getOption
      *
-     * @param Request    $request
-     * @param string     $key
+     * @param Request $request
+     * @param string  $key
      *
      * @return mixed
      */
@@ -87,7 +87,7 @@ abstract class AbstractMiddleware
         /** @var Options $options */
         $options = $this->getOptions($request);
 
-        if(!$options->has($key)) {
+        if (!$options->has($key)) {
             return new GenericOptions();
         }
 
@@ -119,6 +119,26 @@ abstract class AbstractMiddleware
     {
         if ($response instanceof DataResponse) {
             return $response->getDataBody();
+        }
+
+        return $default;
+    }
+
+    /**
+     * getQueryParam
+     *
+     * @param Request $request
+     * @param         $param
+     * @param null    $default
+     *
+     * @return null
+     */
+    public function getQueryParam(Request $request, $param, $default = null)
+    {
+        $params = $request->getQueryParams();
+
+        if (array_key_exists($param, $params)) {
+            return $params[$param];
         }
 
         return $default;

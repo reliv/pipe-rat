@@ -41,7 +41,7 @@ abstract class AbstractResourceController extends AbstractMiddleware implements 
         }
 
         if (!method_exists($this, $method)) {
-            throw new MethodException('Method does not exists');
+            throw new MethodException('Method does not exists: ' . $method);
         }
 
         return $this->$method($request, $response, $out);
