@@ -146,7 +146,7 @@ class DoctrineResourceController extends AbstractResourceController
     public function upsert(Request $request, Response $response, callable $out)
     {
         $idFieldName = $this->getEntityIdFieldName($this->getEntityName($request));
-        $body = $this->getRequestData($request, []);
+        $body = $request->getParsedBody();
 
         if (!array_key_exists($idFieldName, $body)) {
             return $response->withStatus(400);
@@ -420,7 +420,7 @@ class DoctrineResourceController extends AbstractResourceController
     ) {
 
         $this->getHydrator()->hydrate(
-            $this->getRequestData($request, []),
+            $request->getParsedBody(),
             $entity,
             $this->getOptions($request)
         );

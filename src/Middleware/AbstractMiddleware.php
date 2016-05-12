@@ -95,19 +95,6 @@ abstract class AbstractMiddleware
     }
 
     /**
-     * getRequestData
-     *
-     * @param Request    $request
-     * @param mixed|null $default
-     *
-     * @return mixed
-     */
-    protected function getRequestData(Request $request, $default = null)
-    {
-        return $request->getAttribute('dataBody', $default);
-    }
-
-    /**
      * getDataModel
      *
      * @param Response   $response

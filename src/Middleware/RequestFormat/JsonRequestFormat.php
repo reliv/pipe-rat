@@ -50,7 +50,7 @@ class JsonRequestFormat extends AbstractRequestFormat implements Middleware
                 return $response->withStatus(400)->withBody($body);
             }
 
-            $request = $request->withAttribute('dataBody', $body);
+            $request = $request->withParsedBody($body);
         }
 
         return $out($request, $response);

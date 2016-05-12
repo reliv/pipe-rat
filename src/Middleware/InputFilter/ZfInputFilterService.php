@@ -34,11 +34,12 @@ class ZfInputFilterService extends AbstractMiddleware implements Middleware
     ) {
         $this->serviceManager = $serviceManager;
     }
+
     /**
      * __invoke
      *
-     * @param Request       $request
-     * @param Response      $response
+     * @param Request $request
+     * @param Response $response
      * @param callable|null $out
      *
      * @return mixed
@@ -52,11 +53,11 @@ class ZfInputFilterService extends AbstractMiddleware implements Middleware
 
         $inputFilter = clone($service);
 
-        $dataModel = $this->getRequestData($request, []);
+        $dataModel = $request->getParsedBody();
 
         $inputFilter->setData($dataModel);
 
-        if($inputFilter->isValid()) {
+        if ($inputFilter->isValid()) {
             return $out($request, $response);
         }
 
