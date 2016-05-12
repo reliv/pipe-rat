@@ -35,7 +35,7 @@ class ZfInputFilterClass extends AbstractMiddleware implements Middleware
         /** @var InputFilter $inputFilter */
         $inputFilter = new $filterClass();
 
-        $dataModel = $this->getRequestData($request, []);
+        $dataModel = $request->getParsedBody();
 
         $inputFilter->setData($dataModel);
 
