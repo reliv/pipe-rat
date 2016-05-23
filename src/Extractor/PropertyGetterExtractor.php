@@ -228,6 +228,10 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
 
         $properties = [];
 
+        if(!$this->isTraversable($dataModel)) {
+            return $properties;
+        }
+
         foreach ($dataModel as $property => $value) {
             $properties[$property] = true;
         }
