@@ -29,7 +29,7 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
      * extract
      *
      * @param \stdClass|array $dataModel
-     * @param Options         $options
+     * @param Options $options
      *
      * @return array
      */
@@ -51,9 +51,9 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
      * getProperties
      *
      * @param \stdClass|array $dataModel $dataModel
-     * @param array           $properties
-     * @param int             $depth
-     * @param int             $depthLimit
+     * @param array $properties
+     * @param int $depth
+     * @param int $depthLimit
      *
      * @return array
      */
@@ -102,8 +102,8 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
      * getDataFromArray
      *
      * @param string $property
-     * @param array  $dataModel
-     * @param null   $default
+     * @param array $dataModel
+     * @param null $default
      *
      * @return mixed|null
      */
@@ -119,9 +119,9 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
     /**
      * getDataFromObject
      *
-     * @param string    $property
+     * @param string $property
      * @param \stdClass $dataModel
-     * @param null      $default
+     * @param null $default
      *
      * @return mixed|null
      */
@@ -146,9 +146,9 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
      * getCollectionProperties
      *
      * @param array|\Traversable $collectionDataModel
-     * @param array              $properties
-     * @param int                $depth
-     * @param int                $depthLimit
+     * @param array $properties
+     * @param int $depth
+     * @param int $depthLimit
      *
      * @return array
      * @throws ExtractorException
@@ -220,13 +220,18 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
      *
      * @return array
      */
-    protected function getPropertyListFromProperties($dataModel) {
+    protected function getPropertyListFromProperties($dataModel)
+    {
 
         if (is_object($dataModel)) {
             return $this->getPropertyListByMethods($dataModel);
         }
 
         $properties = [];
+
+        if (!$this->isTraversable($dataModel)) {
+            return [];
+        }
 
         foreach ($dataModel as $property => $value) {
             $properties[$property] = true;
