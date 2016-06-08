@@ -210,7 +210,7 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
      */
     protected function isTraversable($dataModel)
     {
-        return (is_array($dataModel) || $dataModel instanceOf \Traversable);
+        return (is_array($dataModel) || $dataModel instanceof \Traversable);
     }
 
     /**
