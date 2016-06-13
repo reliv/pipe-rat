@@ -39,9 +39,9 @@ class TriggerErrorHandler implements ErrorMiddlewareInterface
      */
     public function __invoke($error, Request $request, Response $response, callable $out = null)
     {
-        if($error instanceof \Throwable) {
-            throw $error;
-        }
+//        if($error instanceof \Throwable) {
+//            throw $error;
+//        }
 
         //Insure the error shows up in the php error.log
         trigger_error($error, E_USER_ERROR);

@@ -40,7 +40,7 @@ class Fields implements Middleware
             return $out($request, $response);
         }
 
-        $param = json_decode($params['properties'], true);
+        $param = json_decode($params['fields'], true);
 
         $request = $request->withAttribute('propertyFilterParam', $param);
 
