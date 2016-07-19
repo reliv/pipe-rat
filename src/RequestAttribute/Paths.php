@@ -2,9 +2,6 @@
 
 namespace Reliv\PipeRat\RequestAttribute;
 
-use Reliv\PipeRat\Options\AbstractOptions;
-use Reliv\PipeRat\Options\Options;
-
 /**
  * Class Paths
  *
