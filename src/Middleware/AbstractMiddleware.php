@@ -142,7 +142,7 @@ abstract class AbstractMiddleware
     protected function getResponseWithDataBody(Response $response, $dataModel)
     {
         if (!$response instanceof DataResponse) {
-            $response = new BasicDataResponse($response);
+            $response = new BasicDataResponse();
         }
 
         return $response->withDataBody($dataModel);

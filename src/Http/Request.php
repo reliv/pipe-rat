@@ -10,7 +10,7 @@ namespace Reliv\PipeRat\Http;
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class Request extends \Zend\Stratigility\Http\Request
+class Request extends \Zend\Diactoros\Request
 {
 
 }

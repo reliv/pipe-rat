@@ -94,6 +94,7 @@ return [
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -110,6 +111,7 @@ return [
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -126,6 +128,7 @@ return [
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -138,7 +141,9 @@ return [
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
-                    'postServiceNames' => [],
+                    'postServiceNames' => [
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                    ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
                 ],
@@ -157,7 +162,9 @@ return [
                         ]
                     ],
                     'preServicePriority' => [],
-                    'postServiceNames' => [],
+                    'postServiceNames' => [
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                    ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
                 ],
@@ -179,6 +186,7 @@ return [
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -204,6 +212,7 @@ return [
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor',
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -216,7 +225,9 @@ return [
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
-                    'postServiceNames' => [],
+                    'postServiceNames' => [
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                    ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
                 ],
@@ -232,6 +243,7 @@ return [
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -249,6 +261,7 @@ return [
 //                'JsonRequestFormat' => 1000,
             ],
             'postServiceNames' => [
+                'finalResponseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                 'JsonResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
                 'XmlResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat',
                 'DefaultResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
@@ -290,6 +303,7 @@ return [
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -306,6 +320,7 @@ return [
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -322,6 +337,7 @@ return [
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -334,7 +350,9 @@ return [
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
-                    'postServiceNames' => [],
+                    'postServiceNames' => [
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                    ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
                 ],
@@ -353,7 +371,9 @@ return [
                         ]
                     ],
                     'preServicePriority' => [],
-                    'postServiceNames' => [],
+                    'postServiceNames' => [
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                    ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
                 ],
@@ -375,6 +395,7 @@ return [
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -400,6 +421,7 @@ return [
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor',
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -412,7 +434,9 @@ return [
                     'preServiceNames' => [],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
-                    'postServiceNames' => [],
+                    'postServiceNames' => [
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                    ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
                 ],
@@ -428,6 +452,7 @@ return [
                     'preServicePriority' => [],
                     'postServiceNames' => [
                         'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
+                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -445,6 +470,7 @@ return [
 //                'JsonRequestFormat' => 1000,
             ],
             'postServiceNames' => [
+                'finalResponseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
                 'JsonResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
                 'XmlResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat',
                 'DefaultResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
