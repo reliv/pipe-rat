@@ -19,8 +19,19 @@ use Psr\Http\Message\ResponseInterface;
  */
 class BasicDataResponse extends Response implements DataResponse
 {
+
     /**
-     * @var null
+     * BasicDataResponse constructor.
+     *
+     * @param ResponseInterface $response
+     */
+    public function __construct(ResponseInterface $response)
+    {
+        parent::__construct($response->getBody(), $response->getStatusCode(), $response->getHeaders());
+    }
+
+    /**
+     * @var  null
      */
     protected $dataBody = null;
 
