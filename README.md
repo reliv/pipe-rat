@@ -7,6 +7,7 @@ Create REST APIs with just a few lines of config. This PSR7 compliant PHP librar
 
 - There is a name collision happening when pre and|or post service options have the same name
     I.E.: responseHeaders in this example, looses the postServiceOptions values in the 'findById'
+    
     ```php
     'xxx' => [
         'controllerServiceName' => 'Reliv\PipeRat\Middleware\ResourceController\DoctrineResourceController',
@@ -47,5 +48,5 @@ Create REST APIs with just a few lines of config. This PSR7 compliant PHP librar
             ],
         ],
     ]
-     ```
+    ```
 
