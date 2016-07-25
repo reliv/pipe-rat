@@ -4,6 +4,7 @@ namespace Reliv\PipeRat\Middleware\Header;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Reliv\PipeRat\Exception\OptionException;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
 
@@ -24,6 +25,7 @@ class AddResponseHeaders extends AbstractMiddleware implements Middleware
      * @param Response $response
      *
      * @return Response
+     * @throws OptionException
      */
     public function getResponseWithOptionHeaders(Request $request, Response $response)
     {
@@ -35,8 +37,12 @@ class AddResponseHeaders extends AbstractMiddleware implements Middleware
             return $response;
         }
 
-        foreach ($headers as $headerName => $values) {
-            $response = $response->withHeader($headerName, $values);
+        foreach ($headers as $values) {
+            if (!array_key_exists('name', $values) || !array_key_exists('value', $values)) {
+                throw new OptionException('Header config requires both a name and a value key');
+            }
+
+            $response = $response->withAddedHeader($values['name'], $values['value']);
         }
 
         return $response;
