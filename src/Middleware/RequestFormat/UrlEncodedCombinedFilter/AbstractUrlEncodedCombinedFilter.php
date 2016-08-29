@@ -3,8 +3,9 @@
 namespace Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Reliv\PipeRat\Middleware\AbstractMiddleware;
 
-class AbstractUrlEncodedCombinedFilter
+class AbstractUrlEncodedCombinedFilter extends AbstractMiddleware
 {
     /**
      * Over-ride me

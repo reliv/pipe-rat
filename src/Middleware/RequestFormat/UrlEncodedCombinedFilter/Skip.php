@@ -6,7 +6,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Exception\InvalidWhereException;
 use Reliv\PipeRat\Middleware\Middleware;
-use Reliv\PipeRat\Middleware\RequestFormat\AbstractRequestFormat;
 
 /**
  * Class PropertyFilterParamRequestFormat
