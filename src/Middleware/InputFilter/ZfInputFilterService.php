@@ -9,7 +9,6 @@ use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
 use Reliv\PipeRat\ResponseModel\ZfInputFilterMessageResponseModels;
 use Zend\InputFilter\InputFilter;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class ZfInputFilterService
@@ -38,8 +37,8 @@ class ZfInputFilterService extends AbstractMiddleware implements Middleware
     /**
      * __invoke
      *
-     * @param Request $request
-     * @param Response $response
+     * @param Request       $request
+     * @param Response      $response
      * @param callable|null $out
      *
      * @return mixed

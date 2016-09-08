@@ -10,14 +10,14 @@ use Reliv\PipeRat\ResponseModel\ZfInputFilterMessageResponseModels;
 use Zend\InputFilter\InputFilter;
 
 /**
- * Class ZfInputFilterService
+ * Class ZfInputFilterConfig
  *
  * @author    James Jervis <jjervis@relivinc.com>
  * @copyright 2016 Reliv International
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class ZfInputFilterService  extends AbstractMiddleware implements Middleware
+class ZfInputFilterConfig extends AbstractMiddleware implements Middleware
 {
     /**
      * __invoke
@@ -48,7 +48,7 @@ class ZfInputFilterService  extends AbstractMiddleware implements Middleware
 
         $inputFilter->setData($dataModel);
 
-        if($inputFilter->isValid()) {
+        if ($inputFilter->isValid()) {
             return $out($request, $response);
         }
 
