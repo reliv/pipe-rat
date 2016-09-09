@@ -39,7 +39,7 @@ class ZfInputFilterClass extends AbstractMiddleware implements Middleware
 
         $inputFilter->setData($dataModel);
 
-        if($inputFilter->isValid()) {
+        if ($inputFilter->isValid()) {
             return $out($request, $response);
         }
 
