@@ -77,7 +77,7 @@ return [
          * === Default Doctrine API ==
          */
         'doctrine-api' => [
-            'controllerServiceName' => 'Reliv\PipeRat\Middleware\ResourceController\DoctrineResourceController',
+            'controllerServiceName' => Reliv\PipeRat\Middleware\ResourceController\DoctrineResourceController::class,
             'controllerServiceOptions' => [
                 'entity' => null,
             ],
@@ -88,13 +88,13 @@ return [
                     'httpVerb' => 'GET',
                     'path' => '/{id}',
                     'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'PropertyFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class,
                     ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'extractor' => Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor::class,
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -105,13 +105,13 @@ return [
                     'httpVerb' => 'POST',
                     'path' => '',
                     'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'PropertyFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class,
                     ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'extractor' => Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor::class,
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -122,13 +122,13 @@ return [
                     'httpVerb' => 'PUT',
                     'path' => '',
                     'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'PropertyFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class,
                     ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'extractor' => Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor::class,
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -142,7 +142,7 @@ return [
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -153,7 +153,7 @@ return [
                     'httpVerb' => 'GET',
                     'path' => '/count',
                     'preServiceNames' => [
-                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
+                        'WhereFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where::class,
                     ],
                     'preServiceOptions' => [
                         'WhereFilterParam' => [
@@ -163,7 +163,7 @@ return [
                     ],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -174,8 +174,8 @@ return [
                     'httpVerb' => 'GET',
                     'path' => '/findOne',
                     'preServiceNames' => [
-                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'WhereFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where::class,
+                        'PropertyFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class,
                     ],
                     'preServiceOptions' => [
                         'WhereFilterParam' => [
@@ -185,8 +185,8 @@ return [
                     ],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'extractor' => Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor::class,
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -197,11 +197,11 @@ return [
                     'httpVerb' => 'GET',
                     'path' => '',
                     'preServiceNames' => [
-                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
-                        'OrderByFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Order',
-                        'SkipFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Skip',
-                        'LimitFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Limit',
+                        'WhereFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where::class,
+                        'PropertyFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class,
+                        'OrderByFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Order::class,
+                        'SkipFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Skip::class,
+                        'LimitFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Limit::class,
                     ],
                     'preServiceOptions' => [
                         'WhereFilterParam' => [
@@ -211,8 +211,8 @@ return [
                     ],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor',
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'extractor' => Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor::class,
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -226,7 +226,7 @@ return [
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -237,13 +237,13 @@ return [
                     'httpVerb' => 'PUT',
                     'path' => '/{id}',
                     'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'PropertyFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class,
                     ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'extractor' => Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor::class,
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -253,7 +253,7 @@ return [
             ],
             'options' => [],
             'preServiceNames' => [
-//                'JsonRequestFormat' => 'Reliv\PipeRat\Middleware\RequestFormat\JsonRequestFormat',
+//                'JsonRequestFormat' => Reliv\PipeRat\Middleware\RequestFormat\JsonRequestFormat::class,
             ],
             'preServiceOptions' => [
             ],
@@ -261,10 +261,10 @@ return [
 //                'JsonRequestFormat' => 1000,
             ],
             'postServiceNames' => [
-                'finalResponseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
-                'JsonResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
-                'XmlResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat',
-                'DefaultResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
+                'finalResponseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
+                'JsonResponseFormat' => Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat::class,
+                'XmlResponseFormat' => Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat::class,
+                'DefaultResponseFormat' => Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat::class,
             ],
             'postServiceOptions' => [
                 'DefaultResponseFormat' => [
@@ -284,7 +284,7 @@ return [
          * === Default Repository API ==
          */
         'repository-api' => [
-            'controllerServiceName' => 'Reliv\PipeRat\Middleware\ResourceController\RepositoryResourceController',
+            'controllerServiceName' => Reliv\PipeRat\Middleware\ResourceController\RepositoryResourceController::class,
             'controllerServiceOptions' => [
                 'entityIdFieldName' => 'id',
                 'entity' => null,
@@ -297,13 +297,13 @@ return [
                     'httpVerb' => 'GET',
                     'path' => '/{id}',
                     'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'PropertyFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class,
                     ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'extractor' => Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor::class,
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -314,13 +314,13 @@ return [
                     'httpVerb' => 'POST',
                     'path' => '',
                     'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'PropertyFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class,
                     ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'extractor' => Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor::class,
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -331,13 +331,13 @@ return [
                     'httpVerb' => 'PUT',
                     'path' => '',
                     'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'PropertyFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class,
                     ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'extractor' => Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor::class,
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -351,7 +351,7 @@ return [
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -362,7 +362,7 @@ return [
                     'httpVerb' => 'GET',
                     'path' => '/count',
                     'preServiceNames' => [
-                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
+                        'WhereFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where::class,
                     ],
                     'preServiceOptions' => [
                         'WhereFilterParam' => [
@@ -372,7 +372,7 @@ return [
                     ],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -383,8 +383,8 @@ return [
                     'httpVerb' => 'GET',
                     'path' => '/findOne',
                     'preServiceNames' => [
-                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'WhereFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where::class,
+                        'PropertyFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class,
                     ],
                     'preServiceOptions' => [
                         'WhereFilterParam' => [
@@ -394,8 +394,8 @@ return [
                     ],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'extractor' => Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor::class,
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -406,11 +406,11 @@ return [
                     'httpVerb' => 'GET',
                     'path' => '',
                     'preServiceNames' => [
-                        'WhereFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where',
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
-                        'OrderByFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Order',
-                        'SkipFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Skip',
-                        'LimitFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Limit',
+                        'WhereFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where::class,
+                        'PropertyFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class,
+                        'OrderByFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Order::class,
+                        'SkipFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Skip::class,
+                        'LimitFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Limit::class,
                     ],
                     'preServiceOptions' => [
                         'WhereFilterParam' => [
@@ -420,8 +420,8 @@ return [
                     ],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor',
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'extractor' => Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor::class,
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -435,7 +435,7 @@ return [
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -446,13 +446,13 @@ return [
                     'httpVerb' => 'PUT',
                     'path' => '/{id}',
                     'preServiceNames' => [
-                        'PropertyFilterParam' => 'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields',
+                        'PropertyFilterParam' => Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class,
                     ],
                     'preServiceOptions' => [],
                     'preServicePriority' => [],
                     'postServiceNames' => [
-                        'extractor' => 'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor',
-                        'responseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
+                        'extractor' => Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor::class,
+                        'responseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
                     ],
                     'postServiceOptions' => [],
                     'postServicePriority' => [],
@@ -462,7 +462,7 @@ return [
             ],
             'options' => [],
             'preServiceNames' => [
-//                'JsonRequestFormat' => 'Reliv\PipeRat\Middleware\RequestFormat\JsonRequestFormat',
+//                'JsonRequestFormat' => Reliv\PipeRat\Middleware\RequestFormat\JsonRequestFormat::class,
             ],
             'preServiceOptions' => [
             ],
@@ -470,10 +470,10 @@ return [
 //                'JsonRequestFormat' => 1000,
             ],
             'postServiceNames' => [
-                'finalResponseHeaders' => 'Reliv\PipeRat\Middleware\Header\AddResponseHeaders',
-                'JsonResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
-                'XmlResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat',
-                'DefaultResponseFormat' => 'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat',
+                'finalResponseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
+                'JsonResponseFormat' => Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat::class,
+                'XmlResponseFormat' => Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat::class,
+                'DefaultResponseFormat' => Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat::class,
             ],
             'postServiceOptions' => [
                 'DefaultResponseFormat' => [
@@ -512,7 +512,7 @@ return [
      * === Error Handlers ===
      */
     'errorServiceNames' => [
-        //'errorHandler' => 'Reliv\PipeRat\Middleware\Error\TriggerErrorHandler',
+        //'errorHandler' => Reliv\PipeRat\Middleware\Error\TriggerErrorHandler::class,
     ],
     // '{serviceAlias}' => {priority}
     'errorServicePriority' => [],
