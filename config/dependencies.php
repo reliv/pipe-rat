@@ -5,114 +5,114 @@
 return [
     'config_factories' => [
         /* Extractors */
-        'Reliv\PipeRat\Extractor\CollectionPropertyGetterExtractor' => [],
-        'Reliv\PipeRat\Extractor\PropertyGetterExtractor'=> [],
+        Reliv\PipeRat\Extractor\CollectionPropertyGetterExtractor::class => [],
+        Reliv\PipeRat\Extractor\PropertyGetterExtractor::class => [],
 
         /* Resource Controllers */
-        'Reliv\PipeRat\Middleware\ResourceController\DoctrineResourceController' => [
+        Reliv\PipeRat\Middleware\ResourceController\DoctrineResourceController::class => [
             'arguments' => [
                 'Doctrine\ORM\EntityManager',
-                'Reliv\PipeRat\Hydrator\PropertySetterHydrator'
+                Reliv\PipeRat\Hydrator\PropertySetterHydrator::class
             ],
         ],
 
-        'Reliv\PipeRat\Middleware\ResourceController\RepositoryResourceController' => [
+        Reliv\PipeRat\Middleware\ResourceController\RepositoryResourceController::class => [
             'arguments' => [
                 'ServiceManager',
-                'Reliv\PipeRat\Hydrator\PropertySetterHydrator'
+                Reliv\PipeRat\Hydrator\PropertySetterHydrator::class
             ],
         ],
 
         /* Hydrators */
-        'Reliv\PipeRat\Hydrator\PropertySetterHydrator' => [],
+        Reliv\PipeRat\Hydrator\PropertySetterHydrator::class => [],
 
         /* Resource Middleware */
         // ACL
-        'Reliv\PipeRat\Middleware\Acl\RcmUserAcl' => [
+        Reliv\PipeRat\Middleware\Acl\RcmUserAcl::class => [
             'arguments' => [
-                'RcmUser\Service\RcmUserService',
+                RcmUser\Service\RcmUserService::class,
             ],
         ],
         // Error Middleware
-        'Reliv\PipeRat\Middleware\Error\TriggerErrorHandler' => [],
-        'Reliv\PipeRat\Middleware\Error\NonThrowingErrorHandler' => [],
+        Reliv\PipeRat\Middleware\Error\TriggerErrorHandler::class => [],
+        Reliv\PipeRat\Middleware\Error\NonThrowingErrorHandler::class => [],
 
         // Extractor
-        'Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor' => [],
-        'Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor' => [],
+        Reliv\PipeRat\Middleware\Extractor\CollectionPropertyGetterExtractor::class => [],
+        Reliv\PipeRat\Middleware\Extractor\PropertyGetterExtractor::class => [],
 
         // Header
-        'Reliv\PipeRat\Middleware\Header\AddResponseHeaders' => [],
-        'Reliv\PipeRat\Middleware\Header\Expires' => [],
+        Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class => [],
+        Reliv\PipeRat\Middleware\Header\Expires::class => [],
 
         // InputFilter
-        'Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterClass' => [],
-        'Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterConfig' => [],
-        'Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterService' => [
+        Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterClass::class => [],
+        Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterConfig::class => [],
+        Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterService::class => [
             'arguments' => [
                 'ServiceManager',
             ],
         ],
 
         // Request Formatter
-        'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields'=>[],
-        'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Limit'=>[],
-        'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Order'=>[],
-        'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Skip'=>[],
-        'Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where'=>[],
-        'Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter\Fields' => [],
-        'Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter\Limit' => [],
-        'Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter\Order' => [],
-        'Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter\Skip' => [],
-        'Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter\Where' => [],
-        'Reliv\PipeRat\Middleware\RequestFormat\JsonParamsRequestFormat' => [],
+        Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class => [],
+        Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Limit::class => [],
+        Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Order::class => [],
+        Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Skip::class => [],
+        Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Where::class => [],
+        Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter\Fields::class => [],
+        Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter\Limit::class => [],
+        Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter\Order::class => [],
+        Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter\Skip::class => [],
+        Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter\Where::class => [],
+        Reliv\PipeRat\Middleware\RequestFormat\JsonParamsRequestFormat::class => [],
 
         // Response Formatter
-        'Reliv\PipeRat\Middleware\ResponseFormat\FileDataResponseFormat' => [
+        Reliv\PipeRat\Middleware\ResponseFormat\FileDataResponseFormat::class => [
             'arguments' => [
-                'Reliv\PipeRat\Extractor\PropertyGetterExtractor',
+                Reliv\PipeRat\Extractor\PropertyGetterExtractor::class,
             ],
         ],
-        'Reliv\PipeRat\Middleware\ResponseFormat\FileResponseFormat' => [],
-        'Reliv\PipeRat\Middleware\ResponseFormat\HtmlListResponseFormat' => [
+        Reliv\PipeRat\Middleware\ResponseFormat\FileResponseFormat::class => [],
+        //Reliv\PipeRat\Middleware\ResponseFormat\HtmlListResponseFormat::class => [
+        //    'arguments' => [
+        //        Reliv\PipeRat\Extractor\CollectionPropertyGetterExtractor::class,
+        //    ],
+        //],
+        Reliv\PipeRat\Middleware\ResponseFormat\HtmlResponseFormat::class => [
             'arguments' => [
-                'Reliv\PipeRat\Extractor\CollectionPropertyGetterExtractor',
+                Reliv\PipeRat\Extractor\PropertyGetterExtractor::class,
             ],
         ],
-        'Reliv\PipeRat\Middleware\ResponseFormat\HtmlResponseFormat' => [
-            'arguments' => [
-                'Reliv\PipeRat\Extractor\PropertyGetterExtractor',
-            ],
-        ],
-        'Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat' => [],
-        'Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat' => [],
+        Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat::class => [],
+        Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat::class => [],
 
         // Main
         'Reliv\PipeRat\Middleware\BasicConfigMiddleware' => [
-            'class' => 'Reliv\PipeRat\Middleware\OperationMiddleware',
+            'class' => Reliv\PipeRat\Middleware\OperationMiddleware::class,
             'arguments' => [
-                'Reliv\PipeRat\Provider\BasicConfigRouteMiddlewareProvider',
-                'Reliv\PipeRat\Provider\BasicConfigErrorMiddlewareProvider',
-                'Reliv\PipeRat\Provider\BasicConfigMiddlewareProvider',
+                Reliv\PipeRat\Provider\BasicConfigRouteMiddlewareProvider::class,
+                Reliv\PipeRat\Provider\BasicConfigErrorMiddlewareProvider::class,
+                Reliv\PipeRat\Provider\BasicConfigMiddlewareProvider::class,
             ],
         ],
         'Reliv\PipeRat\Middleware\Router' => [
-            'class' => 'Reliv\PipeRat\Middleware\Router\CurlyBraceVarRouter',
+            'class' => Reliv\PipeRat\Middleware\Router\CurlyBraceVarRouter::class,
         ],
         /* Middleware Providers */
-        'Reliv\PipeRat\Provider\BasicConfigErrorMiddlewareProvider' => [
+        Reliv\PipeRat\Provider\BasicConfigErrorMiddlewareProvider::class => [
             'arguments' => [
                 'Config',
                 'ServiceManager',
             ],
         ],
-        'Reliv\PipeRat\Provider\BasicConfigMiddlewareProvider' => [
+        Reliv\PipeRat\Provider\BasicConfigMiddlewareProvider::class => [
             'arguments' => [
                 'Config',
                 'ServiceManager',
             ],
         ],
-        'Reliv\PipeRat\Provider\BasicConfigRouteMiddlewareProvider' => [
+        Reliv\PipeRat\Provider\BasicConfigRouteMiddlewareProvider::class => [
             'arguments' => [
                 'Config',
                 'ServiceManager',
