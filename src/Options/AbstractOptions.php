@@ -112,6 +112,7 @@ abstract class AbstractOptions
 
         if (!is_array($options)) {
             $options = [];
+            // this should not be done
             $options[$key] = $options;
         }
 

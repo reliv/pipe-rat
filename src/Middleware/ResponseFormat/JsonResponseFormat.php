@@ -40,10 +40,15 @@ class JsonResponseFormat extends AbstractResponseFormat implements Middleware
         if (!$this->isValidAcceptType($request)) {
             return $next($request, $response);
         }
+
+        $options = $this->getOptions($request);
+
+        $jsonEncodeOptions = $options->get('jsonEncodeOptions', JSON_PRETTY_PRINT);
+
         $dataModel = $this->getDataModel($response);
 
         $body = $response->getBody();
-        $content = json_encode($dataModel);
+        $content = json_encode($dataModel, $jsonEncodeOptions);
         $err = json_last_error();
         if ($err !== JSON_ERROR_NONE) {
             throw new ResponseFormatException('json_encode failed to encode');

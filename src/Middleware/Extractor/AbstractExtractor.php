@@ -128,7 +128,7 @@ abstract class AbstractExtractor extends AbstractMiddleware
                 $this->buildPropertyList(
                     $defaultPropertyList[$filterProperty],
                     $filterPropertyList[$filterProperty],
-                    $list
+                    $list[$filterProperty]
                 );
                 continue;
             }
