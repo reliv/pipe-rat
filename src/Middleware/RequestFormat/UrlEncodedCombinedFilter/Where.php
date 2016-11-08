@@ -48,7 +48,7 @@ class Where extends AbstractUrlEncodedCombinedFilter implements Middleware
         $allowDeepWheres = $this->getOption($request, 'allowDeepWheres', false);
 
         if ($allowDeepWheres) {
-            return $out($request, $response);
+            return $out($request->withAttribute('whereFilterParam', $where), $response);
         }
 
         foreach ($where as $whereChunk) {
