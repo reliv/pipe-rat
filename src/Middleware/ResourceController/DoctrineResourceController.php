@@ -223,11 +223,7 @@ class DoctrineResourceController extends AbstractResourceController
     {
         $repo = $this->getRepository($request);
 
-        try {
-            $where = $this->getWhere($request);
-        } catch (InvalidWhereException $e) {
-            return $response->withStatus(400);
-        }
+        $where = $this->getWhere($request);
 
         try {
             $results = $repo->findBy(

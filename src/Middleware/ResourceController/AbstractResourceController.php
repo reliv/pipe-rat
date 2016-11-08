@@ -79,21 +79,7 @@ abstract class AbstractResourceController extends AbstractMiddleware
      */
     public function getWhere(Request $request)
     {
-        $allowDeepWheres = $this->getOption($request, 'allowDeepWheres', false);
-
-        $where = $request->getAttribute('whereFilterParam', []);
-
-        if ($allowDeepWheres) {
-            return $where;
-        }
-
-        foreach ($where as $whereChunk) {
-            if (is_array($whereChunk)) {
-                throw new InvalidWhereException();
-            }
-        }
-
-        return $where;
+        return $request->getAttribute('whereFilterParam', []);
     }
 
     /**
