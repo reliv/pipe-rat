@@ -87,22 +87,39 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
                 $data[$property] = $this->getDataFromArray($property, $dataModel);
             }
 
-            // @todo NOTE: If a Traversable object is found and the object has properties
-            // A __collection will be created as an additional property
-            $collection = null;
 
-            if (is_array($configValue) && $this->isTraversable($data[$property])) {
-                $collection = $this->getCollectionProperties(
+            if (is_array($configValue) && !is_object($data[$property]) && $this->isTraversable($data[$property])) {
+                $data[$property] = $this->getCollectionProperties(
                     $data[$property],
                     $configValue,
                     $depth + 1,
                     $depthLimit
                 );
+                continue;
             }
 
-            if (is_array($configValue) && is_object($data[$property])) {
-
+            if (is_array($configValue) && is_object($data[$property]) && !$this->isTraversable($data[$property])) {
                 $data[$property] = $this->getProperties(
+                    $data[$property],
+                    $configValue,
+                    $depth + 1,
+                    $depthLimit
+                );
+                continue;
+            }
+
+
+            if (is_array($configValue) && is_object($data[$property]) && $this->isTraversable($data[$property])) {
+
+                // @todo Support Traversable object that has properties
+                //$props = $this->getProperties(
+                //    $data[$property],
+                //    $configValue,
+                //    $depth + 1,
+                //    $depthLimit
+                //);
+
+                $collection = $this->getCollectionProperties(
                     $data[$property],
                     $configValue,
                     $depth + 1,
@@ -110,14 +127,11 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
                 );
 
                 if (is_array($collection)) {
-                    $data[$property]['__collection'] = $collection;
-                    $collection = null;
+                    $data[$property] = $collection;
                 }
+                continue;
             }
 
-            if (is_array($collection)) {
-                $data[$property] = $collection;
-            }
         }
 
         return $data;
