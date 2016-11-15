@@ -29,31 +29,33 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
      * extract
      *
      * @param \stdClass|array $dataModel
-     * @param Options $options
+     * @param Options         $options
      *
      * @return array
      */
     public function extract($dataModel, Options $options)
     {
-        $properties = $this->getPropertyList($options, null);
+        $propertyList = $this->getPropertyList($options, null);
 
         // If no properties are set, we get them all if we can
-        if (!is_array($properties)) {
-            $properties = $this->getPropertyListFromProperties($dataModel);
+        if (!is_array($propertyList)) {
+            $propertyList = $this->getPropertyListFromProperties($dataModel);
         }
 
         $depthLimit = $this->getPropertyDepthLimit($options, 1);
 
-        return $this->getProperties($dataModel, $properties, 1, $depthLimit);
+        $properties = $this->getProperties($dataModel, $propertyList, 1, $depthLimit);
+
+        return $properties;
     }
 
     /**
      * getProperties
      *
      * @param \stdClass|array $dataModel $dataModel
-     * @param array $properties
-     * @param int $depth
-     * @param int $depthLimit
+     * @param array           $properties
+     * @param int             $depth
+     * @param int             $depthLimit
      *
      * @return array
      */
@@ -85,13 +87,36 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
                 $data[$property] = $this->getDataFromArray($property, $dataModel);
             }
 
-            if (is_array($configValue)) {
-                $data[$property] = $this->getCollectionProperties(
+            // @todo NOTE: If a Traversable object is found and the object has properties
+            // A __collection will be created as an additional property
+            $collection = null;
+
+            if (is_array($configValue) && $this->isTraversable($data[$property])) {
+                $collection = $this->getCollectionProperties(
                     $data[$property],
                     $configValue,
                     $depth + 1,
                     $depthLimit
                 );
+            }
+
+            if (is_array($configValue) && is_object($data[$property])) {
+
+                $data[$property] = $this->getProperties(
+                    $data[$property],
+                    $configValue,
+                    $depth + 1,
+                    $depthLimit
+                );
+
+                if (is_array($collection)) {
+                    $data[$property]['__collection'] = $collection;
+                    $collection = null;
+                }
+            }
+
+            if (is_array($collection)) {
+                $data[$property] = $collection;
             }
         }
 
@@ -102,8 +127,8 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
      * getDataFromArray
      *
      * @param string $property
-     * @param array $dataModel
-     * @param null $default
+     * @param array  $dataModel
+     * @param null   $default
      *
      * @return mixed|null
      */
@@ -119,9 +144,9 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
     /**
      * getDataFromObject
      *
-     * @param string $property
+     * @param string    $property
      * @param \stdClass $dataModel
-     * @param null $default
+     * @param null      $default
      *
      * @return mixed|null
      */
@@ -146,9 +171,9 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
      * getCollectionProperties
      *
      * @param array|\Traversable $collectionDataModel
-     * @param array $properties
-     * @param int $depth
-     * @param int $depthLimit
+     * @param array              $properties
+     * @param int                $depth
+     * @param int                $depthLimit
      *
      * @return array
      * @throws ExtractorException
