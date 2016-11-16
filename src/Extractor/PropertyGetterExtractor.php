@@ -87,7 +87,6 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
                 $data[$property] = $this->getDataFromArray($property, $dataModel);
             }
 
-
             if (is_array($configValue) && !is_object($data[$property]) && $this->isTraversable($data[$property])) {
                 $data[$property] = $this->getCollectionProperties(
                     $data[$property],
@@ -108,16 +107,7 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
                 continue;
             }
 
-
             if (is_array($configValue) && is_object($data[$property]) && $this->isTraversable($data[$property])) {
-
-                // @todo Support Traversable object that has properties
-                //$props = $this->getProperties(
-                //    $data[$property],
-                //    $configValue,
-                //    $depth + 1,
-                //    $depthLimit
-                //);
 
                 $collection = $this->getCollectionProperties(
                     $data[$property],
@@ -126,9 +116,25 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
                     $depthLimit
                 );
 
-                if (is_array($collection)) {
-                    $data[$property] = $collection;
+                $data[$property] = $collection;
+
+                // Support traversable object that has properties
+                if (array_key_exists('__collectionProperties', $configValue)
+                    && is_array(
+                        $configValue['__collectionProperties']
+                    )
+                ) {
+                    $props = $this->getProperties(
+                        $data[$property],
+                        $configValue['__collectionProperties'],
+                        $depth + 1,
+                        $depthLimit
+                    );
+                    $data[$property] = [];
+                    $data[$property]['collection'] = $collection;
+                    $data[$property]['properties'] = $props;
                 }
+
                 continue;
             }
 
@@ -158,9 +164,9 @@ class PropertyGetterExtractor extends AbstractExtractor implements Extractor
     /**
      * getDataFromObject
      *
-     * @param string    $property
+     * @param string $property
      * @param \stdClass $dataModel
-     * @param null      $default
+     * @param null $default
      *
      * @return mixed|null
      */
