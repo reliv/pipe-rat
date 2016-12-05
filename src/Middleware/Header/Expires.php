@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
 
 /**
+ * @todo Make this work
  * Middleware to send Expires header.
  */
 class Expires extends AbstractMiddleware
@@ -53,7 +54,6 @@ class Expires extends AbstractMiddleware
                 ->withHeader('Cache-Control', trim($cacheControl))
                 ->withAddedHeader('Cache-Control', 'public')
                 ->withHeader('Expires', $expires->format('D, d M Y H:i:s') . ' GMT')
-                ->withHeader('Last-Modified', 'Tue, 09 Aug 2016 14:41:46 GMT')//@TODO RM
                 ->withHeader('Pragma', 'public')
         );
     }
