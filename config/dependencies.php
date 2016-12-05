@@ -43,6 +43,7 @@ return [
 
         // Header
         Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class => [],
+        Reliv\PipeRat\Middleware\Header\CacheMaxAge::class => [],
         Reliv\PipeRat\Middleware\Header\Expires::class => [],
 
         // InputFilter
