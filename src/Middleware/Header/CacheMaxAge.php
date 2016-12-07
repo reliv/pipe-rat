@@ -30,7 +30,7 @@ class CacheMaxAge extends AbstractMiddleware
         }
 
         $pragma = $options->get('pragma', 'cache');
-        $maxAge = $options->get('max-age', '86400');
+        $maxAge = $options->get('max-age', '3600');
         // $lastModifiedDefault = new \DateTime('@0');
         // $lastModified = $lastModifiedDefault->format('D, d M Y H:i:s') . ' GMT';
 
