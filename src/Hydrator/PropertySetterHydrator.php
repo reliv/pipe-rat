@@ -22,9 +22,9 @@ class PropertySetterHydrator extends AbstractHydrator implements Hydrator
     /**
      * hydrate
      *
-     * @param array           $data
+     * @param array $data
      * @param \stdClass|array $dataModel
-     * @param Options         $options
+     * @param Options $options
      *
      * @return void
      */
@@ -60,7 +60,7 @@ class PropertySetterHydrator extends AbstractHydrator implements Hydrator
                 continue;
             }
 
-            if (is_object($dataModel)) {
+            if (is_object($dataModel) && array_key_exists($property, $data)) {
                 $this->setDataToObject($property, $data[$property], $dataModel);
             }
 
@@ -74,8 +74,8 @@ class PropertySetterHydrator extends AbstractHydrator implements Hydrator
      * setDataToArray
      *
      * @param string $property
-     * @param mixed  $value
-     * @param array  $dataModel
+     * @param mixed $value
+     * @param array $dataModel
      *
      * @return void
      */
@@ -103,7 +103,7 @@ class PropertySetterHydrator extends AbstractHydrator implements Hydrator
             $dataModel->$method($value);
         }
     }
-    
+
     /**
      * getPropertiesByMethods
      *
@@ -124,7 +124,7 @@ class PropertySetterHydrator extends AbstractHydrator implements Hydrator
         foreach ($methods as $method) {
 
             $prefixLen = strlen(self::METHOD_PREFIX);
-            if (substr($method, 0, strlen($prefixLen)) === self::METHOD_PREFIX) {
+            if (substr($method, 0, $prefixLen) == self::METHOD_PREFIX) {
                 $property = lcfirst(substr($method, $prefixLen));
                 $properties[$property] = true;
             }
