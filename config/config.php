@@ -253,12 +253,14 @@ return [
             ],
             'options' => [],
             'preServiceNames' => [
-//                'JsonRequestFormat' => Reliv\PipeRat\Middleware\RequestFormat\JsonRequestFormat::class,
+                'JsonRequestFormat' => Reliv\PipeRat\Middleware\RequestFormat\JsonRequestFormat::class,
+                //'BodyParams' => Zend\Expressive\Helper\BodyParams\BodyParamsMiddleware::class,
             ],
             'preServiceOptions' => [
             ],
             'preServicePriority' => [
-//                'JsonRequestFormat' => 1000,
+                'JsonRequestFormat' => 1000,
+                //'BodyParams' => 1000,
             ],
             'postServiceNames' => [
                 'finalResponseHeaders' => Reliv\PipeRat\Middleware\Header\AddResponseHeaders::class,
