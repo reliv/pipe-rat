@@ -60,7 +60,7 @@ class PropertySetterHydrator extends AbstractHydrator implements Hydrator
                 continue;
             }
 
-            if (is_object($dataModel)) {
+            if (is_object($dataModel) && isset($data[$property])) {
                 $this->setDataToObject($property, $data[$property], $dataModel);
             }
 
