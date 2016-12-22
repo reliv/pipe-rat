@@ -414,7 +414,6 @@ class DoctrineResourceController extends AbstractResourceController
         $entity,
         Request $request
     ) {
-
         $this->getHydrator()->hydrate(
             $request->getParsedBody(),
             $entity,
