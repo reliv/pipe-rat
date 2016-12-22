@@ -8,6 +8,7 @@ return [
         Reliv\PipeRat\Extractor\CollectionPropertyGetterExtractor::class => [],
         Reliv\PipeRat\Extractor\PropertyGetterExtractor::class => [],
 
+
         /* Resource Controllers */
         Reliv\PipeRat\Middleware\ResourceController\DoctrineResourceController::class => [
             'arguments' => [
@@ -67,6 +68,8 @@ return [
         Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter\Skip::class => [],
         Reliv\PipeRat\Middleware\RequestFormat\JsonParamsFilter\Where::class => [],
         Reliv\PipeRat\Middleware\RequestFormat\JsonParamsRequestFormat::class => [],
+        Reliv\PipeRat\Middleware\RequestFormat\JsonRequestFormat::class => [],
+
 
         // Response Formatter
         Reliv\PipeRat\Middleware\ResponseFormat\FileDataResponseFormat::class => [
