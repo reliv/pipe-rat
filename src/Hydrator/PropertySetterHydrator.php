@@ -124,12 +124,11 @@ class PropertySetterHydrator extends AbstractHydrator implements Hydrator
         foreach ($methods as $method) {
 
             $prefixLen = strlen(self::METHOD_PREFIX);
-            if (substr($method, 0, strlen($prefixLen)) === self::METHOD_PREFIX) {
+            if (substr($method, 0, $prefixLen) == self::METHOD_PREFIX) {
                 $property = lcfirst(substr($method, $prefixLen));
                 $properties[$property] = true;
             }
         }
-
         return $properties;
     }
 }
