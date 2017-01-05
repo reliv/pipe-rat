@@ -21,7 +21,29 @@ abstract class AbstractRequestFormat extends AbstractMiddleware
     /**
      * @var array
      */
+    protected $methodsWithBody = [
+        'POST',
+        'PUT',
+        'PATCH'
+    ];
+    /**
+     * @var array
+     */
     protected $defaultContentTypes = [];
+
+    /**
+     * isValidMethod
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    public function isValidMethod(Request $request)
+    {
+        $method = $request->getMethod();
+
+        return in_array($method, $this->methodsWithBody);
+    }
 
     /**
      * isValidAcceptType

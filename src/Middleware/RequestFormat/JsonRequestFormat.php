@@ -22,22 +22,28 @@ class JsonRequestFormat extends AbstractRequestFormat implements Middleware
     /**
      * @var array
      */
-    protected $defaultContentTypes = [
-        'application/json',
-    ];
+    protected $defaultContentTypes
+        = [
+            'application/json',
+        ];
 
     /**
      * If the request is of type application/json, this middleware
      * decodes the json in the body and puts it in the "body" attribute
      * in the request.
      *
-     * @param Request $request
-     * @param Response $response
+     * @param Request       $request
+     * @param Response      $response
      * @param null|callable $out
+     *
      * @return null|Response
      */
     public function __invoke(Request $request, Response $response, callable $out = null)
     {
+        if (!$this->isValidMethod($request)) {
+            return $out($request, $response);
+        }
+
         if ($this->isValidContentType($request)) {
             $body = json_decode($request->getBody()->getContents(), true);
 
