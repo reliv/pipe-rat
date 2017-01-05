@@ -3,8 +3,9 @@
 namespace Reliv\PipeRat\ResponseModel;
 
 use Zend\InputFilter\CollectionInputFilter;
-use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Input;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
 
 /**
  * Class ZfInputFilterMessageResponseModels
@@ -44,12 +45,12 @@ class ZfInputFilterMessageResponseModels extends MessageResponseModels
     protected $primaryCode = 'error';
 
     /**
-     * @param InputFilter $inputFilter
-     * @param string      $primaryMessage
-     * @param array       $params
+     * @param InputFilterInterface $inputFilter
+     * @param string               $primaryMessage
+     * @param array                $params
      */
     public function __construct(
-        InputFilter $inputFilter,
+        InputFilterInterface $inputFilter,
         $primaryMessage = 'An Error Occurred',
         $params = []
     ) {
@@ -60,12 +61,12 @@ class ZfInputFilterMessageResponseModels extends MessageResponseModels
     /**
      * build
      *
-     * @param InputFilter $inputFilter
-     * @param array       $params
+     * @param InputFilterInterface $inputFilter
+     * @param array                $params
      *
      * @return void
      */
-    public function build(InputFilter $inputFilter, $params = [])
+    public function build(InputFilterInterface $inputFilter, $params = [])
     {
 
         if ($inputFilter instanceof MessageParam) {

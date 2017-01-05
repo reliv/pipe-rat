@@ -2,12 +2,10 @@
 
 namespace Reliv\PipeRat\Middleware\InputFilter;
 
-use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
-use Reliv\PipeRat\ResponseModel\ZfInputFilterMessageResponseModels;
 use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
 
 /**
  * Class ZfInputFilterConfig
@@ -17,18 +15,16 @@ use Zend\InputFilter\InputFilter;
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class ZfInputFilterConfig extends AbstractMiddleware implements Middleware
+class ZfInputFilterConfig extends AbstractZfInputFilter implements Middleware
 {
     /**
-     * __invoke
+     * getInputFilter
      *
-     * @param Request       $request
-     * @param Response      $response
-     * @param callable|null $out
+     * @param Request $request
      *
-     * @return mixed
+     * @return InputFilterInterface
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    protected function getInputFilter(Request $request)
     {
         $filterConfig = $this->getOption($request, 'config', []);
 
@@ -44,20 +40,6 @@ class ZfInputFilterConfig extends AbstractMiddleware implements Middleware
             );
         }
 
-        $dataModel = $request->getParsedBody();
-
-        $inputFilter->setData($dataModel);
-
-        if ($inputFilter->isValid()) {
-            return $out($request, $response);
-        }
-
-        $messages = new ZfInputFilterMessageResponseModels(
-            $inputFilter,
-            $this->getOption($request, 'primaryMessage', 'An Error Occurred'),
-            $this->getOption($request, 'messageParams', [])
-        );
-
-        return $this->getResponseWithDataBody($response, $messages);
+        return $inputFilter;
     }
 }

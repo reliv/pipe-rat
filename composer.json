@@ -36,6 +36,10 @@
   "require-maybe": {
     "zircote/swagger-php": "^2.0"
   },
+  "suggest": {
+    "rcm/user": "rcm/user for user and ACL",
+    "reliv/zf-input-filter-service": "reliv/zf-input-filter-service for input filtering with services"
+  },
   "autoload": {
     "psr-4": {
       "Reliv\\PipeRat\\": "src/"

@@ -55,6 +55,11 @@ return [
                 'ServiceManager',
             ],
         ],
+        Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterServiceConfig::class => [
+            'arguments' => [
+                \ZfInputFilterService\InputFilter\ServiceAwareFactory::class,
+            ],
+        ],
 
         // Request Formatter
         Reliv\PipeRat\Middleware\RequestFormat\UrlEncodedCombinedFilter\Fields::class => [],
@@ -88,6 +93,7 @@ return [
                 Reliv\PipeRat\Extractor\PropertyGetterExtractor::class,
             ],
         ],
+        Reliv\PipeRat\Middleware\ResponseFormat\JsonErrorResponseFormat::class => [],
         Reliv\PipeRat\Middleware\ResponseFormat\JsonResponseFormat::class => [],
         Reliv\PipeRat\Middleware\ResponseFormat\XmlResponseFormat::class => [],
 

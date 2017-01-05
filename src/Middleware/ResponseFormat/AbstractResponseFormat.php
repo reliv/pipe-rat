@@ -20,6 +20,41 @@ abstract class AbstractResponseFormat extends AbstractMiddleware
      * @var array
      */
     protected $defaultAcceptTypes = [];
+
+    /**
+     * @var array
+     */
+    protected $successStatusCodes = [
+        200,
+    ];
+
+    /**
+     * isError
+     *
+     * @param Request  $request
+     * @param Response $response
+     *
+     * @return bool
+     */
+    public function isError(Request $request, Response $response)
+    {
+        return !$this->isSuccess($request, $response);
+    }
+
+    /**
+     * isSuccess
+     *
+     * @param Request  $request
+     * @param Response $response
+     *
+     * @return bool
+     */
+    public function isSuccess(Request $request, Response $response)
+    {
+        $successStatusCodes = $this->getOption($request, 'successStatusCodes ', $this->successStatusCodes);
+
+        return in_array($response->getStatusCode(), $successStatusCodes);
+    }
     
     /**
      * isValidAcceptType

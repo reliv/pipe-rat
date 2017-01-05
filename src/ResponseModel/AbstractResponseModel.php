@@ -130,7 +130,7 @@ abstract class AbstractResponseModel implements ResponseModel
             $properties[$propertyName] = true;
         }
 
-        return $this->getAllProperties();
+        return $this->getProperties($properties);
     }
 
     /**
