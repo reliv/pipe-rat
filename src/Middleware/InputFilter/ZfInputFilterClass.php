@@ -14,7 +14,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class ZfInputFilterClass extends AbstractZfInputFilterClass implements Middleware
+class ZfInputFilterClass extends AbstractZfInputFilter implements Middleware
 {
     /**
      * getInputFilter

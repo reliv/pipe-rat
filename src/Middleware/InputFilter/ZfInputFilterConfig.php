@@ -2,11 +2,8 @@
 
 namespace Reliv\PipeRat\Middleware\InputFilter;
 
-use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
-use Reliv\PipeRat\ResponseModel\ZfInputFilterMessageResponseModels;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
@@ -18,7 +15,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class ZfInputFilterConfig extends AbstractZfInputFilterClass implements Middleware
+class ZfInputFilterConfig extends AbstractZfInputFilter implements Middleware
 {
     /**
      * getInputFilter

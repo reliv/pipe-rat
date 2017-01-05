@@ -11,14 +11,14 @@ use Reliv\PipeRat\ResponseModel\ZfInputFilterMessageResponseModels;
 use Zend\InputFilter\InputFilterInterface;
 
 /**
- * Class AbstractZfInputFilterClass
+ * Class AbstractZfInputFilter
  *
  * @author    James Jervis <jjervis@relivinc.com>
  * @copyright 2016 Reliv International
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-abstract class AbstractZfInputFilterClass extends AbstractMiddleware implements Middleware
+abstract class AbstractZfInputFilter extends AbstractMiddleware implements Middleware
 {
     /**
      * getInputFilter
@@ -61,10 +61,8 @@ abstract class AbstractZfInputFilterClass extends AbstractMiddleware implements 
      */
     public function __invoke(Request $request, Response $response, callable $out = null)
     {
-        $filterClass = $this->getOption($request, 'class', '');
-
         /** @var InputFilterInterface $inputFilter */
-        $inputFilter = new $filterClass();
+        $inputFilter = $this->getInputFilter($request);
 
         $dataModel = $request->getParsedBody();
 
@@ -80,6 +78,12 @@ abstract class AbstractZfInputFilterClass extends AbstractMiddleware implements 
             $this->getOption($request, 'messageParams', [])
         );
 
-        return $this->getResponseWithDataBody($response, $messages);
+        $response = $this->getResponseWithDataBody($response, $messages);
+
+        $status = $this->getOption($request, 'badRequestStatus', 400);
+
+        $response = $response->withStatus($status);
+
+        return $out($request, $response);
     }
 }

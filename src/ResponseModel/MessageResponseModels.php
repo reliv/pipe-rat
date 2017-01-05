@@ -82,6 +82,16 @@ class MessageResponseModels extends AbstractResponseModel implements \IteratorAg
     }
 
     /**
+     * getMessages
+     *
+     * @return array
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+
+    /**
      * getIndex
      *
      * @param $key
