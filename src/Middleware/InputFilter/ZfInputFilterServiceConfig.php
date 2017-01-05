@@ -9,17 +9,35 @@ use Reliv\PipeRat\Middleware\Middleware;
 use Reliv\PipeRat\ResponseModel\ZfInputFilterMessageResponseModels;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
+use ZfInputFilterService\InputFilter\ServiceAwareFactory;
+use ZfInputFilterService\InputFilter\ServiceAwareInputFilter;
 
 /**
- * Class ZfInputFilterConfig
+ * Class ZfInputFilterServiceConfig
  *
  * @author    James Jervis <jjervis@relivinc.com>
  * @copyright 2016 Reliv International
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class ZfInputFilterConfig extends AbstractZfInputFilterClass implements Middleware
+class ZfInputFilterServiceConfig extends AbstractZfInputFilterClass implements Middleware
 {
+    /**
+     * @var ServiceAwareFactory
+     */
+    protected $serviceAwareFactory;
+
+    /**
+     * Constructor.
+     *
+     * @param ServiceAwareFactory $serviceAwareFactory
+     */
+    public function __construct(
+        ServiceAwareFactory $serviceAwareFactory
+    ) {
+        $this->serviceAwareFactory = $serviceAwareFactory;
+    }
+
     /**
      * getInputFilter
      *
@@ -31,18 +49,9 @@ class ZfInputFilterConfig extends AbstractZfInputFilterClass implements Middlewa
     {
         $filterConfig = $this->getOption($request, 'config', []);
 
-        $inputFilter = new InputFilter();
-
-        $factory = $inputFilter->getFactory();
-
-        foreach ($filterConfig as $field => $config) {
-            $inputFilter->add(
-                $factory->createInput(
-                    $config
-                )
-            );
-        }
-
-        return $inputFilter;
+        return new ServiceAwareInputFilter(
+            $this->serviceAwareFactory,
+            $filterConfig
+        );
     }
 }

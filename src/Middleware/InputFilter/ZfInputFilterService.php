@@ -9,6 +9,7 @@ use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
 use Reliv\PipeRat\ResponseModel\ZfInputFilterMessageResponseModels;
 use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
 
 /**
  * Class ZfInputFilterService
@@ -18,7 +19,7 @@ use Zend\InputFilter\InputFilter;
  * @license   License.txt
  * @link      https://github.com/reliv
  */
-class ZfInputFilterService extends AbstractMiddleware implements Middleware
+class ZfInputFilterService extends AbstractZfInputFilterClass implements Middleware
 {
     /**
      * @var ContainerInterface
@@ -35,37 +36,19 @@ class ZfInputFilterService extends AbstractMiddleware implements Middleware
     }
 
     /**
-     * __invoke
+     * getInputFilter
      *
-     * @param Request       $request
-     * @param Response      $response
-     * @param callable|null $out
+     * @param Request $request
      *
-     * @return mixed
+     * @return InputFilterInterface
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    protected function getInputFilter(Request $request)
     {
         $filterService = $this->getOption($request, 'serviceName', '');
 
         /** @var InputFilter $service */
         $service = $this->serviceManager->get($filterService);
 
-        $inputFilter = clone($service);
-
-        $dataModel = $request->getParsedBody();
-
-        $inputFilter->setData($dataModel);
-
-        if ($inputFilter->isValid()) {
-            return $out($request, $response);
-        }
-
-        $messages = new ZfInputFilterMessageResponseModels(
-            $inputFilter,
-            $this->getOption($request, 'primaryMessage', 'An Error Occurred'),
-            $this->getOption($request, 'messageParams', [])
-        );
-
-        return $this->getResponseWithDataBody($response, $messages);
+        return clone($service);
     }
 }
