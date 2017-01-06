@@ -4,6 +4,7 @@ namespace Reliv\PipeRat\Middleware\InputFilter;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Middleware\Middleware;
+use Reliv\PipeRat\ZfInputFilter\Hydrator\ZfInputFilterErrorHydrator;
 use Zend\InputFilter\InputFilterInterface;
 use ZfInputFilterService\InputFilter\ServiceAwareFactory;
 use ZfInputFilterService\InputFilter\ServiceAwareInputFilter;
@@ -26,12 +27,17 @@ class ZfInputFilterServiceConfig extends AbstractZfInputFilter implements Middle
     /**
      * Constructor.
      *
-     * @param ServiceAwareFactory $serviceAwareFactory
+     * @param ZfInputFilterErrorHydrator $zfInputFilterErrorHydrator
+     * @param ServiceAwareFactory        $serviceAwareFactory
      */
     public function __construct(
+        ZfInputFilterErrorHydrator $zfInputFilterErrorHydrator,
         ServiceAwareFactory $serviceAwareFactory
     ) {
         $this->serviceAwareFactory = $serviceAwareFactory;
+        parent::__construct(
+            $zfInputFilterErrorHydrator
+        );
     }
 
     /**

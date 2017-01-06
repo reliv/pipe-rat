@@ -48,15 +48,25 @@ return [
         Reliv\PipeRat\Middleware\Header\Expires::class => [],
 
         // InputFilter
-        Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterClass::class => [],
-        Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterConfig::class => [],
+        Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterClass::class => [
+            'arguments' => [
+                \Reliv\PipeRat\ZfInputFilter\Hydrator\ZfInputFilterErrorHydrator::class,
+            ],
+        ],
+        Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterConfig::class => [
+            'arguments' => [
+                \Reliv\PipeRat\ZfInputFilter\Hydrator\ZfInputFilterErrorHydrator::class,
+            ],
+        ],
         Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterService::class => [
             'arguments' => [
+                \Reliv\PipeRat\ZfInputFilter\Hydrator\ZfInputFilterErrorHydrator::class,
                 'ServiceManager',
             ],
         ],
         Reliv\PipeRat\Middleware\InputFilter\ZfInputFilterServiceConfig::class => [
             'arguments' => [
+                \Reliv\PipeRat\ZfInputFilter\Hydrator\ZfInputFilterErrorHydrator::class,
                 \ZfInputFilterService\InputFilter\ServiceAwareFactory::class,
             ],
         ],
@@ -128,5 +138,13 @@ return [
                 'ServiceManager',
             ],
         ],
+        /* ZfInputFilter */
+        Reliv\PipeRat\ZfInputFilter\Hydrator\ZfInputFilterErrorHydrator::class => [
+            'arguments' => [
+                Reliv\PipeRat\ZfInputFilter\Service\FieldErrorsFactory::class
+            ],
+        ],
+
+        Reliv\PipeRat\ZfInputFilter\Service\FieldErrorsFactory::class => [],
     ],
 ];
