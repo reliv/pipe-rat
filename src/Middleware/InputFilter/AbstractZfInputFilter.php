@@ -4,11 +4,8 @@ namespace Reliv\PipeRat\Middleware\InputFilter;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\PipeRat\ErrorResponse\Model\BasicErrorResponse;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
-use Reliv\PipeRat\ResponseModel\ResponseModel;
-use Reliv\PipeRat\ResponseModel\ZfInputFilterMessageResponseModels;
 use Reliv\PipeRat\ZfInputFilter\Hydrator\ZfInputFilterErrorHydrator;
 use Reliv\PipeRat\ZfInputFilter\Model\InputFilterError;
 use Zend\InputFilter\InputFilterInterface;
