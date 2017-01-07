@@ -1,38 +1,25 @@
 <?php
 
-
-namespace Reliv\PipeRat\ResponseModel;
-
+namespace Reliv\PipeRat\Http;
 
 /**
- * Class HttpStatusCodeMessageResponseModel
+ * Class StatusCodes
  *
- * LongDescHere
- *
- * PHP version 5
- *
- * @category  Reliv
- * @package   Reliv\PipeRat\ResponseModel
- * @author    James Jervis <jjervis@relivinc.com>
- * @copyright 2016 Reliv International
- * @license   License.txt New BSD License
- * @version   Release: <package_version>
- * @link      https://github.com/reliv
+ * @author    James Jervis
+ * @license   License.txt
+ * @link      https://github.com/jerv13
  */
-
-class HttpStatusCodeMessageResponseModel extends MessageResponseModel
+class StatusCodes
 {
-
-    /**
-     * @var int
-     */
-    protected $statusCode = 200;
+    const DEFAULT_CODE = 0;
+    const DEFAULT_PHRASE = 'Unknown Error';
 
     /**
      * @var array Reason Phrases
      */
-    protected $reasonPhrases = [
-            0 => 'Unknown Error',
+    protected static $reasonPhrases
+        = [
+            0 => self::DEFAULT_PHRASE,
             // INFORMATIONAL CODES
             100 => 'Continue',
             101 => 'Switching Protocols',
@@ -98,86 +85,35 @@ class HttpStatusCodeMessageResponseModel extends MessageResponseModel
         ];
 
     /**
-     * HttpStatusCodeMessageResponseModel constructor.
+     * getReasonPhrase
      *
-     * @param int   $statusCode
-     * @param array $params
-     * @param bool  $primary
-     * @param array $reasonPhrases
+     * @param int    $statusCode
+     * @param string $default
+     *
+     * @return mixed
      */
-    public function __construct(
-        $statusCode = 200,
-        $params = [],
-        $primary = true,
-        array $reasonPhrases = []
-    ) {
-        $this->setStatusCode($statusCode);
-        $this->setParams($params);
-        $this->setPrimary($primary);
-        $this->reasonPhrases = array_merge($this->reasonPhrases, $reasonPhrases);
-    }
-
-    /**
-     * setStatusCode
-     *
-     * @param $statusCode
-     *
-     * @return void
-     * @throws \Exception
-     */
-    public function setStatusCode($statusCode)
+    public static function getReasonPhrase($statusCode, $default = self::DEFAULT_PHRASE)
     {
-        if (!$this->isValidStatusCode($statusCode)) {
-            throw new \Exception("Status code {$statusCode} is not valid");
-        }
-        $this->statusCode = (int)$statusCode;
+        $statusCode = (int)$statusCode;
 
-        $this->setType('httpStatus');
-        $this->setValue($this->getReasonPhrase($statusCode));
-        $this->buildSource($statusCode);
-        $this->setCode((string)$statusCode);
+        if (self::isValidStatusCode($statusCode)) {
+            return self::$reasonPhrases[$statusCode];
+        }
+
+        return $default;
     }
 
     /**
      * isValidStatusCode
      *
-     * @param $statusCode
+     * @param int $statusCode
      *
      * @return bool
      */
-    public function isValidStatusCode($statusCode)
+    public static function isValidStatusCode($statusCode)
     {
-        return isset($this->reasonPhrases[$statusCode]);
-    }
+        $statusCode = (int)$statusCode;
 
-    /**
-     * getReasonPhrase
-     *
-     * @param int $code
-     *
-     * @return mixed
-     */
-    public function getReasonPhrase($code)
-    {
-        $code = (int)$code;
-        if (isset($this->reasonPhrases[$code])) {
-            return $this->reasonPhrases[$code];
-        }
-
-        return $this->reasonPhrases[0];
-    }
-
-    /**
-     * buildSource
-     *
-     * @param int $statusCode
-     *
-     * @return void
-     */
-    public function buildSource($statusCode)
-    {
-        $source = $this->getReasonPhrase($statusCode);
-        $source = lcfirst(str_replace(" ", "", $source));
-        $this->setSource($source);
+        return (array_key_exists($statusCode, self::$reasonPhrases));
     }
 }

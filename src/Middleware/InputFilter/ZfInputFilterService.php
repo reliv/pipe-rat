@@ -5,6 +5,7 @@ namespace Reliv\PipeRat\Middleware\InputFilter;
 use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Middleware\Middleware;
+use Reliv\PipeRat\ZfInputFilter\Hydrator\ZfInputFilterErrorHydrator;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
@@ -24,12 +25,19 @@ class ZfInputFilterService extends AbstractZfInputFilter implements Middleware
     protected $serviceManager;
 
     /**
-     * @param ContainerInterface $serviceManager
+     * Constructor.
+     *
+     * @param ZfInputFilterErrorHydrator $zfInputFilterErrorHydrator
+     * @param                            $serviceManager
      */
     public function __construct(
+        ZfInputFilterErrorHydrator $zfInputFilterErrorHydrator,
         $serviceManager
     ) {
         $this->serviceManager = $serviceManager;
+        parent::__construct(
+            $zfInputFilterErrorHydrator
+        );
     }
 
     /**

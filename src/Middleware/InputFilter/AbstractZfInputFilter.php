@@ -6,8 +6,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
-use Reliv\PipeRat\ResponseModel\ResponseModel;
-use Reliv\PipeRat\ResponseModel\ZfInputFilterMessageResponseModels;
+use Reliv\PipeRat\ZfInputFilter\Hydrator\ZfInputFilterErrorHydrator;
+use Reliv\PipeRat\ZfInputFilter\Model\InputFilterError;
 use Zend\InputFilter\InputFilterInterface;
 
 /**
@@ -21,6 +21,22 @@ use Zend\InputFilter\InputFilterInterface;
 abstract class AbstractZfInputFilter extends AbstractMiddleware implements Middleware
 {
     /**
+     * @var ZfInputFilterErrorHydrator
+     */
+    protected $zfInputFilterErrorHydrator;
+
+    /**
+     * Constructor.
+     *
+     * @param ZfInputFilterErrorHydrator $zfInputFilterErrorHydrator
+     */
+    public function __construct(
+        ZfInputFilterErrorHydrator $zfInputFilterErrorHydrator
+    ) {
+        $this->zfInputFilterErrorHydrator = $zfInputFilterErrorHydrator;
+    }
+
+    /**
      * getInputFilter
      *
      * @param Request $request
@@ -30,24 +46,21 @@ abstract class AbstractZfInputFilter extends AbstractMiddleware implements Middl
     abstract protected function getInputFilter(Request $request);
 
     /**
-     * getResponseModel
+     * getErrorResponse
      *
      * @param InputFilterInterface $inputFilter
-     * @param string               $primaryMessage
-     * @param array                $messageParams
+     * @param array                $options
      *
-     * @return ResponseModel
+     * @return \Reliv\PipeRat\ErrorResponse\Model\Error
      */
-    protected function getResponseModel(
+    protected function getErrorResponse(
         InputFilterInterface $inputFilter,
-        $primaryMessage = 'An Error Occurred',
-        $messageParams = []
+        $options = []
     ) {
-        return new ZfInputFilterMessageResponseModels(
-            $inputFilter,
-            $primaryMessage,
-            $messageParams
-        );
+
+        $error = new InputFilterError();
+
+        return $this->zfInputFilterErrorHydrator->hydrate($error, $inputFilter, $options);
     }
 
     /**
@@ -72,10 +85,9 @@ abstract class AbstractZfInputFilter extends AbstractMiddleware implements Middl
             return $out($request, $response);
         }
 
-        $messages = $this->getResponseModel(
+        $messages = $this->getErrorResponse(
             $inputFilter,
-            $this->getOption($request, 'primaryMessage', 'An Error Occurred'),
-            $this->getOption($request, 'messageParams', [])
+            $this->getOption($request, 'hydratorOptions', [])
         );
 
         $response = $this->getResponseWithDataBody($response, $messages);
