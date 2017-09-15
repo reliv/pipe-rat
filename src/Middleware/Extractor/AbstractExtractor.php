@@ -149,12 +149,14 @@ abstract class AbstractExtractor extends AbstractMiddleware
      *
      * @param Request|DataResponse $request
      * @param Response $response
-     * @param callable|null $out
+     * @param callable|null $next
      *
      * @return static
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    public function __invoke(Request $request, Response $response, callable $next = null)
     {
+        $response = $next($request);
+
         $dataModel = $this->getDataModel($response);
 
         $options = $this->getOptions($request);
@@ -165,6 +167,6 @@ abstract class AbstractExtractor extends AbstractMiddleware
 
         $response = $this->getResponseWithDataBody($response, $dataArray);
 
-        return $out($request, $response);
+        return $response;
     }
 }

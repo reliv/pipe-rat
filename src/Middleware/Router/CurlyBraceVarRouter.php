@@ -32,7 +32,7 @@ class CurlyBraceVarRouter extends AbstractMiddleware implements Middleware
      *
      * @param Request $request
      * @param Response $response
-     * @param callable|null $out
+     * @param callable|null $next
      *
      * @return mixed
      * @throws RouteException
@@ -40,7 +40,7 @@ class CurlyBraceVarRouter extends AbstractMiddleware implements Middleware
     public function __invoke(
         Request $request,
         Response $response,
-        callable $out = null
+        callable $next = null
     ) {
         $aPathMatched = false;
 
@@ -57,7 +57,7 @@ class CurlyBraceVarRouter extends AbstractMiddleware implements Middleware
 
                 foreach ($availableVerbs as $availableVerb => $routeData) {
                     if (strcasecmp($availableVerb, $request->getMethod()) === 0) {
-                        return $out(
+                        return $next(
                             $request->withAttribute(
                                 ResourceKey::ATTRIBUTE_NAME,
                                 $routeData
@@ -79,7 +79,7 @@ class CurlyBraceVarRouter extends AbstractMiddleware implements Middleware
         }
 
         //No paths matched so do nothing and allow other middleware to handle this request.
-        return $out($request, $response);
+        return $next($request, $response);
     }
 
     /**

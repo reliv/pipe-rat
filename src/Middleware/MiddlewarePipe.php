@@ -4,6 +4,7 @@ namespace Reliv\PipeRat\Middleware;
 
 use Reliv\PipeRat\Operation\Operation;
 use Reliv\PipeRat\Operation\OperationCollection;
+use Zend\Diactoros\Response;
 
 /**
  * Class MiddlewarePipe
@@ -15,6 +16,12 @@ use Reliv\PipeRat\Operation\OperationCollection;
  */
 class MiddlewarePipe extends \Zend\Stratigility\MiddlewarePipe
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setResponsePrototype(new Response());
+    }
+
     /**
      * pipeOperations
      *

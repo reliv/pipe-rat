@@ -68,11 +68,11 @@ abstract class AbstractZfInputFilter extends AbstractMiddleware implements Middl
      *
      * @param Request       $request
      * @param Response      $response
-     * @param callable|null $out
+     * @param callable|null $next
      *
      * @return mixed
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    public function __invoke(Request $request, Response $response, callable $next = null)
     {
         /** @var InputFilterInterface $inputFilter */
         $inputFilter = $this->getInputFilter($request);
@@ -82,7 +82,7 @@ abstract class AbstractZfInputFilter extends AbstractMiddleware implements Middl
         $inputFilter->setData($dataModel);
 
         if ($inputFilter->isValid()) {
-            return $out($request, $response);
+            return $next($request, $response);
         }
 
         $messages = $this->getErrorResponse(
@@ -96,6 +96,6 @@ abstract class AbstractZfInputFilter extends AbstractMiddleware implements Middl
 
         $response = $response->withStatus($status);
 
-        return $out($request, $response);
+        return $next($request, $response);
     }
 }

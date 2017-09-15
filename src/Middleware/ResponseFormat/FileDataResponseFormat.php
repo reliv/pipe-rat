@@ -48,9 +48,9 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
     /**
      * withContentType
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
-     * @param array    $properties
+     * @param array $properties
      *
      * @return mixed|string
      */
@@ -89,7 +89,7 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
     /**
      * getProperties
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      *
      * @return array
@@ -137,9 +137,9 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
     /**
      * getProperty
      *
-     * @param array  $list
+     * @param array $list
      * @param string $key
-     * @param null   $default
+     * @param null $default
      *
      * @return null
      */
@@ -155,8 +155,8 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
     /**
      * __invoke
      *
-     * @param Request       $request
-     * @param Response      $response
+     * @param Request $request
+     * @param Response $response
      * @param callable|null $next
      *
      * @return \Psr\Http\Message\MessageInterface
@@ -164,14 +164,19 @@ class FileDataResponseFormat extends AbstractResponseFormat implements Middlewar
      */
     public function __invoke(Request $request, Response $response, callable $next = null)
     {
-        if (!$this->isValidAcceptType($request)) {
-            return $next($request, $response);
-        }
+        $response = $next($request);
 
-        $body = $response->getBody();
+        if (!$this->isValidAcceptType($request)) {
+            return $response;
+        }
 
         $properties = $this->getProperties($request, $response);
 
+        if (!isset($properties['file'])) {
+            return $response;
+        }
+
+        $body = $response->getBody();
         $body->write($properties['file']);
 
         $response = $response->withBody($body);

@@ -94,7 +94,7 @@ class RepositoryResourceController extends AbstractResourceController
      *
      * @return Response
      */
-    public function create(Request $request, Response $response, callable $out)
+    public function create(Request $request, Response $response, callable $next)
     {
         $entityName = $this->getEntityName($request);
         $entity = new $entityName();
@@ -107,7 +107,7 @@ class RepositoryResourceController extends AbstractResourceController
             return $response->withStatus(409);
         }
 
-        return $out($request, $this->getResponseWithDataBody($response, $result));
+        return $next($request, $this->getResponseWithDataBody($response, $result));
     }
 
     /**
@@ -116,11 +116,11 @@ class RepositoryResourceController extends AbstractResourceController
      *
      * @param Request  $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return mixed
      */
-    public function upsert(Request $request, Response $response, callable $out)
+    public function upsert(Request $request, Response $response, callable $next)
     {
         $idFieldName = $this->getEntityIdFieldName($request);
         $body = $request->getParsedBody();
@@ -134,7 +134,7 @@ class RepositoryResourceController extends AbstractResourceController
         $this->populateEntity($entity, $request);
         $result = $this->getRepository($request)->upsert($entity);
 
-        return $out($request, $this->getResponseWithDataBody($response, $result));
+        return $next($request, $this->getResponseWithDataBody($response, $result));
     }
 
     /**
@@ -143,11 +143,11 @@ class RepositoryResourceController extends AbstractResourceController
      *
      * @param Request  $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return \Reliv\PipeRat\Http\DataResponse|Response
      */
-    public function exists(Request $request, Response $response, callable $out)
+    public function exists(Request $request, Response $response, callable $next)
     {
         $id = $this->getRouteParam($request, 'id');
 
@@ -158,10 +158,10 @@ class RepositoryResourceController extends AbstractResourceController
         $result = $this->getRepository($request)->exists($id);
 
         if ($result) {
-            return $out($request, $this->getResponseWithDataBody($response, true));
+            return $next($request, $this->getResponseWithDataBody($response, true));
         }
 
-        return $out($request, $this->getResponseWithDataBody($response->withStatus(404), false));
+        return $next($request, $this->getResponseWithDataBody($response->withStatus(404), false));
     }
 
     /**
@@ -170,11 +170,11 @@ class RepositoryResourceController extends AbstractResourceController
      *
      * @param Request  $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      */
-    public function findById(Request $request, Response $response, callable $out)
+    public function findById(Request $request, Response $response, callable $next)
     {
         $id = $this->getRouteParam($request, 'id');
 
@@ -185,10 +185,10 @@ class RepositoryResourceController extends AbstractResourceController
         $result = $this->getRepository($request)->findById($id);
 
         if (!is_object($result)) {
-            return $out($request, $response->withStatus(404));
+            return $next($request, $response->withStatus(404));
         }
 
-        return $out($request, $this->getResponseWithDataBody($response, $result));
+        return $next($request, $this->getResponseWithDataBody($response, $result));
     }
 
     /**
@@ -197,11 +197,11 @@ class RepositoryResourceController extends AbstractResourceController
      *
      * @param Request  $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return mixed
      */
-    public function find(Request $request, Response $response, callable $out)
+    public function find(Request $request, Response $response, callable $next)
     {
         $repository = $this->getRepository($request);
 
@@ -222,17 +222,17 @@ class RepositoryResourceController extends AbstractResourceController
             return $response->withStatus(400);
         }
 
-        return $out($request, $this->getResponseWithDataBody($response, $results));
+        return $next($request, $this->getResponseWithDataBody($response, $results));
     }
 
     /**
      * @param Request  $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return mixed
      */
-    public function findOne(Request $request, Response $response, callable $out)
+    public function findOne(Request $request, Response $response, callable $next)
     {
         $repository = $this->getRepository($request);
 
@@ -252,7 +252,7 @@ class RepositoryResourceController extends AbstractResourceController
             return $response->withStatus(404);
         }
 
-        return $out($request, $this->getResponseWithDataBody($response, $result));
+        return $next($request, $this->getResponseWithDataBody($response, $result));
     }
 
     /**
@@ -260,11 +260,11 @@ class RepositoryResourceController extends AbstractResourceController
      *
      * @param Request  $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      */
-    public function deleteById(Request $request, Response $response, callable $out)
+    public function deleteById(Request $request, Response $response, callable $next)
     {
         $id = $this->getRouteParam($request, 'id');
 
@@ -278,7 +278,7 @@ class RepositoryResourceController extends AbstractResourceController
             return $response->withStatus(404);
         }
 
-        return $out($request, $this->getResponseWithDataBody($response, $result));
+        return $next($request, $this->getResponseWithDataBody($response, $result));
     }
 
     /**
@@ -286,11 +286,11 @@ class RepositoryResourceController extends AbstractResourceController
      *
      * @param Request  $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      */
-    public function count(Request $request, Response $response, callable $out)
+    public function count(Request $request, Response $response, callable $next)
     {
         try {
             $where = $this->getWhere($request);
@@ -306,7 +306,7 @@ class RepositoryResourceController extends AbstractResourceController
             return $response->withStatus(400);
         }
 
-        return $out($request, $this->getResponseWithDataBody($response, $result));
+        return $next($request, $this->getResponseWithDataBody($response, $result));
     }
 
     /**
@@ -315,14 +315,14 @@ class RepositoryResourceController extends AbstractResourceController
      *
      * @param Request  $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      */
     public function updateProperties(
         Request $request,
         Response $response,
-        callable $out
+        callable $next
     ) {
         $id = $this->getRouteParam($request, 'id');
 
@@ -339,7 +339,7 @@ class RepositoryResourceController extends AbstractResourceController
             return $response->withStatus(404);
         }
 
-        return $out($request, $this->getResponseWithDataBody($response, $result));
+        return $next($request, $this->getResponseWithDataBody($response, $result));
     }
 
     /**

@@ -14,19 +14,21 @@ class CacheMaxAge extends AbstractMiddleware
     /**
      * Execute the middleware
      *
-     * @param RequestInterface  $request
+     * @param RequestInterface $request
      * @param ResponseInterface $response
-     * @param callable          $next
+     * @param callable $next
      *
      * @return ResponseInterface
      */
     public function __invoke(RequestInterface $request, ResponseInterface $response, callable $next)
     {
+        $response = $next($request);
+
         $options = $this->getOptions($request);
         $httpMethods = $options->get('httpMethods', ['GET', 'OPTIONS', 'HEAD']);
 
         if (!in_array($request->getMethod(), $httpMethods)) {
-            return $next($request, $response);
+            return $response;
         }
 
         $pragma = $options->get('pragma', 'cache');
@@ -36,12 +38,7 @@ class CacheMaxAge extends AbstractMiddleware
 
         $maxAgeValue = "max-age={$maxAge}";
 
-        return $next(
-            $request,
-            $response
-                ->withHeader('cache-control', $maxAgeValue)
-                ->withHeader('pragma', $pragma)
-                // ->withHeader('Last-Modified', $lastModified)
-        );
+        return  $response ->withHeader('cache-control', $maxAgeValue) ->withHeader('pragma', $pragma);
+        // ->withHeader('Last-Modified', $lastModified)
     }
 }

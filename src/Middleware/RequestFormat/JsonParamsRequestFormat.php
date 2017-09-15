@@ -27,12 +27,12 @@ class JsonParamsRequestFormat implements Middleware
      *
      * @param Request       $request
      * @param Response      $response
-     * @param callable|null $out
+     * @param callable|null $next
      *
      * @return mixed
      * @throws InvalidWhereException
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    public function __invoke(Request $request, Response $response, callable $next = null)
     {
         $params = $request->getQueryParams();
 
@@ -46,7 +46,7 @@ class JsonParamsRequestFormat implements Middleware
 
         $request = $request->withAttribute('jsonParams', $paramsOptions);
 
-        return $out($request, $response);
+        return $next($request, $response);
     }
 
     /**

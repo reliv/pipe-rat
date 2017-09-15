@@ -31,16 +31,18 @@ class Expires extends AbstractMiddleware
      */
     public function __invoke(RequestInterface $request, ResponseInterface $response, callable $next)
     {
+        $response = $next($request);
+
         $options = $this->getOptions($request);
         $expires = $options->get('time', null);
         $httpMethods = $options->get('httpMethods', ['GET', 'OPTIONS']);
 
         if (!in_array($request->getMethod(), $httpMethods)) {
-            return $next($request, $response);
+            return $response;
         }
 
         if (!$expires) {
-            return $next($request, $response);
+            return $response;
         }
 
         $expires = new DateTimeImmutable($expires);
@@ -48,13 +50,11 @@ class Expires extends AbstractMiddleware
         $cacheControl = $response->getHeaderLine('Cache-Control') ?: '';
         $cacheControl .= ' max-age=' . ($expires->getTimestamp() - time());
 
-        return $next(
-            $request,
+        return
             $response
                 ->withHeader('Cache-Control', trim($cacheControl))
                 ->withAddedHeader('Cache-Control', 'public')
                 ->withHeader('Expires', $expires->format('D, d M Y H:i:s') . ' GMT')
-                ->withHeader('Pragma', 'public')
-        );
+                ->withHeader('Pragma', 'public');
     }
 }

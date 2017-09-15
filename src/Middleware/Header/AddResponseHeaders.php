@@ -21,7 +21,7 @@ class AddResponseHeaders extends AbstractMiddleware implements Middleware
     /**
      * getResponseWithOptionHeaders
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      *
      * @return Response
@@ -51,8 +51,8 @@ class AddResponseHeaders extends AbstractMiddleware implements Middleware
     /**
      * __invoke
      *
-     * @param Request       $request
-     * @param Response      $response
+     * @param Request $request
+     * @param Response $response
      * @param callable|null $next
      *
      * @return Response
@@ -62,9 +62,11 @@ class AddResponseHeaders extends AbstractMiddleware implements Middleware
         Response $response,
         callable $next = null
     ) {
+        $response = $next($request);
+
         $response = $this->getResponseWithOptionHeaders($request, $response);
 
-        return $next($request, $response);
+        return $response;
     }
 
 }

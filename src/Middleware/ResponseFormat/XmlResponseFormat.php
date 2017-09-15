@@ -63,9 +63,16 @@ class XmlResponseFormat extends AbstractResponseFormat implements Middleware
         Response $response,
         callable $next = null
     ) {
-        if (!$this->isValidAcceptType($request)) {
-            return $next($request, $response);
+        $response = $next($request);
+
+        if (!$this->isFormattableResponse($response)) {
+            return $response;
         }
+
+        if (!$this->isValidAcceptType($request)) {
+            return $response;
+        }
+
         $dataModel = $this->getDataModel($response, null);
 
         if(!is_array($dataModel)) {
@@ -84,6 +91,7 @@ class XmlResponseFormat extends AbstractResponseFormat implements Middleware
             $content = $xmlData->asXML();
         }
 
+        $body->rewind();
         $body->write($content);
 
         return $response->withBody($body)->withHeader(

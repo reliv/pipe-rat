@@ -32,23 +32,23 @@ class Where extends AbstractUrlEncodedCombinedFilter implements Middleware
      *
      * @param Request $request
      * @param Response $response
-     * @param callable|null $out
+     * @param callable|null $next
      *
      * @return mixed
      * @throws InvalidWhereException
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    public function __invoke(Request $request, Response $response, callable $next = null)
     {
         $where = $this->getValue($request);
 
         if ($where === null) {
-            return $out($request, $response);
+            return $next($request, $response);
         }
 
         $allowDeepWheres = $this->getOption($request, 'allowDeepWheres', false);
 
         if ($allowDeepWheres) {
-            return $out($request->withAttribute('whereFilterParam', $where), $response);
+            return $next($request->withAttribute('whereFilterParam', $where), $response);
         }
 
         foreach ($where as $whereChunk) {
@@ -58,6 +58,6 @@ class Where extends AbstractUrlEncodedCombinedFilter implements Middleware
             }
         }
 
-        return $out($request->withAttribute('whereFilterParam', $where), $response);
+        return $next($request->withAttribute('whereFilterParam', $where), $response);
     }
 }

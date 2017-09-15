@@ -28,23 +28,23 @@ class Skip implements Middleware
      *
      * @param Request       $request
      * @param Response      $response
-     * @param callable|null $out
+     * @param callable|null $next
      *
      * @return mixed
      * @throws InvalidWhereException
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    public function __invoke(Request $request, Response $response, callable $next = null)
     {
         $params = $request->getQueryParams();
         
         if (!array_key_exists('skip', $params)) {
-            return $out($request, $response);
+            return $next($request, $response);
         }
 
         $param = (int)$params['skip'];
 
         $request = $request->withAttribute('skipFilterParam', $param);
 
-        return $out($request, $response);
+        return $next($request, $response);
     }
 }
