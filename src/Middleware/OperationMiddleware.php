@@ -20,9 +20,9 @@ class OperationMiddleware extends AbstractOperationMiddleware implements Middlew
     /**
      * __invoke
      *
-     * @param Request       $request
-     * @param Response      $response
-     * @param callable|null $out
+     * @param Request $request
+     * @param Response $response
+     * @param callable|null $next
      *
      * @return mixed
      * @throws RouteException
@@ -30,7 +30,7 @@ class OperationMiddleware extends AbstractOperationMiddleware implements Middlew
     public function __invoke(
         Request $request,
         Response $response,
-        callable $out = null
+        callable $next = null
     ) {
         $routeMiddlewareProvider = $this->getRouteMiddlewareProvider();
         $errorMiddlewareProvider = $this->getErrorMiddlewareProvider();
@@ -50,29 +50,31 @@ class OperationMiddleware extends AbstractOperationMiddleware implements Middlew
             $request
         );
 
-        return $routePipe(
+        $response = $routePipe(
             $request,
             $response,
-            $out
+            $next
         );
+
+        return $response;
     }
 
     /**
      * mainPipe
      *
-     * @param Request       $request
-     * @param Response      $response
-     * @param callable|null $out
+     * @param Request $request
+     * @param Response $response
+     * @param callable|null $next
      *
      * @return mixed
      */
     public function mainPipe(
         Request $request,
         Response $response,
-        callable $out = null
+        callable $next = null
     ) {
         if (empty($request->getAttribute(ResourceKey::getName()))) {
-            return $out($request, $response);
+            return $next($request, $response);
         }
 
         $middlewareProvider = $this->getMiddlewareProvider();
@@ -84,6 +86,8 @@ class OperationMiddleware extends AbstractOperationMiddleware implements Middlew
             $request
         );
 
-        return $mainPipe($request,$response, $out);
+        $response = $mainPipe($request, $response, $next);
+
+        return $response;
     }
 }

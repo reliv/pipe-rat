@@ -45,18 +45,26 @@ class CollectionPropertyGetterExtractor extends AbstractExtractor implements Mid
      *
      * @param Request|DataResponse $request
      * @param Response $response
-     * @param callable|null $out
+     * @param callable|null $next
      *
      * @return static
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    public function __invoke(Request $request, Response $response, callable $next = null)
     {
+        $response = $next($request);
+
         $dataModel = $this->getDataModel($response);
 
         if (!is_array($dataModel) && !$dataModel instanceof \Traversable) {
-            return $out($request, $response);
+            return $response;
         }
 
-        return parent::__invoke($request, $response, $out);
+        return parent::__invoke(
+            $request,
+            $response,
+            function ($request) use ($response) {
+                return $response;
+            }
+        );
     }
 }

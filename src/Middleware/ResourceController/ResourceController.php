@@ -52,7 +52,7 @@ class ResourceController extends AbstractResourceController
      *
      * @return Response
      */
-    public function create(Request $request, Response $response, callable $out)
+    public function create(Request $request, Response $response, callable $next)
     {
         return $response->withStatus(404);
     }
@@ -63,11 +63,11 @@ class ResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      */
-    public function upsert(Request $request, Response $response, callable $out)
+    public function upsert(Request $request, Response $response, callable $next)
     {
         return $response->withStatus(404);
     }
@@ -78,11 +78,11 @@ class ResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      */
-    public function exists(Request $request, Response $response, callable $out)
+    public function exists(Request $request, Response $response, callable $next)
     {
         $idField = $this->getEntityIdFieldName($request);
 
@@ -95,11 +95,11 @@ class ResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      */
-    public function findById(Request $request, Response $response, callable $out)
+    public function findById(Request $request, Response $response, callable $next)
     {
         $idField = $this->getEntityIdFieldName($request);
 
@@ -112,11 +112,11 @@ class ResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return mixed
      */
-    public function find(Request $request, Response $response, callable $out)
+    public function find(Request $request, Response $response, callable $next)
     {
         try {
             $where = $this->getWhere($request);
@@ -135,11 +135,11 @@ class ResourceController extends AbstractResourceController
      * entity
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return mixed
      */
-    public function findOne(Request $request, Response $response, callable $out)
+    public function findOne(Request $request, Response $response, callable $next)
     {
         try {
             $where = $this->getWhere($request);
@@ -155,11 +155,11 @@ class ResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      */
-    public function deleteById(Request $request, Response $response, callable $out)
+    public function deleteById(Request $request, Response $response, callable $next)
     {
         $idField = $this->getEntityIdFieldName($request);
 
@@ -171,11 +171,11 @@ class ResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      */
-    public function count(Request $request, Response $response, callable $out)
+    public function count(Request $request, Response $response, callable $next)
     {
         try {
             $where = $this->getWhere($request);
@@ -192,7 +192,7 @@ class ResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      * @throws ResourceControllerException
@@ -200,7 +200,7 @@ class ResourceController extends AbstractResourceController
     public function updateProperties(
         Request $request,
         Response $response,
-        callable $out
+        callable $next
     ) {
         return $response->withStatus(404);
     }

@@ -103,6 +103,22 @@ class BasicConfigMiddlewareProvider extends AbstractBasicConfigMiddlewareProvide
 
         $methodOptions = new BasicOptions($methods[$methodName]);
 
+        // Controller Post
+        $this->buildOperations(
+            $operations,
+            $resourceOptions->get('postServiceNames', []),
+            $resourceOptions->getOptions('postServiceOptions'),
+            $resourceOptions->getOptions('postServicePriority')
+        );
+
+        // Method Post
+        $this->buildOperations(
+            $operations,
+            $methodOptions->get('postServiceNames', []),
+            $methodOptions->getOptions('postServiceOptions'),
+            $methodOptions->getOptions('postServicePriority')
+        );
+
         // Controller Pre
         $this->buildOperations(
             $operations,
@@ -129,22 +145,6 @@ class BasicConfigMiddlewareProvider extends AbstractBasicConfigMiddlewareProvide
                 $controllerOptions,
                 1000
             )
-        );
-
-        // Method Post
-        $this->buildOperations(
-            $operations,
-            $methodOptions->get('postServiceNames', []),
-            $methodOptions->getOptions('postServiceOptions'),
-            $methodOptions->getOptions('postServicePriority')
-        );
-
-        // Controller Post
-        $this->buildOperations(
-            $operations,
-            $resourceOptions->get('postServiceNames', []),
-            $resourceOptions->getOptions('postServiceOptions'),
-            $resourceOptions->getOptions('postServicePriority')
         );
 
         $this->operations[$resourceKey] = $operations;

@@ -38,16 +38,16 @@ class NonThrowingErrorHandler implements ErrorMiddlewareInterface
      *
      * Accepts an error, a server-side request, and a response instance, and
      * does something with them; if further processing can be done, it can
-     * delegate to `$out`.
+     * delegate to `$next`.
      *
      * @see MiddlewareInterface
      * @param mixed $error
      * @param Request $request
      * @param Response $response
-     * @param null|callable $out
+     * @param null|callable $next
      * @return null|Response
      */
-    public function __invoke($error, Request $request, Response $response, callable $out = null)
+    public function __invoke($error, Request $request, Response $response, callable $next = null)
     {
         //Show error in browser if display_errors is on in php.ini
         if ($this->displayErrors) {

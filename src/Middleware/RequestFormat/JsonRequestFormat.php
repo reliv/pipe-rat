@@ -34,14 +34,14 @@ class JsonRequestFormat extends AbstractRequestFormat implements Middleware
      *
      * @param Request       $request
      * @param Response      $response
-     * @param null|callable $out
+     * @param null|callable $next
      *
      * @return null|Response
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    public function __invoke(Request $request, Response $response, callable $next = null)
     {
         if (!$this->isValidMethod($request)) {
-            return $out($request, $response);
+            return $next($request, $response);
         }
 
         if ($this->isValidContentType($request)) {
@@ -59,6 +59,6 @@ class JsonRequestFormat extends AbstractRequestFormat implements Middleware
             $request = $request->withParsedBody($body);
         }
 
-        return $out($request, $response);
+        return $next($request, $response);
     }
 }

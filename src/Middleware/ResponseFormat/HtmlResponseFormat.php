@@ -166,8 +166,14 @@ class HtmlResponseFormat extends AbstractResponseFormat implements Middleware
         Response $response,
         callable $next = null
     ) {
+        $response = $next($request);
+
+        if (!$this->isFormattableResponse($response)) {
+            return $response;
+        }
+
         if (!$this->isValidAcceptType($request)) {
-            return $next($request, $response);
+            return $response;
         }
 
         // @todo finish me

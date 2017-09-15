@@ -35,10 +35,12 @@ class FileResponseFormat extends AbstractResponseFormat implements Middleware
      */
     public function __invoke(Request $request, Response $response, callable $next = null)
     {
+        $response = $next($request);
+
         if (!$this->isValidAcceptType($request)) {
-            return $next($request, $response);
+            return $response;
         }
-        
+
         $options = $this->getOptions($request);
         $contentType = $options->get('contentType', 'application/octet-stream');
 

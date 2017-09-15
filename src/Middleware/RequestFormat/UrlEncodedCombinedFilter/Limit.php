@@ -30,12 +30,12 @@ class Limit extends AbstractUrlEncodedCombinedFilter implements Middleware
      *
      * @param Request $request
      * @param Response $response
-     * @param callable|null $out
+     * @param callable|null $next
      *
      * @return mixed
      * @throws InvalidWhereException
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    public function __invoke(Request $request, Response $response, callable $next = null)
     {
         $value = $this->getValue($request);
 
@@ -44,6 +44,6 @@ class Limit extends AbstractUrlEncodedCombinedFilter implements Middleware
             throw new InvalidWhereException();
         }
 
-        return $out($request->withAttribute('limitFilterParam', $value), $response);
+        return $next($request->withAttribute('limitFilterParam', $value), $response);
     }
 }

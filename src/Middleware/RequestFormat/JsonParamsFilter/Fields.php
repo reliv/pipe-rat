@@ -27,23 +27,23 @@ class Fields implements Middleware
      *
      * @param Request       $request
      * @param Response      $response
-     * @param callable|null $out
+     * @param callable|null $next
      *
      * @return mixed
      * @throws InvalidWhereException
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    public function __invoke(Request $request, Response $response, callable $next = null)
     {
         $params = $request->getQueryParams();
 
         if (!array_key_exists('fields', $params)) {
-            return $out($request, $response);
+            return $next($request, $response);
         }
 
         $param = json_decode($params['fields'], true);
 
         $request = $request->withAttribute('propertyFilterParam', $param);
 
-        return $out($request, $response);
+        return $next($request, $response);
     }
 }

@@ -37,14 +37,14 @@ class RcmUserAcl extends AbstractAcl implements Middleware
      *
      * @param Request       $request
      * @param Response      $response
-     * @param callable|null $out
+     * @param callable|null $next
      *
      * @return mixed
      */
     public function __invoke(
         Request $request,
         Response $response,
-        callable $out = null
+        callable $next = null
     ) {
         $isAllowed = $this->rcmUserService->isAllowed(
             $this->getOption($request, 'resourceId', null),
@@ -52,7 +52,7 @@ class RcmUserAcl extends AbstractAcl implements Middleware
         );
 
         if ($isAllowed) {
-            return $out($request, $response);
+            return $next($request, $response);
         }
 
         return $this->getResponseWithAclFailStatus($request, $response);

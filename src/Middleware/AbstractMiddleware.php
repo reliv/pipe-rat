@@ -3,6 +3,7 @@
 namespace Reliv\PipeRat\Middleware;
 
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Reliv\PipeRat\Http\BasicDataResponse;
 use Reliv\PipeRat\Http\DataResponse;
@@ -10,6 +11,7 @@ use Reliv\PipeRat\Options\BasicOptions;
 use Reliv\PipeRat\Options\Options;
 use Reliv\PipeRat\RequestAttribute\MiddlewareOptions;
 use Reliv\PipeRat\RequestAttribute\ResourceKey;
+use Zend\Diactoros\Response\JsonResponse;
 
 /**
  * Class AbstractMiddleware
@@ -30,7 +32,7 @@ abstract class AbstractMiddleware
      * getResourceKey
      *
      * @param Request $request
-     * @param null    $default
+     * @param null $default
      *
      * @return mixed
      */
@@ -60,8 +62,8 @@ abstract class AbstractMiddleware
     /**
      * getOption
      *
-     * @param Request    $request
-     * @param string     $key
+     * @param Request $request
+     * @param string $key
      * @param null|mixed $default
      *
      * @return mixed
@@ -78,7 +80,7 @@ abstract class AbstractMiddleware
      * getOption
      *
      * @param Request $request
-     * @param string  $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -94,10 +96,23 @@ abstract class AbstractMiddleware
         return $options->getOptions($key);
     }
 
+    protected function isFormattableResponse(Response $response)
+    {
+        if ($response instanceof DataResponse) {
+            return true;
+        }
+
+        if ($response instanceof JsonResponse) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * getDataModel
      *
-     * @param Response   $response
+     * @param Response $response
      * @param mixed|null $default
      *
      * @return mixed|null
@@ -108,6 +123,10 @@ abstract class AbstractMiddleware
             return $response->getDataBody();
         }
 
+        if ($response instanceof JsonResponse) {
+            return $response->getPayload();
+        }
+
         return $default;
     }
 
@@ -116,7 +135,7 @@ abstract class AbstractMiddleware
      *
      * @param Request $request
      * @param         $param
-     * @param null    $default
+     * @param null $default
      *
      * @return null
      */
@@ -142,7 +161,8 @@ abstract class AbstractMiddleware
     protected function getResponseWithDataBody(Response $response, $dataModel)
     {
         if (!$response instanceof DataResponse) {
-            $response = new BasicDataResponse($response->getBody(), $response->getStatusCode(), $response->getHeaders());
+            $response = new BasicDataResponse($response->getBody(), $response->getStatusCode(),
+                $response->getHeaders());
         }
 
         return $response->withDataBody($dataModel);

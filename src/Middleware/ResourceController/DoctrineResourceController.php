@@ -114,7 +114,7 @@ class DoctrineResourceController extends AbstractResourceController
      *
      * @return Response
      */
-    public function create(Request $request, Response $response, callable $out)
+    public function create(Request $request, Response $response, callable $next)
     {
         $entityName = $this->getEntityName($request);
         $entity = new $entityName();
@@ -129,7 +129,9 @@ class DoctrineResourceController extends AbstractResourceController
             return $response->withStatus(409);
         }
 
-        return $out($request, $this->getResponseWithDataBody($response, $entity));
+        $response = $this->getResponseWithDataBody($response, $entity);
+
+        return $response;
     }
 
     /**
@@ -138,12 +140,12 @@ class DoctrineResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return mixed
      * @throws DoctrineEntityException
      */
-    public function upsert(Request $request, Response $response, callable $out)
+    public function upsert(Request $request, Response $response, callable $next)
     {
         $idFieldName = $this->getEntityIdFieldName($this->getEntityName($request));
         $body = $request->getParsedBody();
@@ -165,7 +167,9 @@ class DoctrineResourceController extends AbstractResourceController
 
         $this->getEntityManager()->flush($entity);
 
-        return $out($request, $this->getResponseWithDataBody($response, $entity));
+        $response = $this->getResponseWithDataBody($response, $entity);
+
+        return $response;
     }
 
     /**
@@ -174,18 +178,21 @@ class DoctrineResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return \Reliv\PipeRat\Http\DataResponse
      */
-    public function exists(Request $request, Response $response, callable $out)
+    public function exists(Request $request, Response $response, callable $next)
     {
         if (is_object($this->getEntityByRequestId($request))) {
-            return $out($request, $this->getResponseWithDataBody($response, true));
+            $response = $this->getResponseWithDataBody($response, true);
+
+            return $response;
         }
 
-        return $out($request, $this->getResponseWithDataBody($response->withStatus(404), false));
+        $response = $this->getResponseWithDataBody($response->withStatus(404), false);
 
+        return $response;
     }
 
     /**
@@ -194,19 +201,21 @@ class DoctrineResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      */
-    public function findById(Request $request, Response $response, callable $out)
+    public function findById(Request $request, Response $response, callable $next)
     {
         $entity = $this->getEntityByRequestId($request);
 
         if (!is_object($entity)) {
-            return $out($request, $response->withStatus(404));
+            return $response->withStatus(404);
         }
 
-        return $out($request, $this->getResponseWithDataBody($response, $entity));
+        $response = $this->getResponseWithDataBody($response, $entity);
+
+        return $response;
     }
 
     /**
@@ -215,11 +224,11 @@ class DoctrineResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return mixed
      */
-    public function find(Request $request, Response $response, callable $out)
+    public function find(Request $request, Response $response, callable $next)
     {
         $repo = $this->getRepository($request);
 
@@ -236,17 +245,19 @@ class DoctrineResourceController extends AbstractResourceController
             return $response->withStatus(400);
         }
 
-        return $out($request, $this->getResponseWithDataBody($response, $results));
+        $response = $this->getResponseWithDataBody($response, $results);
+
+        return $response;
     }
 
     /**
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return mixed
      */
-    public function findOne(Request $request, Response $response, callable $out)
+    public function findOne(Request $request, Response $response, callable $next)
     {
         $repo = $this->getRepository($request);
 
@@ -262,7 +273,9 @@ class DoctrineResourceController extends AbstractResourceController
             return $response->withStatus(400);
         }
 
-        return $out($request, $this->getResponseWithDataBody($response, $results));
+        $response = $this->getResponseWithDataBody($response, $results);
+
+        return $response;
     }
 
     /**
@@ -270,11 +283,11 @@ class DoctrineResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      */
-    public function deleteById(Request $request, Response $response, callable $out)
+    public function deleteById(Request $request, Response $response, callable $next)
     {
         $entity = $this->getEntityByRequestId($request);
 
@@ -285,7 +298,9 @@ class DoctrineResourceController extends AbstractResourceController
         $this->getEntityManager()->remove($entity);
         $this->getEntityManager()->flush($entity);
 
-        return $out($request, $this->getResponseWithDataBody($response, $entity));
+        $response = $this->getResponseWithDataBody($response, $entity);
+
+        return $response;
     }
 
     /**
@@ -293,11 +308,11 @@ class DoctrineResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      */
-    public function count(Request $request, Response $response, callable $out)
+    public function count(Request $request, Response $response, callable $next)
     {
         try {
             $where = $this->getWhere($request);
@@ -312,7 +327,9 @@ class DoctrineResourceController extends AbstractResourceController
                 ->createQuery('SELECT COUNT(e) FROM ' . $entityName . ' e')
                 ->getSingleScalarResult();
 
-            return $out($request, $this->getResponseWithDataBody($response, (int)$count));
+            $response = $this->getResponseWithDataBody($response, (int)$count);
+
+            return $response;
         }
 
         $repo = $this->getRepository($request);
@@ -323,7 +340,9 @@ class DoctrineResourceController extends AbstractResourceController
             return $response->withStatus(400);
         }
 
-        return $out($request, $this->getResponseWithDataBody($response, count($results)));
+        $response = $this->getResponseWithDataBody($response, $results);
+
+        return $response;
     }
 
     /**
@@ -332,7 +351,7 @@ class DoctrineResourceController extends AbstractResourceController
      *
      * @param Request $request
      * @param Response $response
-     * @param callable $out
+     * @param callable $next
      *
      * @return Response
      * @throws DoctrineEntityException
@@ -340,7 +359,7 @@ class DoctrineResourceController extends AbstractResourceController
     public function updateProperties(
         Request $request,
         Response $response,
-        callable $out
+        callable $next
     ) {
         $entity = $this->getEntityByRequestId($request);
 
@@ -351,7 +370,9 @@ class DoctrineResourceController extends AbstractResourceController
         $this->populateEntity($entity, $request);
         $this->getEntityManager()->flush($entity);
 
-        return $out($request, $this->getResponseWithDataBody($response, $entity));
+        $response = $this->getResponseWithDataBody($response, $entity);
+
+        return $response;
     }
 
     /**

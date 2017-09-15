@@ -24,20 +24,20 @@ class TriggerErrorHandler implements ErrorMiddlewareInterface
      *
      * Accepts an error, a server-side request, and a response instance, and
      * does something with them; if further processing can be done, it can
-     * delegate to `$out`.
+     * delegate to `$next`.
      *
      * @see MiddlewareInterface
      *
      * @param mixed         $error
      * @param Request       $request
      * @param Response      $response
-     * @param callable|null $out
+     * @param callable|null $next
      *
      * @return void
      * @throws \Throwable
      * @throws mixed
      */
-    public function __invoke($error, Request $request, Response $response, callable $out = null)
+    public function __invoke($error, Request $request, Response $response, callable $next = null)
     {
 //        if($error instanceof \Throwable) {
 //            throw $error;

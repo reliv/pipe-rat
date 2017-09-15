@@ -28,17 +28,17 @@ class Where extends AbstractRequestFormat implements Middleware
      *
      * @param Request       $request
      * @param Response      $response
-     * @param callable|null $out
+     * @param callable|null $next
      *
      * @return mixed
      * @throws InvalidWhereException
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    public function __invoke(Request $request, Response $response, callable $next = null)
     {
         $params = $request->getQueryParams();
 
         if (!array_key_exists('where', $params)) {
-            return $out($request, $response);
+            return $next($request, $response);
         }
 
         $param = json_decode($params['where'], true);
@@ -48,7 +48,7 @@ class Where extends AbstractRequestFormat implements Middleware
         $allowDeepWheres = $this->getOption($request, 'allowDeepWheres', false);
 
         if ($allowDeepWheres) {
-            return $out($request, $response);
+            return $next($request, $response);
         }
 
         foreach ($param as $whereChunk) {
@@ -57,6 +57,6 @@ class Where extends AbstractRequestFormat implements Middleware
             }
         }
 
-        return $out($request, $response);
+        return $next($request, $response);
     }
 }

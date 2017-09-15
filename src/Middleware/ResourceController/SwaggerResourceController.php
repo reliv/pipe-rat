@@ -15,7 +15,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class SwaggerResourceController extends AbstractResourceController
 {
-    public function get(Request $request, Response $response, callable $out)
+    public function get(Request $request, Response $response, callable $next)
     {
         $this->getOption($request, 'swagger', []);
     }

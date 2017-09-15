@@ -26,12 +26,12 @@ abstract class AbstractResourceController extends AbstractMiddleware
      *
      * @param Request $request
      * @param Response $response
-     * @param callable|null $out
+     * @param callable|null $next
      *
      * @return mixed
      * @throws MethodException
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    public function __invoke(Request $request, Response $response, callable $next = null)
     {
         $method = $this->getOption($request, 'method', null);
 
@@ -44,7 +44,7 @@ abstract class AbstractResourceController extends AbstractMiddleware
             throw new MethodException('Method does not exists: ' . $method);
         }
 
-        return $this->$method($request, $response, $out);
+        return $this->$method($request, $response, $next);
     }
 
     /**

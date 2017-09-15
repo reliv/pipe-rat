@@ -19,8 +19,8 @@ class JsonErrorResponseFormat extends JsonResponseFormat
     /**
      * __invoke
      *
-     * @param Request       $request
-     * @param Response      $response
+     * @param Request $request
+     * @param Response $response
      * @param callable|null $next
      *
      * @return \Psr\Http\Message\MessageInterface
@@ -28,10 +28,18 @@ class JsonErrorResponseFormat extends JsonResponseFormat
      */
     public function __invoke(Request $request, Response $response, callable $next = null)
     {
+        $response = $next($request);
+
         if (!$this->isError($request, $response)) {
-            return $next($request, $response);
+            return $response;
         }
 
-        return parent::__invoke($request, $response, $next);
+        return parent::__invoke(
+            $request,
+            $response,
+            function ($request) use ($response) {
+                return $response;
+            }
+        );
     }
 }

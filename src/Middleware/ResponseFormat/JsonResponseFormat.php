@@ -20,16 +20,16 @@ class JsonResponseFormat extends AbstractResponseFormat implements Middleware
     /**
      * @var array
      */
-    protected $defaultAcceptTypes= [
-            'application/json',
-            'json'
-        ];
+    protected $defaultAcceptTypes = [
+        'application/json',
+        'json'
+    ];
 
     /**
      * __invoke
      *
-     * @param Request       $request
-     * @param Response      $response
+     * @param Request $request
+     * @param Response $response
      * @param callable|null $next
      *
      * @return \Psr\Http\Message\MessageInterface
@@ -37,8 +37,17 @@ class JsonResponseFormat extends AbstractResponseFormat implements Middleware
      */
     public function __invoke(Request $request, Response $response, callable $next = null)
     {
+        /**
+         * @var Response $response
+         */
+        $response = $next($request);
+
+        if (!$this->isFormattableResponse($response)) {
+            return $response;
+        }
+
         if (!$this->isValidAcceptType($request)) {
-            return $next($request, $response);
+            return $response;
         }
 
         $options = $this->getOptions($request);
@@ -53,6 +62,8 @@ class JsonResponseFormat extends AbstractResponseFormat implements Middleware
         if ($err !== JSON_ERROR_NONE) {
             throw new ResponseFormatException('json_encode failed to encode');
         }
+
+        $body->rewind();
         $body->write($content);
 
         return $response->withBody($body)->withHeader(
