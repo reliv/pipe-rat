@@ -33,7 +33,7 @@ class RepositoryResourceController extends AbstractResourceController
      * RepositoryResourceController constructor.
      *
      * @param ContainerInterface $serviceManager
-     * @param Hydrator           $hydrator
+     * @param Hydrator $hydrator
      */
     public function __construct(
         $serviceManager,
@@ -77,7 +77,7 @@ class RepositoryResourceController extends AbstractResourceController
 
         $repository = $this->getServiceManager()->get($repositoryName);
 
-        if(!is_a($repository, 'Reliv\PipeRat\Repository\Repository')) {
+        if (!is_a($repository, 'Reliv\PipeRat\Repository\Repository')) {
             throw new RepositoryException(
                 'Not a valid repository, must implement Reliv\PipeRat\Repository\Repository: ' . get_class($repository)
             );
@@ -89,7 +89,7 @@ class RepositoryResourceController extends AbstractResourceController
     /**
      * Adds the given entity to the DB.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      *
      * @return Response
@@ -107,14 +107,14 @@ class RepositoryResourceController extends AbstractResourceController
             return $response->withStatus(409);
         }
 
-        return $next($request, $this->getResponseWithDataBody($response, $result));
+        return $this->getResponseWithDataBody($response, $result);
     }
 
     /**
      * Updates the entity with the given ID with the request body.
      * If the entity is not in the DB, it will be created.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $next
      *
@@ -134,14 +134,14 @@ class RepositoryResourceController extends AbstractResourceController
         $this->populateEntity($entity, $request);
         $result = $this->getRepository($request)->upsert($entity);
 
-        return $next($request, $this->getResponseWithDataBody($response, $result));
+        return $this->getResponseWithDataBody($response, $result);
     }
 
     /**
      * Returns 200, true if the entity with the given ID exists in DB.
      * Returns 404, false if the entity does not exist in DB.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $next
      *
@@ -158,17 +158,17 @@ class RepositoryResourceController extends AbstractResourceController
         $result = $this->getRepository($request)->exists($id);
 
         if ($result) {
-            return $next($request, $this->getResponseWithDataBody($response, true));
+            return $this->getResponseWithDataBody($response, true);
         }
 
-        return $next($request, $this->getResponseWithDataBody($response->withStatus(404), false));
+        return $this->getResponseWithDataBody($response->withStatus(404), false);
     }
 
     /**
      * Finds the the entity with the given ID and returns it.
      * If the entity is not in the DB, return 404.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $next
      *
@@ -185,17 +185,17 @@ class RepositoryResourceController extends AbstractResourceController
         $result = $this->getRepository($request)->findById($id);
 
         if (!is_object($result)) {
-            return $next($request, $response->withStatus(404));
+            return $response->withStatus(404);
         }
 
-        return $next($request, $this->getResponseWithDataBody($response, $result));
+        return $this->getResponseWithDataBody($response, $result);
     }
 
     /**
      * Returns a list of all enitites that match the json encoded "where" query param.
      * If "where" is not in the query, all entities are returned.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $next
      *
@@ -222,11 +222,11 @@ class RepositoryResourceController extends AbstractResourceController
             return $response->withStatus(400);
         }
 
-        return $next($request, $this->getResponseWithDataBody($response, $results));
+        return $this->getResponseWithDataBody($response, $results);
     }
 
     /**
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $next
      *
@@ -252,13 +252,13 @@ class RepositoryResourceController extends AbstractResourceController
             return $response->withStatus(404);
         }
 
-        return $next($request, $this->getResponseWithDataBody($response, $result));
+        return $this->getResponseWithDataBody($response, $result);
     }
 
     /**
      * Deletes the entity with the give ID from the DB.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $next
      *
@@ -278,13 +278,13 @@ class RepositoryResourceController extends AbstractResourceController
             return $response->withStatus(404);
         }
 
-        return $next($request, $this->getResponseWithDataBody($response, $result));
+        return $this->getResponseWithDataBody($response, $result);
     }
 
     /**
      * Returns the count of the entities given.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $next
      *
@@ -306,14 +306,14 @@ class RepositoryResourceController extends AbstractResourceController
             return $response->withStatus(400);
         }
 
-        return $next($request, $this->getResponseWithDataBody($response, $result));
+        return $this->getResponseWithDataBody($response, $result);
     }
 
     /**
      * Updates the entity with the given ID with the request body.
      * IF the entity is not in the DB, return 404.
      *
-     * @param Request  $request
+     * @param Request $request
      * @param Response $response
      * @param callable $next
      *
@@ -339,7 +339,7 @@ class RepositoryResourceController extends AbstractResourceController
             return $response->withStatus(404);
         }
 
-        return $next($request, $this->getResponseWithDataBody($response, $result));
+        return $this->getResponseWithDataBody($response, $result);
     }
 
     /**
