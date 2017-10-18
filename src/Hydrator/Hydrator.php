@@ -18,7 +18,7 @@ interface Hydrator
      * hydrate
      *
      * @param array           $data
-     * @param \stdClass|array $dataModel
+     * @param object|array $dataModel
      * @param Options         $options
      *
      * @return mixed
