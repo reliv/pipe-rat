@@ -2,41 +2,32 @@
 
 namespace Reliv\PipeRat\Middleware\Acl;
 
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use RcmUser\Service\RcmUserService;
+use Rcm\Acl\AclActions;
+use Rcm\Acl\AssertIsAllowed;
+use Rcm\Acl\NotAllowedException;
 use Reliv\PipeRat\Middleware\AbstractMiddleware;
 use Reliv\PipeRat\Middleware\Middleware;
 
 /**
- * Class RcmUserAcl
- *
- * @author    James Jervis <jjervis@relivinc.com>
- * @copyright 2016 Reliv International
- * @license   License.txt
- * @link      https://github.com/reliv
+ * @deprecated This will be removed eventully. Use the new ACL system instead.
  */
 class RcmUserAcl extends AbstractAcl implements Middleware
 {
-    /**
-     * @var RcmUserService
-     */
-    protected $rcmUserService;
+    protected $requestContext;
 
-    /**
-     * @param RcmUserService $rcmUserService
-     */
-    public function __construct(
-        RcmUserService $rcmUserService
-    ) {
-        $this->rcmUserService = $rcmUserService;
+    public function __construct(ContainerInterface $requestContext)
+    {
+        $this->requestContext = $requestContext;
     }
 
     /**
-     * __invoke
+     * @deprecated This will be removed eventully. Use the new ACL system instead.
      *
-     * @param Request       $request
-     * @param Response      $response
+     * @param Request $request
+     * @param Response $response
      * @param callable|null $next
      *
      * @return mixed
@@ -46,10 +37,17 @@ class RcmUserAcl extends AbstractAcl implements Middleware
         Response $response,
         callable $next = null
     ) {
-        $isAllowed = $this->rcmUserService->isAllowed(
-            $this->getOption($request, 'resourceId', null),
-            $this->getOption($request, 'privilege', null)
-        );
+        /**
+         * @var AssertIsAllowed $assertIsAllowed
+         */
+        $assertIsAllowed = $this->requestContext->get(AssertIsAllowed::class);
+        try {
+            //Note that "legacy-global-admin-functionality" is temporary and will be removed eventually.
+            $assertIsAllowed->__invoke(AclActions::EXECUTE, ['type' => 'legacy-global-admin-functionality']);
+            $isAllowed = true;
+        } catch (NotAllowedException $e) {
+            $isAllowed = false;
+        }
 
         if ($isAllowed) {
             return $next($request, $response);
