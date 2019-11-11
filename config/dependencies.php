@@ -31,7 +31,7 @@ return [
         // ACL
         Reliv\PipeRat\Middleware\Acl\RcmUserAcl::class => [
             'arguments' => [
-                RcmUser\Service\RcmUserService::class,
+                \Rcm\RequestContext\RequestContext::class,
             ],
         ],
         // Error Middleware
